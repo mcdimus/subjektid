@@ -1,0 +1,43 @@
+package frontend.control;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+public class SessionManager {
+
+	private HttpServletRequest req = null;
+
+	public SessionManager(HttpServletRequest req) {
+		this.req = req;
+	}
+
+	public HttpSession getSession(boolean create) {
+
+		return this.req.getSession(create);
+	}
+
+	public boolean isExist() {
+		HttpSession existingSession = req.getSession(false);
+		if (existingSession != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public void invalidateCurrent() {
+		req.getSession(false).invalidate();
+	}
+
+	public void createNewSession() {
+		req.getSession(true);
+	}
+
+	public boolean loggedIn() {
+		if (req.getSession(false).getAttribute("username") != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
