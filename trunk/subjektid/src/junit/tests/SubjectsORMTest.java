@@ -8,14 +8,22 @@ import org.junit.Test;
 
 import backend.DA.SubjectsORM;
 import backend.model.Address;
+import backend.model.AddressType;
 
 public class SubjectsORMTest {
 	
-	SubjectsORM orm = new SubjectsORM();
+	private SubjectsORM orm = new SubjectsORM();
+	
+	@Test
+	public void testFindAll() {
+		List<AddressType> types = orm.findAll(AddressType.class);
+		assertNotNull("List<AddressType> types are null!", types);
+		assertTrue("types.size = 0", types.size() > 0);
+	}
 
 	@Test
-	public void testFindAdressesById() {
-		List<Address> addresses = orm.findAddressesByID(1);
+	public void testFindById() {
+		List<Address> addresses = orm.findByID(Address.class, 1);
 //		for (int i = 0; i < addresses.size(); i++) {
 //			Address address = addresses.get(i);
 //			System.out.printf("%d\t%d\t%d\t%d\t%s\t%s\t%s\t%s\t%s\r\n", 
@@ -30,12 +38,12 @@ public class SubjectsORMTest {
 	}
 	
 	@Test
-	public void testSaveOrUpdateAddress() {
-		List<Address> addresses = orm.findAddressesByID(1);
+	public void testSaveOrUpdate() {
+		List<Address> addresses = orm.findByID(Address.class, 1);
 		Address address = addresses.get(2);
-		address.setCountry("Rootsi");
+		address.setCounty("Stockholm");
 		assertTrue("saveOrUpdateAddress() = false",
-				orm.saveOrUpdateAddress(address));
+				orm.saveOrUpdate(address));
 	}
 
 }
