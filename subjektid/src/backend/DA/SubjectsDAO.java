@@ -64,7 +64,7 @@ public class SubjectsDAO {
 		try {
 			MessageDigest m = MessageDigest.getInstance("MD5");
 			BigInteger bi = new BigInteger(1, m.digest(passw.getBytes()));
-			return String.format("%1$032X", bi);
+			return String.format("%1$032x", bi);
 		} catch (NoSuchAlgorithmException e) {
 			MyLogger.log("SubjectsDAO.generateMD5(): ", e.getMessage());
 			e.printStackTrace();
