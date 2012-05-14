@@ -26,7 +26,6 @@ public class ViewManager {
 
 			context.getRequestDispatcher(dispatcher).forward(req, resp);
 		} catch (Exception e) {
-			
 			MyLogger.log("ViewManager.navigate()", e.getMessage());
 		}
 		

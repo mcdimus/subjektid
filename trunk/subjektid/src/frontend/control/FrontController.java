@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import backend.DA.SubjectsDAO;
+import backend.model.Employee;
+
 import frontend.forms.LoginForm;
 import frontend.validator.LoginFormValidator;
 
@@ -80,11 +83,28 @@ public class FrontController extends HttpServlet {
 							loginForm);
 
 					if (loginFormValidator.validate()) {
+						SubjectsDAO subjectDao = new SubjectsDAO();
+						Employee employee = subjectDao.auth(loginForm);
+						if (employee != null) {
+							sessionManager.set("username", username);
+							sessionManager.set("employee_id",
+									String.valueOf(employee.getEmployee()));
+							
+							view = "default_view";
+						} else {
+							HashMap<String, String> errors = new HashMap<String, String>();
+							errors.put("reason", "Wrong username or password");
+							req.setAttribute("errors", errors);
+							req.setAttribute("loginForm", loginForm);
+							view = "login_view";
+						}
 						viewManager.navigate(view, req, resp, context);
+						
 					} else {
 						view = "login_view";
 						HashMap<String, String> errors = (HashMap<String, String>) loginFormValidator
 								.getErrors();
+						errors.put("reason", "Login failed");
 						req.setAttribute("errors", errors);
 						req.setAttribute("loginForm", loginForm);
 						viewManager.navigate(view, req, resp, context);

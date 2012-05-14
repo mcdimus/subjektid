@@ -29,6 +29,9 @@ public class SessionManager {
 		req.getSession(false).invalidate();
 	}
 
+	/**
+	 * If there is no current session, creates a new session.
+	 */
 	public void createNewSession() {
 		req.getSession(true);
 	}
@@ -39,5 +42,9 @@ public class SessionManager {
 		} else {
 			return false;
 		}
+	}
+
+	public void set(String atrName, String atrValue) {
+		req.getSession(false).setAttribute(atrName, atrValue);
 	}
 }

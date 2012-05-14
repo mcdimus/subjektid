@@ -8,5 +8,7 @@
 </head>
 <body>
 LOGGED IN
+<br />
+HELLO, <%=session.getAttribute("username") %>
 </body>
 </html>

@@ -16,14 +16,17 @@
 		String passwordError = "";
 
 		if (!errors.isEmpty()) {
-			
+
 			username = loginForm.getUsername();
 			usernameError = errors.containsKey("username") ? (String) errors
 					.get("username") : "";
 			passwordError = errors.containsKey("password") ? (String) errors
 					.get("password") : "";
 	%>
-	<p class="error">Login failed.</p>
+	<p class="error">
+		Error!
+		<%=errors.containsKey("reason") ? (String) errors
+						.get("reason") : "" %></p>
 	<%
 		}
 	%>
@@ -31,11 +34,11 @@
 		<table>
 			<tr>
 				<th>Username</th>
-				<td><input type="text" name="username" value="<%=username%>"/><%=usernameError %></td>
+				<td><input type="text" name="username" value="<%=username%>" /><%=usernameError%></td>
 			</tr>
 			<tr>
 				<th>Password</th>
-				<td><input type="password" name="password" /><%=passwordError %></td>
+				<td><input type="password" name="password" /><%=passwordError%></td>
 			</tr>
 			<tr>
 				<td colspan="2">
