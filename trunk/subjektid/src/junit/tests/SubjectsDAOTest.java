@@ -4,9 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import frontend.forms.LoginForm;
+
 import backend.DA.SubjectsDAO;
 import backend.model.Employee;
-import backend.model.UserAccount;
 
 public class SubjectsDAOTest {
 	
@@ -14,10 +15,10 @@ public class SubjectsDAOTest {
 
 	@Test
 	public void authTest() {
-		UserAccount ua = new UserAccount();
-		ua.setUsername("juhan");
-		ua.setPassw("juhan");
-		Employee employee = dao.auth(ua);
+		LoginForm form = new LoginForm();
+		form.setUsername("juhan");
+		form.setPassword("juhan");
+		Employee employee = dao.auth(form);
 		assertNotNull("Employee is null!", employee);
 	}
 
