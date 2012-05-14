@@ -9,10 +9,11 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
+import frontend.forms.LoginForm;
+
 import log.MyLogger;
 
 import backend.model.Employee;
-import backend.model.UserAccount;
 
 public class SubjectsDAO {
 	
@@ -31,8 +32,8 @@ public class SubjectsDAO {
 		}
 	}
 	
-	public Employee auth(UserAccount ua) {
-		ua.setPassw(generateMD5(ua.getUsername() + ua.getPassw()));
+	public Employee auth(LoginForm form) {
+		form.setPassword(generateMD5(form.getUsername() + form.getPassword()));
 		Connection db;
 		ResultSet results;
 		Employee employee = null;
@@ -40,16 +41,17 @@ public class SubjectsDAO {
 			db = DriverManager.getConnection(url, user, password);
 			Statement st = db.createStatement();
 			results = st.executeQuery("SELECT e.employee, e.person_fk,"
-					+ "e.enterprise_fk, e.struct_unit_fk, e.active FROM "
-					+ "employee E INNER JOIN user_account UA ON E.employee"
-					+ "= UA.subject_fk WHERE UA.username='" + ua.getUsername()
-					+ "' AND UA.passw='"+ ua.getPassw() + "'");
-			results.next();
-			employee = new Employee(results.getLong("employee"),
-					results.getLong("person_fk"),
-					results.getLong("enterprise_fk"),
-					results.getLong("struct_unit_fk"),
-					results.getString("active"));
+					+ "e.enterprise_fk, e.struct_unit_fk, e.active FROM"
+					+ " employee E INNER JOIN user_account UA ON E.employee"
+					+ "= UA.subject_fk WHERE UA.username='" + form.getUsername()
+					+ "' AND UA.passw='" + form.getPassword() + "'");
+			if (results.next()) {
+				employee = new Employee(results.getLong("employee"),
+						results.getLong("person_fk"),
+						results.getLong("enterprise_fk"),
+						results.getLong("struct_unit_fk"),
+						results.getString("active"));
+			}
 			db.close();
 		} catch(Exception e) {
 			MyLogger.log("SubjectsDAO.auth(): ", e.getMessage());
