@@ -43,81 +43,19 @@ public class FrontController extends HttpServlet {
 		Map<String, String[]> params = req.getParameterMap();
 
 		ServletContext context = getServletConfig().getServletContext();
-		SessionManager sessionManager = new SessionManager(req);
+	//	SessionManager sessionManager = new SessionManager(req);
 		ViewManager viewManager = new ViewManager();
 
 		String event = null;
 		String view = "default_view";
 
+		// in all controllers do if sessionManager.loggedIn()
 		event = new EventFinder().find(params);
 
-		if (event.equals("logout_event")) {
+		Controller controller = new ControllerFactory().getController(event);
 
-			if (sessionManager.isExist()) {
-
-				sessionManager.invalidateCurrent();
-				view = "login_view";
-				viewManager.navigate(view, req, resp, context);
-			}
-		}
-
-		sessionManager.createNewSession();
-
-		if (sessionManager.loggedIn()) {
-			viewManager.navigate(view, req, resp, context);
-		} else {
-			if (event.equals("login_event")) {
-				String username = null;
-				String password = null;
-
-				if (params.containsKey("username")) {
-					username = params.get("username")[0];
-				}
-				if (params.containsKey("password")) {
-					password = params.get("password")[0];
-				}
-
-				if (username != null && password != null) {
-					LoginForm loginForm = new LoginForm(username, password);
-					LoginFormValidator loginFormValidator = new LoginFormValidator(
-							loginForm);
-
-					if (loginFormValidator.validate()) {
-						SubjectsDAO subjectDao = new SubjectsDAO();
-						Employee employee = subjectDao.auth(loginForm);
-						if (employee != null) {
-							sessionManager.set("username", username);
-							sessionManager.set("employee_id",
-									String.valueOf(employee.getEmployee()));
-							
-							view = "default_view";
-						} else {
-							HashMap<String, String> errors = new HashMap<String, String>();
-							errors.put("reason", "Wrong username or password");
-							req.setAttribute("errors", errors);
-							req.setAttribute("loginForm", loginForm);
-							view = "login_view";
-						}
-						viewManager.navigate(view, req, resp, context);
-						
-					} else {
-						view = "login_view";
-						HashMap<String, String> errors = (HashMap<String, String>) loginFormValidator
-								.getErrors();
-						errors.put("reason", "Login failed");
-						req.setAttribute("errors", errors);
-						req.setAttribute("loginForm", loginForm);
-						viewManager.navigate(view, req, resp, context);
-					}
-				} else {
-					view = "login_view";
-					viewManager.navigate(view, req, resp, context);
-				}
-			} else {
-				view = "login_view";
-				viewManager.navigate(view, req, resp, context);
-			}
-		}
+		view = controller.service(event, req, resp);
+		viewManager.navigate(view, req, resp, context);
 
 	}
 
