@@ -37,7 +37,7 @@ public class SessionManager {
 	}
 
 	public boolean loggedIn() {
-		if (req.getSession(false).getAttribute("username") != null) {
+		if (this.isExist() && req.getSession(false).getAttribute("username") != null) {
 			return true;
 		} else {
 			return false;
