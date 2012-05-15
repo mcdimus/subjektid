@@ -10,20 +10,6 @@ abstract public class Controller {
 	public abstract String service(HttpServletRequest req, HttpServletResponse resp);
 	
 	/**
-	 * @return the mode
-	 */
-	public String getMode() {
-		return mode;
-	}
-
-	/**
-	 * @param mode the mode to set
-	 */
-	public void setMode(String mode) {
-		this.mode = mode;
-	}
-
-	/**
 	 * @return the action
 	 */
 	public String getAction() {

@@ -20,7 +20,7 @@ public class SubjectController extends Controller {
 		SessionManager sessionManager = new SessionManager(req);
 
 		if (sessionManager.loggedIn()) {
-			if (event.equals("add_new_subject_event")) {
+			if (action.equals("show_form")) {
 				try {
 					SubjectsORM dao = new SubjectsORM();
 					List<EmployeeRoleType> employeeRoleTypeList = dao

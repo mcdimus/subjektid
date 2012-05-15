@@ -21,7 +21,7 @@ public class LoginController extends Controller {
 		Map<String, String[]> params = req.getParameterMap();
 		SessionManager sessionManager = new SessionManager(req);
 
-		if (event.equals("logout_event")) {
+		if (action.equals("logout")) {
 
 			if (sessionManager.isExist()) {
 
@@ -32,7 +32,7 @@ public class LoginController extends Controller {
 
 		sessionManager.createNewSession();
 
-		if (event.equals("login_event")) {
+		if (action.equals("login")) {
 			String username = null;
 			String password = null;
 

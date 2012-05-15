@@ -9,7 +9,7 @@
 <body>
 	User
 	<strong><%=session.getAttribute("username")%></strong> logged in.
-	<form method="post" action="?action=logout">
+	<form method="post" action="?mode=login&action=logout">
 		<button type="submit">Logout</button>
 	</form>
 	<br />
