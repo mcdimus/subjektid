@@ -1,5 +1,7 @@
 package backend.DA;
 
+import log.MyLogger;
+
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -18,6 +20,7 @@ public class HibernateUtil {
 		    serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();        
 		    sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (HibernateException e) {
+			MyLogger.log("static HibernateUtil: ", e.getMessage());
 			e.printStackTrace();
 		}
 	}
