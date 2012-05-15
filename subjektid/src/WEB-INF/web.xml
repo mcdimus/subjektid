@@ -5,11 +5,15 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-	<display-name>JSP/Servlet/JavaBean kombinatsioon</display-name>
+	<display-name>Subjektid by r12</display-name>
 	<description>
-		servlet/bean
+		RakArh kodutoo
 	</description>
-	
+
+	<listener>
+		<listener-class>backend.control.HibernateListener</listener-class>
+	</listener>
+
 	<servlet>
 		<servlet-name>
 			FrontController
@@ -24,4 +28,5 @@
 		<servlet-name>FrontController</servlet-name>
 		<url-pattern>/s</url-pattern>
 	</servlet-mapping>
+
 </web-app>

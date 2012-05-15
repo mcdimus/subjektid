@@ -26,24 +26,25 @@ Author:  Raul Liivrand
 
 	<target name="init">
 		<property environment="env" />
-		<property name="src_all.dir" 		value="src" />
-		<property name="src_jsp.dir" 		value="src/frontend/view" />
-		<property name="src_static.dir" 	value="src/static" />
-		<property name="src_web_inf.dir" 	value="src/WEB-INF" />
-		<property name="src.dir" 			value="src" />
-		<property name="prop.dir" 			value="src/properties" />
-		<property name="web-inf.dir" 		value="WEB-INF" />
-		<property name="classes.dir" 		value="WEB-INF/classes" />
-		<property name="jsp.dir" 			value="." />
-		<property name="build.dir" 			value="build" />
-		<property name="pkg-dist.name" 		value="${name}-pkg" />
-		<property name="tomcat.home" 		location="${env.TOMCAT_HOME}" />
-		<property name="tomcat.server.lib" 	location="${tomcat.home}/lib" />
-		<property name="myapp.lib" 			location="lib"/>
+		<property name="src_all.dir" value="src" />
+		<property name="src_jsp.dir" value="src/frontend/view" />
+		<property name="src_static.dir" value="src/static" />
+		<property name="src_web_inf.dir" value="src/WEB-INF" />
+		<property name="src.dir" value="src" />
+		<property name="prop.dir" value="src/properties" />
+		<property name="hib_xml.dir" value="src/hibernate_xml" />
+		<property name="web-inf.dir" value="WEB-INF" />
+		<property name="classes.dir" value="WEB-INF/classes" />
+		<property name="jsp.dir" value="." />
+		<property name="build.dir" value="build" />
+		<property name="pkg-dist.name" value="${name}-pkg" />
+		<property name="tomcat.home" location="${env.TOMCAT_HOME}" />
+		<property name="tomcat.server.lib" location="${tomcat.home}/lib" />
+		<property name="myapp.lib" location="lib" />
 		<path id="lib.classpath">
 			<fileset dir="${tomcat.server.lib}" includes="*.jar" />
-			<fileset dir="${env.ANT_HOME}/lib" 	includes="*.jar" />
-			<fileset dir="${myapp.lib}" 		includes="*.jar"/>
+			<fileset dir="${env.ANT_HOME}/lib" includes="*.jar" />
+			<fileset dir="${myapp.lib}" includes="*.jar" />
 		</path>
 	</target>
 
@@ -76,6 +77,7 @@ Author:  Raul Liivrand
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="lib.classpath" />
 		<copy todir="${classes.dir}">
 			<fileset dir="${prop.dir}" includes="**/*.properties" />
+			<fileset dir="${hib_xml.dir}" includes="**/*.xml" />
 		</copy>
 	</target>
 
@@ -90,7 +92,8 @@ Author:  Raul Liivrand
 			<fileset dir="src/frontend/view" />
 			<zipfileset dir="src/static" prefix="static" />
 			<classes dir="${classes.dir}" />
-			<lib dir="${myapp.lib}"></lib>
+			<lib dir="${myapp.lib}">
+			</lib>
 		</war>
 	</target>
 

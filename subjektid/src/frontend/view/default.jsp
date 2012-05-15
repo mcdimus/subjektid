@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,8 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-LOGGED IN
-<br />
-HELLO, <%=session.getAttribute("username") %>
+<jsp:include page="header.jsp" />
+
+	<form method="post" action="?action=add_new_subject">
+		<button type="submit">Add new subject</button>
+	</form>
 </body>
 </html>

@@ -8,6 +8,8 @@ public class ControllerFactory {
 		
 		if (event.equals("login_event") || event.equals("logout_event")) {
 			controller = new LoginController();
+		} else if (event.equals("add_new_subject_event")) {
+			controller = new SubjectController();
 		} else {
 			controller = new LoginController();
 		}
