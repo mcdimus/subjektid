@@ -43,18 +43,16 @@ public class FrontController extends HttpServlet {
 		Map<String, String[]> params = req.getParameterMap();
 
 		ServletContext context = getServletConfig().getServletContext();
-	//	SessionManager sessionManager = new SessionManager(req);
 		ViewManager viewManager = new ViewManager();
 
-		String event = null;
 		String view = null;
 
 		// in all controllers do if sessionManager.loggedIn()
-		event = new EventFinder().find(params);
+//		event = new EventFinder().find(params);
 
-		Controller controller = new ControllerFactory().getController(event);
+		Controller controller = new ControllerFactory().getController(params);
 
-		view = controller.service(event, req, resp);
+		view = controller.service(req, resp);
 		viewManager.navigate(view, req, resp, context);
 
 	}

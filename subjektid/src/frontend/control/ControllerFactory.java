@@ -1,14 +1,28 @@
 package frontend.control;
 
+import java.util.Map;
+
 public class ControllerFactory {
 
-	public Controller getController(String event) {
+	public Controller getController(Map<String, String[]> params) {
 
 		Controller controller;
 		
-		if (event.equals("login_event") || event.equals("logout_event")) {
+		String mode = params.get("mode")[0];
+		String action = params.get("action")[0];
+		
+		if (mode.equals("login")) {
 			controller = new LoginController();
-		} else if (event.equals("add_new_subject_event")) {
+			controller.setAction(action);
+		} else if (mode.equals("add_new_subject")) {
+			
+		} else {
+			
+		}
+		
+		if (params.equals("login_event") || params.equals("logout_event")) {
+			controller = new LoginController();
+		} else if (params.equals("add_new_subject_event")) {
 			controller = new SubjectController();
 		} else {
 			controller = new LoginController();
