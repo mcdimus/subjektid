@@ -1,5 +1,5 @@
 <p>New person</p>
-<form method="post" action="add_new_person">
+<form method="post" action="?action=add_new_person">
 	<table>
 		<tr>
 			<th>First name</th>

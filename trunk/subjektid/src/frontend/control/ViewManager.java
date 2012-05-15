@@ -1,8 +1,5 @@
 package frontend.control;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

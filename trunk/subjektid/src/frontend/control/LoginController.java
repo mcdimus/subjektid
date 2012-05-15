@@ -11,11 +11,10 @@ import backend.model.Employee;
 import frontend.forms.LoginForm;
 import frontend.validator.LoginFormValidator;
 
-public class LoginController implements Controller {
+public class LoginController extends Controller {
 
 	@Override
-	public String service(String event, HttpServletRequest req,
-			HttpServletResponse resp) {
+	public String service(HttpServletRequest req, HttpServletResponse resp) {
 
 		String view = "default_view";
 
