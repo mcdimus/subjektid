@@ -6,7 +6,9 @@
     <class name="backend.model.SubjectAttributeType" table="subject_attribute_type" schema="public">
         <id name="subjectAttributeType" type="long">
             <column name="subject_attribute_type" precision="10" scale="0" />
-            <generator class="assigned" />
+            <generator class="sequence">
+            	<param name="sequence">subject_attribute_type_id</param>
+            </generator>
         </id>
         <property name="subjectTypeFk" type="java.lang.Long">
             <column name="subject_type_fk" precision="10" scale="0" />

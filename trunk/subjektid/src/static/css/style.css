@@ -1,3 +1,43 @@
+body {
+    font: 14px/20px Helvetica, Arial, sans-serif;
+}
+
+#login-form {
+	width: 17em;
+	margin: 100px auto;
+	border: 1px solid #000000;
+}
+
+p.error, td.error {
+	color: #FF0000;
+}
+
+div.indicator-line {
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	color: #FFFFFF;
+	width: 100%;
+	margin: 1em 0em;
+}
+
+div.indicator-line div {
+	padding-left: 1em;
+	border-top: 1px solid #FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+div.SUCCESS {
+	background-color: #0000FF;
+}
+
+div.ERROR {
+	background-color: #FF0000;
+}
+
+div.WELCOME {
+	background-color: #808080;
+}
+
 ul {
 	margin-left: 0;
 	padding-left: 0;
@@ -34,7 +74,4 @@ table,th,td {
 
 table {
 	border-collapse: collapse;
-}
-.error {
-	color: red;
 }

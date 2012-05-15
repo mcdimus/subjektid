@@ -6,7 +6,9 @@
     <class name="backend.model.UserAccount" table="user_account" schema="public">
         <id name="userAccount" type="long">
             <column name="user_account" precision="10" scale="0" />
-            <generator class="assigned" />
+            <generator class="sequence">
+            	<param name="sequence">user_account_id</param>
+            </generator>
         </id>
         <property name="subjectTypeFk" type="java.lang.Long">
             <column name="subject_type_fk" precision="10" scale="0" />
