@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import frontend.forms.LoginForm;
 
-public class LoginFormValidator {
+public class LoginFormValidator implements Validator {
 
 	LoginForm form;
 	HashMap<String, String> errors;
@@ -13,7 +13,13 @@ public class LoginFormValidator {
 		this.form = form;
 		this.errors = new HashMap<String, String>();
 	}
+	
+	@Override
+	public HashMap<String, String> getErrors() {
+		return this.errors;
+	}
 
+	@Override
 	public boolean validate() {
 		boolean validUsername = this.validateUsername();
 		boolean validPassword = this.validatePassword();
@@ -35,10 +41,6 @@ public class LoginFormValidator {
 			return false;
 		}
 		return true;
-	}
-
-	public HashMap<String, String> getErrors() {
-		return this.errors;
 	}
 
 }
