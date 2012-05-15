@@ -4,11 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="static/css/style.css" />
 <title>Insert title here</title>
 </head>
 <body>
 <jsp:include page="header.jsp" />
 
+	<div class="indicator-line">
+		<div class="WELCOME">WELCOME!</div>
+	</div>
 	<form method="post" action="?action=add_new_subject">
 		<button type="submit">Add new subject</button>
 	</form>

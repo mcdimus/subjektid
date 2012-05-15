@@ -6,7 +6,9 @@
     <class name="backend.model.Contact" table="contact" schema="public">
         <id name="contact" type="long">
             <column name="contact" precision="10" scale="0" />
-            <generator class="assigned" />
+            <generator class="sequence">
+            	<param name="sequence">contact_id</param>
+            </generator>
         </id>
         <property name="subjectFk" type="java.lang.Long">
             <column name="subject_fk" precision="10" scale="0" />

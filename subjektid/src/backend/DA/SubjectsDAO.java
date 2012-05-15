@@ -1,8 +1,5 @@
 package backend.DA;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,6 +7,7 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 
 import frontend.forms.LoginForm;
+import general.Utils;
 
 import log.MyLogger;
 
@@ -33,7 +31,7 @@ public class SubjectsDAO {
 	}
 	
 	public Employee auth(LoginForm form) {
-		form.setPassword(generateMD5(form.getUsername() + form.getPassword()));
+		form.setPassword(Utils.generateMD5(form.getUsername() + form.getPassword()));
 		Connection db;
 		ResultSet results;
 		Employee employee = null;
@@ -58,18 +56,6 @@ public class SubjectsDAO {
 			e.printStackTrace();
 		}
 		return employee;
-	}
-	
-	static String generateMD5(String passw) {
-		try {
-			MessageDigest m = MessageDigest.getInstance("MD5");
-			BigInteger bi = new BigInteger(1, m.digest(passw.getBytes()));
-			return String.format("%1$032x", bi);
-		} catch (NoSuchAlgorithmException e) {
-			MyLogger.log("SubjectsDAO.generateMD5(): ", e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
 	}
 	
 //	public void findAddresses() {

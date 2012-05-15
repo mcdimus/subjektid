@@ -6,7 +6,9 @@
     <class name="backend.model.EnterprisePersonRelation" table="enterprise_person_relation" schema="public">
         <id name="enterprisePersonRelation" type="long">
             <column name="enterprise_person_relation" precision="10" scale="0" />
-            <generator class="assigned" />
+            <generator class="sequence">
+            	<param name="sequence">enterprise_person_relation_id</param>
+            </generator>
         </id>
         <property name="personFk" type="java.lang.Long">
             <column name="person_fk" precision="10" scale="0" />

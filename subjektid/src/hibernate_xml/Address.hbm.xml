@@ -6,7 +6,9 @@
     <class name="backend.model.Address" table="address" schema="public">
         <id name="address" type="long">
             <column name="address" precision="10" scale="0" />
-            <generator class="assigned" />
+            <generator class="sequence">
+            	<param name="sequence">address_id</param>
+            </generator>
         </id>
         <property name="addressTypeFk" type="java.lang.Long">
             <column name="address_type_fk" precision="10" scale="0" />

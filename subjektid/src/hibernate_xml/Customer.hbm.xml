@@ -6,7 +6,9 @@
     <class name="backend.model.Customer" table="customer" schema="public">
         <id name="customer" type="long">
             <column name="customer" precision="10" scale="0" />
-            <generator class="assigned" />
+            <generator class="sequence">
+            	<param name="sequence">customer_id</param>
+            </generator>
         </id>
         <property name="subjectFk" type="java.lang.Long">
             <column name="subject_fk" precision="10" scale="0" />
