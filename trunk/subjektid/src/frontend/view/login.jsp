@@ -8,7 +8,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="static/css/style.css" />
-<title>Login</title>
+<title>r12_subjektid :: Login</title>
 </head>
 <body>
 	<%
@@ -33,7 +33,7 @@
 		<div class="<%=status%>"><%=status%>! <%=errortxt%></div>
 	</div>
 	<div id="login-form">
-		<form method="post" action="?action=login">
+		<form method="post" action="?mode=login&action=login">
 			<table>
 				<tr>
 					<th>Username</th>
