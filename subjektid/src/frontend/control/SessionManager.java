@@ -47,4 +47,12 @@ public class SessionManager {
 	public void set(String atrName, String atrValue) {
 		req.getSession(false).setAttribute(atrName, atrValue);
 	}
+	
+	public String get(String atrName) {
+		return (String) req.getSession(false).getAttribute(atrName);
+	}
+	
+	public String getEmployeeId() {
+		return this.get("employee_id");
+	}
 }

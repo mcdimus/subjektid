@@ -1,5 +1,6 @@
 package frontend.control;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ControllerFactory {
@@ -27,6 +28,7 @@ public class ControllerFactory {
 
 		}
 
+		controller.setParams((HashMap<String, String[]>) params);
 		controller.setAction(action);
 		return controller;
 	}
