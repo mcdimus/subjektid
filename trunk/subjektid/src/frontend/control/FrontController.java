@@ -47,7 +47,7 @@ public class FrontController extends HttpServlet {
 		ViewManager viewManager = new ViewManager();
 
 		String event = null;
-		String view = "default_view";
+		String view = null;
 
 		// in all controllers do if sessionManager.loggedIn()
 		event = new EventFinder().find(params);

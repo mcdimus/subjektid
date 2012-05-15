@@ -22,6 +22,9 @@ public class ViewManager {
 			} else if (view.equals("default_view")) {
 
 				dispatcher = "/default.jsp";
+			} else if (view.equals("add_new_subject_view")) {
+				
+				dispatcher = "/new_subject.jsp";
 			}
 
 			context.getRequestDispatcher(dispatcher).forward(req, resp);

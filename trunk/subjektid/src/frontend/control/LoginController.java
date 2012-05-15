@@ -78,7 +78,11 @@ public class LoginController implements Controller {
 				view = "login_view";
 			}
 		} else {
-			view = "login_view";
+			if (sessionManager.loggedIn()) {
+				view = "default_view";
+			} else {
+				view = "login_view";
+			}
 		}
 
 		return view;

@@ -1,0 +1,40 @@
+ul {
+	margin-left: 0;
+	padding-left: 0;
+	white-space: nowrap;
+}
+
+li {
+	display: inline;
+	list-style-type: none;
+}
+
+li a {
+	padding: 3px 10px;
+}
+
+li a:link,li a:visited {
+	color: #fff;
+	background-color: gray;
+	border: 1px solid darkgray;
+	text-decoration: none;
+}
+
+li a:hover {
+	color: #fff;
+	background-color: lightgray;
+	border: 1px solid darkgray;
+	text-decoration: none;
+}
+
+table,th,td {
+	border: 1px solid black;
+	padding: 2px;
+}
+
+table {
+	border-collapse: collapse;
+}
+.error {
+	color: red;
+}
