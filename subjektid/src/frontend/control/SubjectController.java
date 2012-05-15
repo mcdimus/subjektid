@@ -17,7 +17,7 @@ public class SubjectController implements Controller {
 	public String service(String event, HttpServletRequest req,
 			HttpServletResponse resp) {
 
-		String view = "login_view";
+		String view = "default_view";
 		SessionManager sessionManager = new SessionManager(req);
 		
 		if (sessionManager.loggedIn()) {

@@ -39,6 +39,7 @@ public class SubjectsORM {
 		try {
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			session.beginTransaction();
+			// TODO: fail in query!  
 			Query q = session.createQuery("from " + _class.getName()
 					+ " where subject_fk=:subj_id");
 			q.setInteger("subj_id", id);		
