@@ -5,8 +5,7 @@ public class LoginForm {
 	String username;
 	String password;
 	
-	public LoginForm() {
-	}
+	public LoginForm() { }
 	
 	public LoginForm(String username, String password) {
 		this.username = username;
