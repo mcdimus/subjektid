@@ -52,6 +52,7 @@ public class LoginController extends Controller {
 					SubjectsDAO subjectDao = new SubjectsDAO();
 					Employee employee = subjectDao.auth(loginForm);
 					if (employee != null) {
+						req.setAttribute("status", "WELCOME");
 						sessionManager.set("username", username);
 						sessionManager.set("employee_id",
 								String.valueOf(employee.getEmployee()));
@@ -59,7 +60,8 @@ public class LoginController extends Controller {
 						view = "default_view";
 					} else {
 						HashMap<String, String> errors = new HashMap<String, String>();
-						errors.put("reason", "Wrong username or password");
+//						errors.put("reason", "Wrong username or password");
+						errors.put("password", "Wrong username or password");
 						req.setAttribute("errors", errors);
 						req.setAttribute("loginForm", loginForm);
 						view = "login_view";
@@ -69,7 +71,7 @@ public class LoginController extends Controller {
 					view = "login_view";
 					HashMap<String, String> errors = (HashMap<String, String>) loginFormValidator
 							.getErrors();
-					errors.put("reason", "Login failed");
+//					errors.put("reason", "Login failed");
 					req.setAttribute("errors", errors);
 					req.setAttribute("loginForm", loginForm);
 				}

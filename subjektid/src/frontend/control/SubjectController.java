@@ -3,7 +3,6 @@ package frontend.control;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,6 +37,7 @@ public class SubjectController extends Controller {
 					req.setAttribute("employeeRoleTypeList",
 							employeeRoleTypeList);
 					req.setAttribute("enterpriseList", enterpriseList);
+					req.setAttribute("status", "WELCOME");
 					view = "add_new_subject_view";
 				} catch (Exception e) {
 					MyLogger.log("SubjectController:AddNewSubject:show_form",
@@ -64,16 +64,18 @@ public class SubjectController extends Controller {
 				personForm.setBirthDate(params.get("birthdate")[0]);
 				personForm.setGender(params.get("gender")[0]);
 				personForm.setEestiResident(params.get("eesti_resident")[0]);
+				personForm.setLasteArv(params.get("laste_arv")[0]);
 				personForm.setNationality(params.get("nationality")[0]);
 				personForm.setReligion(params.get("religion")[0]);
 				personForm.setFavNumber(params.get("fav_number")[0]);
+				personForm.setDrivingLicense(params.get("driving_license")[0]);
 				personForm.setAddressForm(addressForm);
 				
 				PersonFormValidator personFormValidator = new PersonFormValidator(personForm);
 				
 				if (addressFormValidator.validate() && personFormValidator.validate()) {
-					
-					// vse good --> send personForm to backend
+					SubjectsORM orm = new SubjectsORM();
+					orm.savePerson(personForm);
 				} else {
 					HashMap<String, String> errors = new HashMap<String, String>();
 					

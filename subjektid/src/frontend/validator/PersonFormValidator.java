@@ -84,7 +84,7 @@ public class PersonFormValidator implements Validator {
 		   	today = currDtCal.getTime();
 			
 		   	if (!birthDate.before(today)) {
-				errors.put("birthdate", "Birthday cannot be more or equal than today!");
+				errors.put("birthdate", "Birthdate cannot be more than today or equal!");
 		   		return false;
 			} else {
 				return true;

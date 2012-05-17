@@ -1,4 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<jsp:useBean id="status" scope="request" class="java.lang.String" />
+
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -7,14 +11,17 @@
 <title>r12_subjektid</title>
 </head>
 <body>
-	User
-	<strong><%=session.getAttribute("username")%></strong> logged in.
-	<form method="post" action="?mode=login&action=logout">
-		<button type="submit">Logout</button>
-	</form>
-	<br />
+	<div class="indicator-line">
+		<div class="<%=status.toLowerCase()%>"><%=status%>!</div>
+	</div>
+	<div>
+		User <strong><%=session.getAttribute("username")%></strong> is logged in.
+		<form id="logout-form" method="post" action="?mode=login&action=logout">
+			<button type="submit">Logout</button>
+		</form>
+	</div>
 	<ul>
 		<li><a href="s">servlet</a></li>
-		<li><a href="log.txt" target="_blank">Log.txt</a></li>
+		<li><a href="log.txt" target="_blank">log.txt</a></li>
 	</ul>
 	<hr />

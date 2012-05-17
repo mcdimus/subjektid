@@ -2,13 +2,17 @@ package junit.tests;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Test;
 
+import frontend.forms.SearchForm;
+
 import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.AddressType;
+import backend.model.Person;
 
 public class SubjectsORMTest {
 	
@@ -23,7 +27,7 @@ public class SubjectsORMTest {
 
 	@Test
 	public void testFindById() {
-		List<Address> addresses = orm.findByID(Address.class, 1);
+		Address address = orm.findByID(Address.class, 3);
 //		for (int i = 0; i < addresses.size(); i++) {
 //			Address address = addresses.get(i);
 //			System.out.printf("%d\t%d\t%d\t%d\t%s\t%s\t%s\t%s\t%s\r\n", 
@@ -33,17 +37,31 @@ public class SubjectsORMTest {
 //					address.getTownVillage(), address.getStreetAddress(),
 //					address.getZipcode());
 //		}
-		assertNotNull("List<Address> addresses are null!", addresses);
-		assertTrue("addresses.size() = 0", addresses.size() > 0);
+		assertNotNull("List<Address> addresses are null!", address);
 	}
 	
 	@Test
 	public void testSaveOrUpdate() {
-		List<Address> addresses = orm.findByID(Address.class, 1);
-		Address address = addresses.get(2);
+		Address address = orm.findByID(Address.class, 3);
 		address.setCounty("Stockholm");
 		assertTrue("saveOrUpdateAddress() = false",
 				orm.saveOrUpdate(address));
+	}
+	
+	@Test
+	public void testSearch() {
+		SearchForm form = new SearchForm();
+		HashMap<String, String> criterias = new HashMap<String, String>();
+//		criterias.put("birthDate", "11-11-1960 11-11-1970");
+//		form.setMap(criterias, 3);
+		criterias.put("identityCode", "5");
+		form.setMap(criterias, 1);
+		List<Person> persons = orm.search(form, Person.class);
+		assertNotNull("List<Person> persons are null!", persons);
+		assertTrue("types.size = 0", persons.size() > 0);
+//		for (Person p : persons) {
+//			System.out.println(p.getFirstName());
+//		}
 	}
 
 }

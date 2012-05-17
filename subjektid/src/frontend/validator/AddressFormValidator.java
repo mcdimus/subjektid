@@ -16,7 +16,6 @@ public class AddressFormValidator implements Validator{
 
 	@Override
 	public HashMap<String, String> getErrors() {
-		// TODO Auto-generated method stub
 		return this.errors;
 	}
 	

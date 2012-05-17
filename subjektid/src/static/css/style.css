@@ -7,6 +7,10 @@ body {
 	margin: 100px auto;
 }
 
+#logout-form {
+	display: inline-block;
+}
+
 p.error, td.error {
 	color: #FF0000;
 }
@@ -25,16 +29,16 @@ div.indicator-line div {
 	border-bottom: 1px solid #FFFFFF;
 }
 
-div.SUCCESS {
+div.welcome {
+	background-color: #808080;
+}
+
+div.success {
 	background-color: #0000FF;
 }
 
-div.ERROR {
+div.error {
 	background-color: #FF0000;
-}
-
-div.WELCOME {
-	background-color: #808080;
 }
 
 ul {
