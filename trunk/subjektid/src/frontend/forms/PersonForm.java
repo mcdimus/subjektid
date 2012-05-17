@@ -15,12 +15,28 @@ public class PersonForm {
 	
 	private String gender;
 	private String eestiResident;
+	private String lasteArv;
 	private String nationality;
 	private String religion;
 	private String favNumber;
+	private String drivingLicense;
 	
-	public PersonForm() {
-		// TODO Auto-generated constructor stub
+	public PersonForm() { }
+
+	public String getLasteArv() {
+		return lasteArv;
+	}
+
+	public void setLasteArv(String lasteArv) {
+		this.lasteArv = lasteArv;
+	}
+
+	public String getDrivingLicense() {
+		return drivingLicense;
+	}
+
+	public void setDrivingLicense(String drivingLicense) {
+		this.drivingLicense = drivingLicense;
 	}
 
 	/**

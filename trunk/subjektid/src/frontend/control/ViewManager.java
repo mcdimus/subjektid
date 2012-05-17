@@ -20,8 +20,8 @@ public class ViewManager {
 
 				dispatcher = "/default.jsp";
 			} else if (view.equals("add_new_subject_view")) {
-				
-				dispatcher = "/new_subject.jsp";
+//				dispatcher = "/new_subject.jsp";
+				dispatcher = "/new_person_form.jsp";
 			}
 
 			context.getRequestDispatcher(dispatcher).forward(req, resp);

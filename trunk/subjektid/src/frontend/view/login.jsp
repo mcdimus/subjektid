@@ -15,7 +15,7 @@
 		String username = "";
 		String usernameError = "";
 		String passwordError = "";
-		String status = "WELCOME", errortxt = "";
+		String status = "WELCOME";
 
 		if (!errors.isEmpty()) {
 
@@ -25,12 +25,12 @@
 			passwordError = errors.containsKey("password") ? (String) errors
 					.get("password") : "";
 			status = "ERROR";
-			errortxt = errors.containsKey("reason") ? (String) errors
-					.get("reason") : "";
+			//errortxt = errors.containsKey("reason") ? (String) errors
+			//		.get("reason") : "";
 		}
 	%>
 	<div class="indicator-line">
-		<div class="<%=status%>"><%=status%>! <%=errortxt%></div>
+		<div class="<%=status.toLowerCase()%>"><%=status%>!</div>
 	</div>
 	<div id="login-form">
 		<form method="post" action="?mode=login&action=login">

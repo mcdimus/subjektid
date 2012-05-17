@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<jsp:useBean id="personForm" scope="request"
-	class="frontend.forms.PersonForm" />
-<jsp:useBean id="errors" scope="request" class="java.util.HashMap" />
 <jsp:include page="header.jsp" />
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -19,11 +16,6 @@
 		});
 	});
 </script>
-<% if (!errors.isEmpty()) {
-	out.println("Error");
-	
-}
-%>
 Subject type:
 <select name="subject_type">
 	<option value="1">Person</option>
