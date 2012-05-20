@@ -12,6 +12,7 @@
 </head>
 <body>
 	<div class="indicator-line">
+		<% if (status.length() == 0) { status = "WELCOME"; } %>
 		<div class="<%=status.toLowerCase()%>"><%=status%>!</div>
 	</div>
 	<div>

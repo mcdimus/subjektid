@@ -10,6 +10,7 @@ import backend.DA.SubjectsDAO;
 import backend.model.Employee;
 import frontend.forms.LoginForm;
 import frontend.validator.LoginFormValidator;
+import frontend.validator.Validator;
 
 public class LoginController extends Controller {
 
@@ -44,23 +45,25 @@ public class LoginController extends Controller {
 			}
 
 			if (username != null && password != null) {
+				// Clear previous Validator warnings
+				Validator.getErrors().clear();
+				
 				LoginForm loginForm = new LoginForm(username, password);
 				LoginFormValidator loginFormValidator = new LoginFormValidator(
 						loginForm);
-
-				if (loginFormValidator.validate()) {
+				loginFormValidator.validate();
+				HashMap<String, String> errors = Validator.getErrors();
+				
+				if (errors.isEmpty()) {
 					SubjectsDAO subjectDao = new SubjectsDAO();
 					Employee employee = subjectDao.auth(loginForm);
 					if (employee != null) {
-						req.setAttribute("status", "WELCOME");
 						sessionManager.set("username", username);
 						sessionManager.set("employee_id",
 								String.valueOf(employee.getEmployee()));
 
 						view = "default_view";
 					} else {
-						HashMap<String, String> errors = new HashMap<String, String>();
-//						errors.put("reason", "Wrong username or password");
 						errors.put("password", "Wrong username or password");
 						req.setAttribute("errors", errors);
 						req.setAttribute("loginForm", loginForm);
@@ -69,9 +72,6 @@ public class LoginController extends Controller {
 
 				} else {
 					view = "login_view";
-					HashMap<String, String> errors = (HashMap<String, String>) loginFormValidator
-							.getErrors();
-//					errors.put("reason", "Login failed");
 					req.setAttribute("errors", errors);
 					req.setAttribute("loginForm", loginForm);
 				}

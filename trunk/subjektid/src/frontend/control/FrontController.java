@@ -1,7 +1,6 @@
 package frontend.control;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -10,12 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import backend.DA.SubjectsDAO;
-import backend.model.Employee;
-
-import frontend.forms.LoginForm;
-import frontend.validator.LoginFormValidator;
 
 import log.MyLogger;
 

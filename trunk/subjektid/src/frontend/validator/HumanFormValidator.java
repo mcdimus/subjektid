@@ -1,80 +1,54 @@
 package frontend.validator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
-import frontend.forms.PersonForm;
+import frontend.forms.HumanForm;
 
-public class PersonFormValidator implements Validator {
+public class HumanFormValidator extends Validator {
 
-	PersonForm form;
-	HashMap<String, String> errors;
+	HumanForm form;
 
-	public PersonFormValidator(PersonForm form) {
+	public HumanFormValidator(HumanForm form) {
 		this.form = form;
-		this.errors = new HashMap<String, String>();
 	}
 
 	@Override
-	public HashMap<String, String> getErrors() {
-		return this.errors;
+	public void validate() {
+		validateFirstName();
+		validateLastName();
+		validateIdentityCode();
+		validateBirthDate();
 	}
 
-	@Override
-	public boolean validate() {
-		boolean validateFirstName = validateFirstName(),
-				validateLastName = validateLastName(),
-				validateIdentityCode = validateIdentityCode(),
-				validateBirthDate = validateBirthDate();
-		return validateFirstName && validateLastName && validateIdentityCode
-				&& validateBirthDate;
-	}
-
-	private boolean validateFirstName() {
+	private void validateFirstName() {
 		if (!form.getFirstName().matches("[A-Za-z]+")) {
 			errors.put("first_name", "First name is empty / contains non-letters!");
-			return false;
 		} else if (form.getFirstName().length() > 100) {
 			errors.put("first_name", "First name should not exceed 100 symbols!");
-			return false;
-		} else {
-			return true;
 		}
 	}
 	
-	private boolean validateLastName() {
+	private void validateLastName() {
 		if (!form.getLastName().matches("[A-Za-z]+")) {
 			errors.put("last_name", "Last name is empty / contains non-letters!");
-			return false;
 		} else if (form.getLastName().length() > 100) {
 			errors.put("last_name", "Last name should not exceed 100 symbols!");
-			return false;
-		} else {
-			return true;
 		}
 	}
 	
-	private boolean validateIdentityCode() {
+	private void validateIdentityCode() {
 		if (!form.getIdentityCode().matches("\\w+")) {
 			errors.put("identity_code", "Identity code is empty /"
 					+ " contains non-word characters!");
-			return false;
 		} else if (form.getIdentityCode().length() > 20) {
 			errors.put("identity_code", "Identity code should not exceed 20 symbols!");
-			return false;
-		} else {
-			return true;
 		}
 	}
 	
-	private boolean validateBirthDate() {
-		Date birthDate, today;
-		try {
-			birthDate = new SimpleDateFormat("dd.MM.yyyy").parse(form.getBirthDate());
-			
+	private void validateBirthDate() {
+		Date birthDate = validateDate(form.getBirthDate()), today;
+		if (birthDate != null) {
 			// Zero out the hour, minute, second, and millisecond
 			Calendar currDtCal = Calendar.getInstance();
 		    currDtCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -85,13 +59,9 @@ public class PersonFormValidator implements Validator {
 			
 		   	if (!birthDate.before(today)) {
 				errors.put("birthdate", "Birthdate cannot be more than today or equal!");
-		   		return false;
-			} else {
-				return true;
 			}
-		} catch (ParseException e) {
+		} else {
 			errors.put("birthdate", "Birthdate is empty / in the wrong format");
-			return false;
 		}
 	}
 	

@@ -10,7 +10,7 @@ public class SubjectAttributeType implements java.io.Serializable {
 	private long subjectAttributeType;
 	private Long subjectTypeFk;
 	private String typeName;
-	private Boolean dataType;
+	private int dataType;
 	private Long orderby;
 	private String required;
 	private String multipleAttributes;
@@ -24,7 +24,7 @@ public class SubjectAttributeType implements java.io.Serializable {
 	}
 
 	public SubjectAttributeType(long subjectAttributeType, Long subjectTypeFk,
-			String typeName, Boolean dataType, Long orderby, String required,
+			String typeName, int dataType, Long orderby, String required,
 			String multipleAttributes, String createdByDefault) {
 		this.subjectAttributeType = subjectAttributeType;
 		this.subjectTypeFk = subjectTypeFk;
@@ -60,11 +60,11 @@ public class SubjectAttributeType implements java.io.Serializable {
 		this.typeName = typeName;
 	}
 
-	public Boolean getDataType() {
+	public int getDataType() {
 		return this.dataType;
 	}
 
-	public void setDataType(Boolean dataType) {
+	public void setDataType(int dataType) {
 		this.dataType = dataType;
 	}
 

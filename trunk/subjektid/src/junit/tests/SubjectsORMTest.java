@@ -13,6 +13,7 @@ import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.AddressType;
 import backend.model.Person;
+import backend.model.SubjectAttributeType;
 
 public class SubjectsORMTest {
 	
@@ -26,7 +27,7 @@ public class SubjectsORMTest {
 	}
 
 	@Test
-	public void testFindById() {
+	public void testFindByIdFirst() {
 		Address address = orm.findByID(Address.class, 3);
 //		for (int i = 0; i < addresses.size(); i++) {
 //			Address address = addresses.get(i);
@@ -38,6 +39,17 @@ public class SubjectsORMTest {
 //					address.getZipcode());
 //		}
 		assertNotNull("List<Address> addresses are null!", address);
+	}
+	
+	@Test
+	public void testFindByIdSecond() {
+		List<SubjectAttributeType> types = orm.findByID(
+				SubjectAttributeType.class, "subjectTypeFk", 1);
+//		for (SubjectAttributeType type : types) {
+//			System.out.println(type.getTypeName());
+//		}
+		assertNotNull("List<AddressType> types are null!", types);
+		assertTrue("types.size = 0", types.size() > 0);
 	}
 	
 	@Test

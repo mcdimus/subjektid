@@ -78,3 +78,13 @@ table {
 table {
 	border-collapse: collapse;
 }
+
+th.main {
+	text-align: center;
+	color: #FFFFFF;
+	background-color: #808080;
+}
+
+td.centered {
+	text-align: center;
+}
