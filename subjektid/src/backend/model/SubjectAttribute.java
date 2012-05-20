@@ -2,7 +2,6 @@ package backend.model;
 
 // Generated May 11, 2012 8:57:46 PM by Hibernate Tools 3.4.0.CR1
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -16,9 +15,9 @@ public class SubjectAttribute implements java.io.Serializable {
 	private Long subjectTypeFk;
 	private Long orderby;
 	private String valueText;
-	private BigDecimal valueNumber;
+	private long valueNumber;
 	private Date valueDate;
-	private Boolean dataType;
+	private int dataType;
 
 	public SubjectAttribute() {
 	}
@@ -29,8 +28,8 @@ public class SubjectAttribute implements java.io.Serializable {
 
 	public SubjectAttribute(long subjectAttribute, Long subjectFk,
 			Long subjectAttributeTypeFk, Long subjectTypeFk, Long orderby,
-			String valueText, BigDecimal valueNumber, Date valueDate,
-			Boolean dataType) {
+			String valueText, long valueNumber, Date valueDate,
+			int dataType) {
 		this.subjectAttribute = subjectAttribute;
 		this.subjectFk = subjectFk;
 		this.subjectAttributeTypeFk = subjectAttributeTypeFk;
@@ -90,11 +89,11 @@ public class SubjectAttribute implements java.io.Serializable {
 		this.valueText = valueText;
 	}
 
-	public BigDecimal getValueNumber() {
+	public long getValueNumber() {
 		return this.valueNumber;
 	}
 
-	public void setValueNumber(BigDecimal valueNumber) {
+	public void setValueNumber(long valueNumber) {
 		this.valueNumber = valueNumber;
 	}
 
@@ -106,11 +105,11 @@ public class SubjectAttribute implements java.io.Serializable {
 		this.valueDate = valueDate;
 	}
 
-	public Boolean getDataType() {
+	public int getDataType() {
 		return this.dataType;
 	}
 
-	public void setDataType(Boolean dataType) {
+	public void setDataType(int dataType) {
 		this.dataType = dataType;
 	}
 
