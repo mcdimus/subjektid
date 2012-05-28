@@ -1,10 +1,13 @@
 package frontend.forms;
 
+import java.util.ArrayList;
+
 public abstract class SubjectForm {
 
 	String subjectId;
 	String createdBy;
 	String updatedBy;
+	ArrayList<AddressForm> addressForms;
 	
 	public String getSubjectId() {
 		return subjectId;
@@ -40,6 +43,20 @@ public abstract class SubjectForm {
 	 */
 	public final void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	/**
+	 * @return the addressForm
+	 */
+	public final ArrayList<AddressForm> getAddressForms() {
+		return addressForms;
+	}
+
+	/**
+	 * @param addressForm the addressForm to set
+	 */
+	public final void setAddressForms(ArrayList<AddressForm> addressForms) {
+		this.addressForms = addressForms;
 	}
 	
 }

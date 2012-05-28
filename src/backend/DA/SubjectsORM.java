@@ -128,8 +128,7 @@ public class SubjectsORM {
 		person.setCreated(new Date());
 		
 		saveOrUpdate(person);
-		// TODO: fix the likeness of the person and the employee.
-		saveAddress(form.getAddressForm(), person.getPerson(), 0);
+//		saveAddress(form.getAddressForms(), person.getPerson(), 1);
 		
 		saveAttributes(person.getPerson(), form.getAttributes());
 		
@@ -170,7 +169,7 @@ public class SubjectsORM {
 		enterprise.setCreated(new Date());
 		
 		saveOrUpdate(enterprise);
-		saveAddress(form.getAddressForm(), enterprise.getEnterprise(), 2);
+//		saveAddress(form.getAddressForms(), enterprise.getEnterprise(), 2);
 		saveAttributes(enterprise.getEnterprise(), form.getAttributes());
 		
 		return String.valueOf(enterprise.getEnterprise());
@@ -250,7 +249,7 @@ public class SubjectsORM {
 	private String addStringCriterias(HashMap<String, String> criterias) {
 		String queryPart = "";
 		for (String key : criterias.keySet()) {
-			queryPart += " " + key + " like '" + criterias.get(key) + "%' AND";
+			queryPart += " " + key + " like '%" + criterias.get(key) + "%' AND";
 		}
 		return queryPart;
 	}

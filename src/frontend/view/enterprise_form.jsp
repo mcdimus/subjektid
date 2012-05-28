@@ -14,21 +14,21 @@
 		name = enterpriseForm.getName();
 		fullName = enterpriseForm.getFullName();
 		if (enterpriseForm.getSubjectId() != null) {
-			subjectId = enterpriseForm.getSubjectId();
-			action = "Edit enterprise";
-			button = "Save";
+	subjectId = enterpriseForm.getSubjectId();
+	action = "Edit enterprise";
+	button = "Save";
 		}
 		
-		AddressForm addressForm = enterpriseForm.getAddressForm();
+		AddressForm addressForm = enterpriseForm.getAddressForms();
 		if (addressForm != null) {
-			country = addressForm.getCountry();
-			county = addressForm.getCounty();
-			townVillage = addressForm.getTownVillage();
-			streetAddress = addressForm.getStreetAddress();
-			zipcode = addressForm.getZipcode();
-			if (addressForm.getAddressId() != null) {
-				addressId = addressForm.getAddressId();
-			}
+	country = addressForm.getCountry();
+	county = addressForm.getCounty();
+	townVillage = addressForm.getTownVillage();
+	streetAddress = addressForm.getStreetAddress();
+	zipcode = addressForm.getZipcode();
+	if (addressForm.getAddressId() != null) {
+		addressId = addressForm.getAddressId();
+	}
 		}
 	}
 %>

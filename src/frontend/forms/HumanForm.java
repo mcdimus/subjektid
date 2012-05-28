@@ -6,7 +6,6 @@ public abstract class HumanForm extends SubjectForm {
 	String lastName;
 	String identityCode;
 	String birthDate;
-	AddressForm addressForm;
 	FormAttribute[] attributes;
 	
 	public HumanForm() { }
@@ -65,20 +64,6 @@ public abstract class HumanForm extends SubjectForm {
 	 */
 	public final void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
-	}
-
-	/**
-	 * @return the addressForm
-	 */
-	public final AddressForm getAddressForm() {
-		return addressForm;
-	}
-
-	/**
-	 * @param addressForm the addressForm to set
-	 */
-	public final void setAddressForm(AddressForm addressForm) {
-		this.addressForm = addressForm;
 	}
 	
 	public FormAttribute[] getAttributes() {

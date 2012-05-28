@@ -32,28 +32,38 @@ public class FormAttributesValidator extends Validator {
 	}
 	
 	private void validateString(FormAttribute attr) {
-		if (attr.getValue().length() > 100) {
+		if (Utils.checkEmpty(attr.getValue())) {
+			errors.put(attr.getName(), attr.getName() + " is empty!");
+		} else if (attr.getValue().length() > 100) {
 			errors.put(attr.getName(), attr.getName()
 					+ " is too long (100 chars max)!");
 		}
 	}
 
 	private void validateNumber(FormAttribute attr) {
-		try {
-			Long.parseLong(attr.getValue());
-		} catch (NumberFormatException e) {
-			errors.put(attr.getName(), attr.getName() + " is not a number!");
+		if (Utils.checkEmpty(attr.getValue())) {
+			errors.put(attr.getName(), attr.getName() + " is empty!");
+		} else {
+			try {
+				Long.parseLong(attr.getValue());
+			} catch (NumberFormatException e) {
+				errors.put(attr.getName(), attr.getName() + " is not a number!");
+			}
 		}
 	}
 
 	private void validateDate(FormAttribute attr) {
-		Date date = Utils.parseDate(attr.getValue());
-		if (date != null) {
-		   	if (date.after(new Date())) {
-				errors.put(attr.getName(), "Date cannot be more than today!");
-			}
+		if (Utils.checkEmpty(attr.getValue())) {
+			errors.put(attr.getName(), attr.getName() + " is empty!");
 		} else {
-			errors.put(attr.getName(), "Date is in the wrong format");
+			Date date = Utils.parseDate(attr.getValue());
+			if (date != null) {
+			   	if (date.after(new Date())) {
+					errors.put(attr.getName(), "Date cannot be more than today!");
+				}
+			} else {
+				errors.put(attr.getName(), "Date is in the wrong format");
+			}
 		}
 	}
 

@@ -186,7 +186,7 @@ public class SubjectController extends Controller {
 		HumanFormValidator humanFormValidator = new HumanFormValidator(humanForm);
 		humanFormValidator.validate();
 		
-		humanForm.setAddressForm(formAndValidateAddressForm());
+//		humanForm.setAddressForms(formAndValidateAddressForm());
 		formAndValidateFormAttributes(humanForm.getAttributes());
 		return humanForm;
 	}
@@ -212,7 +212,7 @@ public class SubjectController extends Controller {
 		enterpriseForm.setUpdatedBy(sessionManager.getEmployeeId());
 		enterpriseForm.setName(params.get("name")[0]);
 		enterpriseForm.setFullName(params.get("full_name")[0]);
-		enterpriseForm.setAddressForm(formAndValidateAddressForm());
+//		enterpriseForm.setAddressForms(formAndValidateAddressForm());
 		
 		EnterpriseFormValidator enterpriseFormValidator =
 				new EnterpriseFormValidator(enterpriseForm);

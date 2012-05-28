@@ -1,42 +1,48 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ page import="frontend.forms.AddressForm" %>
+<%@page import="backend.model.EmployeeRoleType"%>
+<%@page import="backend.model.Enterprise"%>
 <%@ page import="frontend.forms.FormAttribute" %>
-<jsp:useBean id="personForm" scope="request" class="frontend.forms.PersonForm" />
+<%@ page import="frontend.forms.AddressForm" %>
+<jsp:useBean id="enterpriseList" scope="request"
+	class="java.util.ArrayList" />
+<jsp:useBean id="employeeRoleTypeList" scope="request"
+	class="java.util.ArrayList" />
+<jsp:useBean id="employeeForm" scope="request" class="frontend.forms.EmployeeForm" />
 <jsp:useBean id="errors" scope="request" class="java.util.HashMap" />
 
 <%
 	String firstName = "", lastName = "", identityCode = "", birthDate = "",
 		country = "", county = "", townVillage = "", streetAddress = "",
-		zipcode = "", status = "", action = "New person", button = "Submit",
-		subjectId = "", addressId = "";
-	if (personForm.getFirstName() != null) {
-		firstName = personForm.getFirstName();
-		lastName = personForm.getLastName();
-		identityCode = personForm.getIdentityCode();
-		birthDate = personForm.getBirthDate();
-		if (personForm.getSubjectId() != null) {
-			subjectId = personForm.getSubjectId();
-			action = "Edit person";
-			button = "Save";
+		zipcode = "", status = "", action = "New employee", button = "Submit",
+		subjectId = "", addressId = "", employeeId = "";
+	if (employeeForm.getFirstName() != null) {
+		firstName = employeeForm.getFirstName();
+		lastName = employeeForm.getLastName();
+		identityCode = employeeForm.getIdentityCode();
+		birthDate = employeeForm.getBirthDate();
+		if (employeeForm.getSubjectId() != null) {
+	subjectId = employeeForm.getSubjectId();
+	employeeId = employeeForm.getEmployeeId();
+	action = "Edit employee";
+	button = "Save";
 		}
 		
-		AddressForm addressForm = personForm.getAddressForm();
+		AddressForm addressForm = employeeForm.getAddressForms();
 		if (addressForm != null) {
-			country = addressForm.getCountry();
-			county = addressForm.getCounty();
-			townVillage = addressForm.getTownVillage();
-			streetAddress = addressForm.getStreetAddress();
-			zipcode = addressForm.getZipcode();
-			if (addressForm.getAddressId() != null) {
-				addressId = addressForm.getAddressId();
-			}
+	country = addressForm.getCountry();
+	county = addressForm.getCounty();
+	townVillage = addressForm.getTownVillage();
+	streetAddress = addressForm.getStreetAddress();
+	zipcode = addressForm.getZipcode();
+	if (addressForm.getAddressId() != null) {
+		addressId = addressForm.getAddressId();
+	}
 		}
 	}
 %>
 
-<form method="post" action="?mode=subject&action=add_person">
+<form method="post" action="?mode=subject&action=add_employee">
 	<input type="hidden" name="subjectId" value="<%=subjectId%>" />
+	<input type="hidden" name="employeeId" value="<%=employeeId%>" />
 	<table>
 		<tr>
 			<th colspan="2" class="main"><%=action%></th>
@@ -88,7 +94,53 @@
 		
 		<tr>
 			<td colspan="2" class="centered">
-				<input type="hidden" name="address_type_fk"value="1" />
+				--------------------------------</td>
+		</tr>
+		<tr>
+			<th>Enterprise</th>
+			<td><select name="enterprise">
+					<option value="">Select one...</option>
+					<%
+						Enterprise enterprise;
+						for (int i = 0; i < enterpriseList.size(); i++) {
+							enterprise = (Enterprise) enterpriseList.get(i);
+					%>
+					<option value="<%=enterprise.getEnterprise()%>">
+						<%=enterprise.getName()%></option>
+					<%
+						}
+					%>
+			</select></td>
+		</tr>
+		<tr>
+			<td class="error" colspan="2"><%=errors.containsKey("enterprise") ? 
+					errors.get("enterprise") : ""%></td>
+		</tr>
+		<tr>
+			<th>Role</th>
+			<td><select name="employee_role_type">
+					<option value="">Select one...</option>
+					<%
+						EmployeeRoleType employeeRoleType;
+						for (int i = 0; i < employeeRoleTypeList.size(); i++) {
+							employeeRoleType = (EmployeeRoleType) 
+									employeeRoleTypeList.get(i);
+					%>
+					<option value="<%=employeeRoleType.getEmployeeRoleType()%>">
+						<%=employeeRoleType.getTypeName()%></option>
+					<%
+						}
+					%>
+			</select></td>
+		</tr>
+		<tr>
+			<td class="error" colspan="2"><%=errors.containsKey("employee_role_type") ? 
+					errors.get("employee_role_type") : ""%></td>
+		</tr>
+		
+		<tr>
+			<td colspan="2" class="centered">
+				<input type="hidden" name="address_type_fk" value="1" />
 				<input type="hidden" name="addressId" value="<%=addressId%>" />
 				---------- Main address ---------
 			</td>
@@ -149,7 +201,7 @@
 				------- Person attributes ------</td>
 		</tr>
 		<%
-			FormAttribute[] attributes = personForm.getAttributes();
+			FormAttribute[] attributes = employeeForm.getAttributes();
 			for (FormAttribute attribute : attributes) {
 				String value = attribute.getValue() != null 
 						? attribute.getValue() : "";
@@ -166,6 +218,30 @@
 		<%
 			}
 		%>
+		
+		<tr>
+			<td colspan="2" class="centered">
+				------- Employee attributes ------</td>
+		</tr>
+		<%
+			attributes = employeeForm.getEmployeeAttributes();
+			for (FormAttribute attribute : attributes) {
+				String value = attribute.getValue() != null 
+						? attribute.getValue() : "";
+		%>
+		<tr>
+			<th><%=attribute.getName()%></th>
+			<td><input type="text" name="<%=attribute.getName()%>"
+				value="<%=value%>" /></td>
+		</tr>
+		<tr>
+			<td class="error" colspan="2"><%=errors.containsKey(attribute.getName()) ? 
+					errors.get(attribute.getName()) : ""%></td>
+		</tr>
+		<%
+			}
+		%>
+		
 		<tr>
 			<td colspan="2"><button type="submit" name="submitBtn"><%=button%></button></td>
 		</tr>
