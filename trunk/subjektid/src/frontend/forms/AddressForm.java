@@ -2,6 +2,7 @@ package frontend.forms;
 
 public class AddressForm {
 	
+	private String addressId;
 	private String addressTypeFk;
 	private String country;
 	private String county;
@@ -9,10 +10,16 @@ public class AddressForm {
 	private String streetAddress;
 	private String zipcode;
 	
-	public AddressForm() {
-		// TODO Auto-generated constructor stub
+	public AddressForm() { }
+
+	public String getAddressId() {
+		return addressId;
 	}
 
+	public void setAddressId(String addressId) {
+		this.addressId = addressId;
+	}
+	
 	/**
 	 * @return the addressTypeFk
 	 */

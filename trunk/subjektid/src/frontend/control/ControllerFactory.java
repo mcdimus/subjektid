@@ -19,10 +19,10 @@ public class ControllerFactory {
 			action = params.get("action")[0];
 		}
 
-		if (mode.equals("login")) {
-			controller = new LoginController();
-		} else if (mode.equals("adding_new_subject")) {
+		if (mode.equals("subject")) {
 			controller = new SubjectController();
+		} else if (mode.equals("search")) {
+			controller = new SearchController();
 		} else {
 			controller = new LoginController();
 

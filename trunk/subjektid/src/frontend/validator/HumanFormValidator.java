@@ -1,9 +1,9 @@
 package frontend.validator;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import frontend.forms.HumanForm;
+import general.Utils;
 
 public class HumanFormValidator extends Validator {
 
@@ -22,24 +22,30 @@ public class HumanFormValidator extends Validator {
 	}
 
 	private void validateFirstName() {
-		if (!form.getFirstName().matches("[A-Za-z]+")) {
-			errors.put("first_name", "First name is empty / contains non-letters!");
+		if (Utils.checkEmpty(form.getFirstName())) {
+			errors.put("first_name", "First name is empty");
+		} else if (!form.getFirstName().matches("[A-Za-z]+[-_]?[A-Za-z]+")) {
+			errors.put("first_name", "First name contains non-letters!");
 		} else if (form.getFirstName().length() > 100) {
 			errors.put("first_name", "First name should not exceed 100 symbols!");
 		}
 	}
 	
 	private void validateLastName() {
-		if (!form.getLastName().matches("[A-Za-z]+")) {
-			errors.put("last_name", "Last name is empty / contains non-letters!");
+		if (Utils.checkEmpty(form.getLastName())) {
+			errors.put("last_name", "Last name is empty");
+		} else if (!form.getLastName().matches("[A-Za-z]+[-_]?[A-Za-z]+")) {
+			errors.put("last_name", "Last name contains non-letters!");
 		} else if (form.getLastName().length() > 100) {
 			errors.put("last_name", "Last name should not exceed 100 symbols!");
 		}
 	}
 	
 	private void validateIdentityCode() {
-		if (!form.getIdentityCode().matches("\\w+")) {
-			errors.put("identity_code", "Identity code is empty /"
+		if (Utils.checkEmpty(form.getIdentityCode())) {
+			errors.put("identity_code", "Identity code is empty!");
+		} else if (!form.getIdentityCode().matches("\\w+")) {
+			errors.put("identity_code", "Identity code"
 					+ " contains non-word characters!");
 		} else if (form.getIdentityCode().length() > 20) {
 			errors.put("identity_code", "Identity code should not exceed 20 symbols!");
@@ -47,21 +53,17 @@ public class HumanFormValidator extends Validator {
 	}
 	
 	private void validateBirthDate() {
-		Date birthDate = validateDate(form.getBirthDate()), today;
-		if (birthDate != null) {
-			// Zero out the hour, minute, second, and millisecond
-			Calendar currDtCal = Calendar.getInstance();
-		    currDtCal.set(Calendar.HOUR_OF_DAY, 0);
-		    currDtCal.set(Calendar.MINUTE, 0);
-		    currDtCal.set(Calendar.SECOND, 0);
-		    currDtCal.set(Calendar.MILLISECOND, 0);
-		   	today = currDtCal.getTime();
-			
-		   	if (!birthDate.before(today)) {
-				errors.put("birthdate", "Birthdate cannot be more than today or equal!");
-			}
+		if (Utils.checkEmpty(form.getIdentityCode())) {
+			errors.put("birthdate", "Birthdate is empty!");
 		} else {
-			errors.put("birthdate", "Birthdate is empty / in the wrong format");
+			Date birthDate = Utils.parseDate(form.getBirthDate());
+			if (birthDate != null) {
+				if (birthDate.after(new Date())) {
+					errors.put("birthdate", "Birthdate cannot be more than today!");
+				}
+			} else {
+				errors.put("birthdate", "Birthdate is in the wrong format!");
+			}
 		}
 	}
 	

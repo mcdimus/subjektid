@@ -1,14 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <jsp:include page="header.jsp" />
-<script type="text/javascript" src="static/js/new_subject.js" ></script>
-Subject type:
-<select name="subject_type">
-	<option value="1">Person</option>
-	<option value="2">Enterprise</option>
-	<option value="3">Employee</option>
-</select>
+<jsp:useBean id="subjectTypeFk" scope="request" class="java.lang.String" />
+<script type="text/javascript" src="static/js/edit_subject.js" ></script>
 
+<input type="hidden" name="subjectTypeFk" value="<%=subjectTypeFk%>" />
 <div id="person_form" class="form" style="display: block">
 	<jsp:include page="person_form.jsp" />
 </div>

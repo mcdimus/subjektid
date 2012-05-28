@@ -3,6 +3,7 @@ package frontend.validator;
 import java.util.Date;
 
 import frontend.forms.FormAttribute;
+import general.Utils;
 
 
 public class FormAttributesValidator extends Validator {
@@ -18,7 +19,7 @@ public class FormAttributesValidator extends Validator {
 	public void validate() {
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].getRequired()
-					|| attributes[i].getValue().length() != 0) {
+					|| !Utils.checkEmpty(attributes[i].getValue())) {
 				if (attributes[i].getType() == 1) {
 					validateString(attributes[i]);
 				} else if (attributes[i].getType() == 2) {
@@ -31,28 +32,22 @@ public class FormAttributesValidator extends Validator {
 	}
 	
 	private void validateString(FormAttribute attr) {
-		if (attr.getValue().length() == 0) {
-			errors.put(attr.getName(), attr.getName() + " is empty!");
-		} else if (attr.getValue().length() > 100) {
+		if (attr.getValue().length() > 100) {
 			errors.put(attr.getName(), attr.getName()
 					+ " is too long (100 chars max)!");
 		}
 	}
 
 	private void validateNumber(FormAttribute attr) {
-		if (attr.getValue().length() == 0) {
-			errors.put(attr.getName(), attr.getName() + " is empty!");
-		} else {
-			try {
-				Long.parseLong(attr.getValue());
-			} catch (NumberFormatException e) {
-				errors.put(attr.getName(), attr.getName() + " is not a number!");
-			}
+		try {
+			Long.parseLong(attr.getValue());
+		} catch (NumberFormatException e) {
+			errors.put(attr.getName(), attr.getName() + " is not a number!");
 		}
 	}
 
 	private void validateDate(FormAttribute attr) {
-		Date date = validateDate(attr.getValue());
+		Date date = Utils.parseDate(attr.getValue());
 		if (date != null) {
 		   	if (date.after(new Date())) {
 				errors.put(attr.getName(), "Date cannot be more than today!");

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import frontend.forms.SearchForm;
+import general.Utils;
 
 public class SearchFormValidator extends Validator {
 
@@ -34,7 +35,7 @@ public class SearchFormValidator extends Validator {
 	private void validateDates() {
 	   	HashMap<String, String> criterias = new HashMap<String, String>();
 		for (String key : criterias.keySet()) {
-			Date date = validateDate(criterias.get(key));
+			Date date = Utils.parseDate(criterias.get(key));
 			
 			if (date.after(new Date())) {
 				errors.put(key, "Date cannot be more than today or equal!");

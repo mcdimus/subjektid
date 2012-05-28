@@ -15,7 +15,7 @@ public class SubjectAttribute implements java.io.Serializable {
 	private Long subjectTypeFk;
 	private Long orderby;
 	private String valueText;
-	private long valueNumber;
+	private Long valueNumber;
 	private Date valueDate;
 	private int dataType;
 
@@ -89,11 +89,11 @@ public class SubjectAttribute implements java.io.Serializable {
 		this.valueText = valueText;
 	}
 
-	public long getValueNumber() {
+	public Long getValueNumber() {
 		return this.valueNumber;
 	}
 
-	public void setValueNumber(long valueNumber) {
+	public void setValueNumber(Long valueNumber) {
 		this.valueNumber = valueNumber;
 	}
 

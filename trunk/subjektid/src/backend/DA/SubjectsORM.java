@@ -110,8 +110,11 @@ public class SubjectsORM {
 		return saveOrUpdate(user);
 	}
 	
-	public long saveHuman(HumanForm form) {
+	public String saveHuman(HumanForm form) {
 		Person person = new Person();
+		if (!Utils.checkEmpty(form.getSubjectId())) {
+			person.setPerson(Long.parseLong(form.getSubjectId()));
+		}
 		person.setFirstName(form.getFirstName());
 		person.setLastName(form.getLastName());
 		person.setIdentityCode(form.getIdentityCode());
@@ -125,16 +128,21 @@ public class SubjectsORM {
 		person.setCreated(new Date());
 		
 		saveOrUpdate(person);
-		saveAddress(form.getAddressForm());
+		// TODO: fix the likeness of the person and the employee.
+		saveAddress(form.getAddressForm(), person.getPerson(), 0);
 		
 		saveAttributes(person.getPerson(), form.getAttributes());
 		
-		return person.getPerson();
+		return String.valueOf(person.getPerson());
 	}
 	
-	public long saveEmployee(long subjectId, EmployeeForm form) {
+	public String saveEmployee(String subjectId, EmployeeForm form) {
+		long subjId = Long.parseLong(subjectId);
 		Employee employee = new Employee();
-		employee.setPersonFk(subjectId);
+		employee.setPersonFk(subjId);
+		if (!Utils.checkEmpty(form.getEmployeeId())) {
+			employee.setEmployee(Long.parseLong(form.getSubjectId()));
+		}
 		employee.setEnterpriseFk(Long.parseLong(form.getEnterprise()));
 		employee.setActive("Y");
 		
@@ -146,26 +154,36 @@ public class SubjectsORM {
 				.getEmployeeRoleType()));
 		employeeRole.setActive("Y");
 		
-		saveAttributes(subjectId, form.getEmployeeAttributes());
+		saveAttributes(subjId, form.getEmployeeAttributes());
 		
-		return employee.getEmployee();
+		return String.valueOf(employee.getEmployee());
 	}
 	
-	public long saveEnterprise(EnterpriseForm form) {
+	public String saveEnterprise(EnterpriseForm form) {
 		Enterprise enterprise = new Enterprise();
+		if (!Utils.checkEmpty(form.getSubjectId())) {
+			enterprise.setEnterprise(Long.parseLong(form.getSubjectId()));
+		}
 		enterprise.setName(form.getName());
 		enterprise.setFullName(form.getFullName());
 		enterprise.setCreatedBy(Long.parseLong(form.getCreatedBy()));
 		enterprise.setCreated(new Date());
 		
 		saveOrUpdate(enterprise);
+		saveAddress(form.getAddressForm(), enterprise.getEnterprise(), 2);
 		saveAttributes(enterprise.getEnterprise(), form.getAttributes());
 		
-		return enterprise.getEnterprise();
+		return String.valueOf(enterprise.getEnterprise());
 	}
 	
-	private void saveAddress(AddressForm form) {
+	private void saveAddress(AddressForm form, long subjectFk, 
+			long subjectTypeFk) {
 		Address address = new Address();
+		if (!Utils.checkEmpty(form.getAddressId())) {
+			address.setAddress(Long.parseLong(form.getAddressId()));
+		}
+		address.setSubjectFk(subjectFk);
+		address.setSubjectTypeFk(subjectTypeFk);
 		address.setAddressTypeFk(Long.parseLong(form.getAddressTypeFk()));
 		address.setCountry(form.getCountry());
 		address.setCounty(form.getCounty());
@@ -194,23 +212,12 @@ public class SubjectsORM {
 					subjAttr.setValueNumber(Long.parseLong(attribute.getValue()));
 					break;
 				case 3:
-					subjAttr.setValueDate(parseDate(attribute.getValue()));
+					subjAttr.setValueDate(Utils.parseDate(attribute.getValue()));
 					break;
 				}
 				saveOrUpdate(subjAttr);
 			}
 		}
-	}
-	
-	private Date parseDate(String date) {
-		String[] formatStrings = {"d.M.y", "d/M/y", "d-M-y"};
-		
-		for (String formatString : formatStrings) {
-			try {
-				return new SimpleDateFormat(formatString).parse(date);
-			} catch (ParseException e) { }
-		}
-		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -233,7 +240,7 @@ public class SubjectsORM {
 			queryStr = queryStr.substring(0, queryStr.length() - 4);
 		    data = (List<T>) session.createQuery(queryStr).list();
 		} catch(Exception e) {
-			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
+			MyLogger.log("SubjectsORM.search(): ", e.getMessage());
 			e.printStackTrace();
 		}
 		session.close();
