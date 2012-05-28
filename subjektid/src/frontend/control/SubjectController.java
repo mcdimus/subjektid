@@ -53,7 +53,7 @@ public class SubjectController extends Controller {
 		req.setAttribute("employeeForm", employeeForm);
 		
 		if (sessionManager.loggedIn()) {
-			if (action.equals("show_form")) {
+			if (action.equals("add_new_subject")) {
 				try {
 					List<EmployeeRoleType> employeeRoleTypeList = dao
 							.findAll(EmployeeRoleType.class);
@@ -73,47 +73,57 @@ public class SubjectController extends Controller {
 				// Clear previous Validator warnings
 				Validator.getErrors().clear();
 				
-				if (action.equals("add_new_person")) {
+				if (action.equals("add_person")) {
 					formAndValidateHumanForm(sessionManager, personForm);
-					
+					req.setAttribute("personForm", personForm);	
 					HashMap<String, String> errors = Validator.getErrors();		
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
-						dao.saveHuman(personForm);
+						req.setAttribute("subjectTypeFk", "1");
+						personForm.setSubjectId(dao.saveHuman(personForm));
+						
+						view = "edit_subject_view";
 					} else {
 						req.setAttribute("status", "ERROR");
 						req.setAttribute("errors", errors);
-						req.setAttribute("personForm", personForm);
 						
 						view="add_new_subject_view";
 					}
-				} else if (action.equals("add_new_employee")) {
+				} else if (action.equals("add_employee")) {
 					formAndValidateHumanForm(sessionManager, employeeForm);
 					formAndValidateEmployeeForm(employeeForm);
-					
+					req.setAttribute("employeeForm", employeeForm);
 					HashMap<String, String> errors = Validator.getErrors();	
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
-						long subjectId = dao.saveHuman(personForm);
-						dao.saveEmployee(subjectId, employeeForm);
+						req.setAttribute("subjectTypeFk", "3");
+						String subjectId = dao.saveHuman(employeeForm);
+						String employeeId = dao.saveEmployee(subjectId,
+								employeeForm);
+						employeeForm.setSubjectId(subjectId);
+						employeeForm.setEmployeeId(employeeId);
+						
+						view = "edit_subject_view";
 					} else {
 						req.setAttribute("status", "ERROR");
 						req.setAttribute("errors", errors);
-						req.setAttribute("employeeForm", employeeForm);
 						
 						view="add_new_subject_view";
 					}
-				} else if (action.equals("add_new_enterprise")) {
+				} else if (action.equals("add_enterprise")) {
 					formAndValidateEnterpriseForm(sessionManager, enterpriseForm);
-
+					req.setAttribute("enterpriseForm", enterpriseForm);
 					HashMap<String, String> errors = Validator.getErrors();	
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
-						dao.saveEnterprise(enterpriseForm);
+						req.setAttribute("subjectTypeFk", "2");
+						enterpriseForm.setSubjectId(dao.saveEnterprise(
+								enterpriseForm));
+						
+						view = "edit_subject_view";
 					} else {
 						req.setAttribute("status", "ERROR");
 						req.setAttribute("errors", errors);
-						req.setAttribute("employeeForm", employeeForm);
 						
 						view="add_new_subject_view";
 					}
@@ -121,6 +131,8 @@ public class SubjectController extends Controller {
 				}
 
 			}
+		} else if (action.equals("edit_subject")) {
+			view = "edit_subject_view";
 		} else {
 			view = "login_view";
 		}
@@ -163,6 +175,7 @@ public class SubjectController extends Controller {
 	
 	private HumanForm formAndValidateHumanForm(SessionManager sessionManager,
 			HumanForm humanForm) {
+		humanForm.setSubjectId(params.get("subjectId")[0]);
 		humanForm.setCreatedBy(sessionManager.getEmployeeId());
 		humanForm.setUpdatedBy(sessionManager.getEmployeeId());
 		humanForm.setFirstName(params.get("first_name")[0]);
@@ -179,6 +192,7 @@ public class SubjectController extends Controller {
 	}
 	
 	private EmployeeForm formAndValidateEmployeeForm(EmployeeForm employeeForm) {
+		employeeForm.setSubjectId(params.get("employeeId")[0]);
 		employeeForm.setEmployeeRoleType(params.get("employee_role_type")[0]);
 		employeeForm.setEnterprise(params.get("enterprise")[0]);
 		
@@ -193,6 +207,7 @@ public class SubjectController extends Controller {
 	
 	private EnterpriseForm formAndValidateEnterpriseForm(SessionManager sessionManager,
 			EnterpriseForm enterpriseForm) {
+		enterpriseForm.setSubjectId(params.get("subjectId")[0]);
 		enterpriseForm.setCreatedBy(sessionManager.getEmployeeId());
 		enterpriseForm.setUpdatedBy(sessionManager.getEmployeeId());
 		enterpriseForm.setName(params.get("name")[0]);
@@ -209,6 +224,7 @@ public class SubjectController extends Controller {
 	
 	private AddressForm formAndValidateAddressForm() {
 		AddressForm addressForm = new AddressForm();
+		addressForm.setAddressId(params.get("addressId")[0]);
 		addressForm.setAddressTypeFk(params.get("address_type_fk")[0]);
 		addressForm.setCountry(params.get("country")[0]);
 		addressForm.setCounty(params.get("county")[0]);

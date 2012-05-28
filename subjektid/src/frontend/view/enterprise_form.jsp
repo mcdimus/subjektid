@@ -7,10 +7,17 @@
 
 <%
 	String name = "", fullName = "", country = "", county = "",
-		townVillage = "", streetAddress = "", zipcode = "", status = "";
+		townVillage = "", streetAddress = "", zipcode = "", status = "",
+		action = "New enterprise", button = "Submit", subjectId = "",
+		addressId = "";
 	if (enterpriseForm.getName() != null) {
 		name = enterpriseForm.getName();
 		fullName = enterpriseForm.getFullName();
+		if (enterpriseForm.getSubjectId() != null) {
+			subjectId = enterpriseForm.getSubjectId();
+			action = "Edit enterprise";
+			button = "Save";
+		}
 		
 		AddressForm addressForm = enterpriseForm.getAddressForm();
 		if (addressForm != null) {
@@ -19,14 +26,18 @@
 			townVillage = addressForm.getTownVillage();
 			streetAddress = addressForm.getStreetAddress();
 			zipcode = addressForm.getZipcode();
+			if (addressForm.getAddressId() != null) {
+				addressId = addressForm.getAddressId();
+			}
 		}
 	}
 %>
 
-<form method="post" action="?mode=adding_new_subject&action=add_new_enterprise">
+<form method="post" action="?mode=subject&action=add_enterprise">
+	<input type="hidden" name="subjectId" value="<%=subjectId%>" />
 	<table>
 		<tr>
-			<th colspan="2" class="main"> New enterprise</th>
+			<th colspan="2" class="main"><%=action%></th>
 		</tr>
 		<tr>
 			<th>Name</th>
@@ -46,8 +57,11 @@
 		</tr>
 		
 		<tr>
-			<td colspan="2" class="centered"><input type="hidden" name="address_type_fk"
-				value="2" />---------- Legal address ---------</td>
+			<td colspan="2" class="centered">
+				<input type="hidden" name="address_type_fk"value="2" />
+				<input type="hidden" name="addressId" value="<%=addressId%>" />
+				---------- Legal address ---------
+			</td>
 		</tr>
 		
 		<tr>
@@ -124,7 +138,7 @@
 		%>
 		
 		<tr>
-			<td colspan="2"><button type="submit" name="submitBtn">Submit</button></td>
+			<td colspan="2"><button type="submit" name="submitBtn"><%=button%></button></td>
 		</tr>
 	</table>
 </form>

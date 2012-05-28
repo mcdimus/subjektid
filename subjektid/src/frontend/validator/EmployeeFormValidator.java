@@ -1,6 +1,7 @@
 package frontend.validator;
 
 import frontend.forms.EmployeeForm;
+import general.Utils;
 
 public class EmployeeFormValidator extends Validator {
 
@@ -18,14 +19,13 @@ public class EmployeeFormValidator extends Validator {
 
 	
 	private void validateEmployeeRoleType() {
-		if (form.getEmployeeRoleType() == null || form.getEmployeeRoleType()
-				.equals("")) {
+		if (Utils.checkEmpty(form.getEmployeeRoleType())) {
 			errors.put("employee_role_type", "Employee role should be specified!");
 		}
 	}
 	
 	private void validateEnterpise() {
-		if (form.getEnterprise() == null || form.getEnterprise().equals("")) {
+		if (Utils.checkEmpty(form.getEnterprise())) {
 			errors.put("enterprise", "Employee enterprise should be specified!");
 		}
 	}

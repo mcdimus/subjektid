@@ -2,8 +2,17 @@ package frontend.forms;
 
 public abstract class SubjectForm {
 
+	String subjectId;
 	String createdBy;
 	String updatedBy;
+	
+	public String getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(String subjectId) {
+		this.subjectId = subjectId;
+	}
 
 	/**
 	 * @return the createdBy

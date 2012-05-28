@@ -12,6 +12,7 @@ import frontend.forms.SearchForm;
 import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.AddressType;
+import backend.model.Employee;
 import backend.model.Person;
 import backend.model.SubjectAttributeType;
 
@@ -58,6 +59,13 @@ public class SubjectsORMTest {
 		address.setCounty("Stockholm");
 		assertTrue("saveOrUpdateAddress() = false",
 				orm.saveOrUpdate(address));
+
+//		Employee employee = new Employee();
+//		employee.setEmployee(3);
+//		employee.setPersonFk((long) 3);
+//		employee.setEnterpriseFk((long) 2);
+//		employee.setActive("Y");
+//		orm.saveOrUpdate(employee);
 	}
 	
 	@Test

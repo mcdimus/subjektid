@@ -1,6 +1,7 @@
 package frontend.validator;
 
 import frontend.forms.EnterpriseForm;
+import general.Utils;
 
 public class EnterpriseFormValidator extends Validator {
 	
@@ -17,13 +18,13 @@ public class EnterpriseFormValidator extends Validator {
 	}
 	
 	private void validateName() {
-		if (form.getName().length() == 0) {
+		if (Utils.checkEmpty(form.getName())) {
 			errors.put("name", "Enterprise name is empty!");
 		}
 	}
 	
 	private void validateFullName() {
-		if (form.getFullName().length() == 0) {
+		if (Utils.checkEmpty(form.getFullName())) {
 			errors.put("full_name", "Enterprise full name is empty!");
 		}
 	}

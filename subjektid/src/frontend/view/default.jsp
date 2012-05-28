@@ -3,11 +3,11 @@
 
 	<jsp:include page="header.jsp" />
 
-	<form method="post" action="?mode=adding_new_subject&action=show_form">
+	<form method="post" action="?mode=subject&action=add_new_subject">
 		<button type="submit">Add new subject</button>
 	</form>
 	
-	<form method="post" action="">
+	<form method="post" action="?mode=search">
 		<button type="submit">Search</button>
 	</form>
 </body>
