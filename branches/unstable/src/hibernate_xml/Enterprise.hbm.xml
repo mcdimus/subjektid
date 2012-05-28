@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated May 11, 2012 8:57:46 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="backend.model.Enterprise" table="enterprise" schema="public">
+        <id name="enterprise" type="long">
+            <column name="enterprise" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">enterprise_id</param>
+            </generator>
+        </id>
+        <property name="name" type="string">
+            <column name="name" />
+        </property>
+        <property name="fullName" type="string">
+            <column name="full_name" />
+        </property>
+        <property name="createdBy" type="java.lang.Long">
+            <column name="created_by" precision="10" scale="0" />
+        </property>
+        <property name="updatedBy" type="java.lang.Long">
+            <column name="updated_by" precision="10" scale="0" />
+        </property>
+        <property name="created" type="timestamp">
+            <column name="created" length="29" />
+        </property>
+        <property name="updated" type="timestamp">
+            <column name="updated" length="29" />
+        </property>
+    </class>
+</hibernate-mapping>

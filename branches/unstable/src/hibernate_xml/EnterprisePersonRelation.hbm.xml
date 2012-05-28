@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated May 11, 2012 8:57:46 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="backend.model.EnterprisePersonRelation" table="enterprise_person_relation" schema="public">
+        <id name="enterprisePersonRelation" type="long">
+            <column name="enterprise_person_relation" precision="10" scale="0" />
+            <generator class="sequence">
+            	<param name="sequence">enterprise_person_relation_id</param>
+            </generator>
+        </id>
+        <property name="personFk" type="java.lang.Long">
+            <column name="person_fk" precision="10" scale="0" />
+        </property>
+        <property name="enterpriseFk" type="java.lang.Long">
+            <column name="enterprise_fk" precision="10" scale="0" />
+        </property>
+        <property name="entPerRelationTypeFk" type="java.lang.Long">
+            <column name="ent_per_relation_type_fk" precision="10" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

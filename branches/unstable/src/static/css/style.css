@@ -1,0 +1,90 @@
+body {
+    font: 14px/20px Helvetica, Arial, sans-serif;
+}
+
+#login-form {
+	width: 17em;
+	margin: 100px auto;
+}
+
+#logout-form {
+	display: inline-block;
+}
+
+p.error, td.error {
+	color: #FF0000;
+}
+
+div.indicator-line {
+	border-top: 1px solid #000000;
+	border-bottom: 1px solid #000000;
+	color: #FFFFFF;
+	width: 100%;
+	margin: 1em 0em;
+}
+
+div.indicator-line div {
+	padding-left: 1em;
+	border-top: 1px solid #FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+div.welcome {
+	background-color: #808080;
+}
+
+div.success {
+	background-color: #0000FF;
+}
+
+div.error {
+	background-color: #FF0000;
+}
+
+ul {
+	margin-left: 0;
+	padding-left: 0;
+	white-space: nowrap;
+}
+
+li {
+	display: inline;
+	list-style-type: none;
+}
+
+li a {
+	padding: 3px 10px;
+}
+
+li a:link,li a:visited {
+	color: #fff;
+	background-color: gray;
+	border: 1px solid darkgray;
+	text-decoration: none;
+}
+
+li a:hover {
+	color: #fff;
+	background-color: lightgray;
+	border: 1px solid darkgray;
+	text-decoration: none;
+}
+
+table {
+	border: 1px solid black;
+	padding: 2px;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+th.main {
+	text-align: center;
+	color: #FFFFFF;
+	background-color: #808080;
+}
+
+td.centered {
+	text-align: center;
+}

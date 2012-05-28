@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+ <session-factory>
+  <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+  <property name="hibernate.connection.url">jdbc:postgresql:r12_subjektid</property>
+  <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+  <property name="hibernate.connection.username">postgres</property>
+  <property name="hibernate.connection.password">collEditorv1.1</property>
+  <!-- JDBC connection pool (use the built-in) -->
+  <property name="connection.pool_size">2</property>
+  <!-- Enable Hibernate's current session context -->
+  <property name="current_session_context_class">thread</property>
+  <!-- Disable the second-level cache -->
+  <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+  <!-- Echo all executed SQL to stdout -->
+  <property name="show_sql">true</property>
+  
+  <!-- Mappings -->
+  <mapping resource="Address.hbm.xml"/>
+  <mapping resource="AddressType.hbm.xml"/>
+  <mapping resource="Contact.hbm.xml"/>
+  <mapping resource="ContactType.hbm.xml"/>
+  <mapping resource="Customer.hbm.xml"/>
+  <mapping resource="Employee.hbm.xml"/>
+  <mapping resource="EmployeeRole.hbm.xml"/>
+  <mapping resource="EmployeeRoleType.hbm.xml"/>
+  <mapping resource="EntPerRelationType.hbm.xml"/>
+  <mapping resource="Enterprise.hbm.xml"/>
+  <mapping resource="EnterprisePersonRelation.hbm.xml"/>
+  <mapping resource="Person.hbm.xml"/>
+  <mapping resource="StructUnit.hbm.xml"/>
+  <mapping resource="SubjectAttribute.hbm.xml"/>
+  <mapping resource="SubjectAttributeType.hbm.xml"/>
+  <mapping resource="SubjectType.hbm.xml"/>
+  <mapping resource="UserAccount.hbm.xml"/>
+ </session-factory>
+</hibernate-configuration>

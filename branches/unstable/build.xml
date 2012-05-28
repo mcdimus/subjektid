@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+Version: $Revision: 4.12 $ $Date: 2012/01/23 10:36:29 $
+Author:  Raul Liivrand
+
+-->
+
+<project name="r12_subjektid" default="all" basedir=".">
+	<property name="application_name" value="r12_subjektid" />
+	<!-- Configure properties to access the Manager application -->
+	<property name="url" value="http://imbi.ld.ttu.ee:7500/manager/text" />
+	<property name="username" value="manager" />
+	<property name="password" value="tomcat" />
+	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" />
+	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask" />
+	<property name="path" value="/${application_name}" />
+
+
+
+
+	<!-- ================================================================== -->
+	<!-- Initialization of all property settings                            -->
+	<!-- ================================================================== -->
+
+	<target name="init">
+		<property environment="env" />
+		<property name="src_all.dir" value="src" />
+		<property name="src_jsp.dir" value="src/frontend/view" />
+		<property name="src_static.dir" value="src/static" />
+		<property name="src_web_inf.dir" value="src/WEB-INF" />
+		<property name="src.dir" value="src" />
+		<property name="prop.dir" value="src/properties" />
+		<property name="hib_xml.dir" value="src/hibernate_xml" />
+		<property name="web-inf.dir" value="WEB-INF" />
+		<property name="classes.dir" value="WEB-INF/classes" />
+		<property name="jsp.dir" value="." />
+		<property name="build.dir" value="build" />
+		<property name="pkg-dist.name" value="${name}-pkg" />
+		<property name="tomcat.home" location="${env.TOMCAT_HOME}" />
+		<property name="tomcat.server.lib" location="${tomcat.home}/lib" />
+		<property name="myapp.lib" location="lib" />
+		<path id="lib.classpath">
+			<fileset dir="${tomcat.server.lib}" includes="*.jar" />
+			<fileset dir="${env.ANT_HOME}/lib" includes="*.jar" />
+			<fileset dir="${myapp.lib}" includes="*.jar" />
+		</path>
+	</target>
+
+
+	<!-- ================================================================== -->
+	<!-- Kustutab kompileeritud klassid                        -->
+	<!-- ================================================================== -->
+
+	<target name="clean" depends="init">
+		<delete dir="${classes.dir}" />
+		<delete dir="${web-inf.dir}" />
+	</target>
+
+
+
+	<!-- ================================================================== -->
+	<!-- Ettevalmistused                                                    -->
+	<!-- ================================================================== -->
+
+	<target name="prepare" depends="clean">
+		<mkdir dir="${classes.dir}" />
+	</target>
+
+
+	<!-- ========================================================================================================================= -->
+	<!-- Kompileerib ja asetab tulemuse vahekataloogi                                                                              -->
+	<!-- ========================================================================================================================= -->
+
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="lib.classpath" />
+		<copy todir="${classes.dir}">
+			<fileset dir="${prop.dir}" includes="**/*.properties" />
+			<fileset dir="${hib_xml.dir}" includes="**/*.xml" />
+		</copy>
+	</target>
+
+	<!-- ============================================================================================= -->
+	<!-- Deployment . Kopeerib kompileeritud klassid ja staatilised failid kokku yheks war-failiks     -->
+	<!-- ============================================================================================= -->
+
+
+
+	<target name="war" depends="compile">
+		<war destfile="${application_name}.war" webxml="${src_web_inf.dir}/web.xml">
+			<fileset dir="src/frontend/view" />
+			<zipfileset dir="src/static" prefix="static" />
+			<classes dir="${classes.dir}" />
+			<lib dir="${myapp.lib}">
+			</lib>
+		</war>
+	</target>
+
+	<!-- ================================================================================= -->
+	<!-- Deployment . Kopeerib war-faili lokaalarvuti Tomcat-i /webapps kataloogi          -->
+	<!-- ================================================================================= -->
+
+	<target name="deploy_war_local" depends="war">
+		<copy todir="${tomcat.home}/webapps" overwrite="true">
+			<fileset dir="." includes="*.war" />
+		</copy>
+		<delete dir="${classes.dir}" />
+		<delete dir="${web-inf.dir}" />
+	</target>
+
+
+	<!-- ================================================================================= -->
+	<!-- Deployment . Laadib war-faili remote serverile yle HTTP                           -->
+	<!-- ================================================================================= -->
+
+	<target name="deploy_remote_to_imbi" description="Install web application" depends="war">
+		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="file:${application_name}.war" />
+		<delete dir="${classes.dir}" />
+		<delete dir="${web-inf.dir}" />
+	</target>
+
+	<target name="undeploy_remote_from_imbi" description="Remove web application" depends="init">
+		<undeploy url="${url}" username="${username}" password="${password}" path="${path}" />
+	</target>
+
+	<!-- ========================================================================================== -->
+	<!-- Deployment . Laadib war-faili remote serverile yle HTTP  (serveril juba on sama rakendus)  -->
+	<!-- ========================================================================================== -->
+
+	<target name="redeploy_remote_to_imbi" depends="undeploy_remote_from_imbi, war">
+		<deploy url="${url}" username="${username}" password="${password}" path="${path}" war="file:${application_name}.war" />
+		<delete dir="${classes.dir}" />
+		<delete dir="${web-inf.dir}" />
+	</target>
+
+	<!-- ========================================================================================== -->
+	<!-- Deployment . Vaikimisi kopeeritakse lokaalarvutisse                                        -->
+	<!-- ========================================================================================== -->
+
+	<target name="all" depends="deploy_war_local" />
+
+</project>
