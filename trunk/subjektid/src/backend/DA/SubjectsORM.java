@@ -6,6 +6,7 @@ import frontend.forms.EnterpriseForm;
 import frontend.forms.FormAttribute;
 import frontend.forms.HumanForm;
 import frontend.forms.SearchForm;
+import frontend.forms.SubjectForm;
 import general.Utils;
 
 import java.text.ParseException;
@@ -21,6 +22,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import backend.model.Address;
+import backend.model.Customer;
 import backend.model.Employee;
 import backend.model.EmployeeRole;
 import backend.model.Enterprise;
@@ -48,7 +50,7 @@ public class SubjectsORM {
 	}
 
     @SuppressWarnings("unchecked")
-	public <T> T findByID(Class<T> _class, int id) {
+	public <T> T findByID(Class<T> _class, long id) {
 		Session session = null;
 		T data = null;
 		try {
@@ -56,7 +58,7 @@ public class SubjectsORM {
 			session.beginTransaction();
 			Query q = session.createQuery("from " + _class.getName()
 					+ " obj where obj.id=:id");
-			q.setInteger("id", id);	
+			q.setLong("id", id);	
 		    data = (T) q.uniqueResult();
 		} catch(Exception e) {
 			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
@@ -67,7 +69,7 @@ public class SubjectsORM {
 	}
     
     @SuppressWarnings("unchecked")
-   	public <T> List<T> findByID(Class<T> _class, String attribute, int id) {
+   	public <T> List<T> findByID(Class<T> _class, String attribute, long id) {
    		Session session = null;
    		List<T> data = null;
    		try {
@@ -75,7 +77,7 @@ public class SubjectsORM {
    			session.beginTransaction();
    			Query q = session.createQuery("from " + _class.getName()
    					+ " where " + attribute + "=:id");
-   			q.setInteger("id", id);	
+   			q.setLong("id", id);	
    		    data = (List<T>) q.list();
    		} catch(Exception e) {
    			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
@@ -128,16 +130,21 @@ public class SubjectsORM {
 		person.setCreated(new Date());
 		
 		saveOrUpdate(person);
-		// TODO: fix the likeness of the person and the employee.
-		saveAddress(form.getAddressForm(), person.getPerson(), 0);
-		
+		form.setSubjectId(String.valueOf(person.getPerson()));
+		saveAddress(form.getAddressForm(), person.getPerson(), 1);
+		for (AddressForm address : form.getAddresses()) {
+			saveAddress(address, person.getPerson(), 1);
+		}
 		saveAttributes(person.getPerson(), form.getAttributes());
+		if (form.getCustomer() != null) {
+			saveCustomer(form, 1);
+		}
 		
-		return String.valueOf(person.getPerson());
+		return form.getSubjectId();
 	}
 	
-	public String saveEmployee(String subjectId, EmployeeForm form) {
-		long subjId = Long.parseLong(subjectId);
+	public String saveEmployee(EmployeeForm form) {
+		long subjId = Long.parseLong(form.getSubjectId());
 		Employee employee = new Employee();
 		employee.setPersonFk(subjId);
 		if (!Utils.checkEmpty(form.getEmployeeId())) {
@@ -147,6 +154,7 @@ public class SubjectsORM {
 		employee.setActive("Y");
 		
 		saveOrUpdate(employee);
+		form.setEmployeeId(String.valueOf(employee.getEmployee()));
 		
 		EmployeeRole employeeRole = new EmployeeRole();
 		employeeRole.setEmployeeFk(employee.getEmployee());
@@ -170,10 +178,17 @@ public class SubjectsORM {
 		enterprise.setCreated(new Date());
 		
 		saveOrUpdate(enterprise);
+		form.setSubjectId(String.valueOf(enterprise.getEnterprise()));
 		saveAddress(form.getAddressForm(), enterprise.getEnterprise(), 2);
+		for (AddressForm address : form.getAddresses()) {
+			saveAddress(address, enterprise.getEnterprise(), 2);
+		}
 		saveAttributes(enterprise.getEnterprise(), form.getAttributes());
+		if (form.getCustomer() != null) {
+			saveCustomer(form, 2);
+		}
 		
-		return String.valueOf(enterprise.getEnterprise());
+		return form.getSubjectId();
 	}
 	
 	private void saveAddress(AddressForm form, long subjectFk, 
@@ -192,6 +207,7 @@ public class SubjectsORM {
 		address.setZipcode(form.getZipcode());
 		
 		saveOrUpdate(address);
+		form.setAddressId(String.valueOf(address.getAddress()));
 	}
 	
 	private void saveAttributes(long id, FormAttribute[] attributes) {
@@ -216,8 +232,19 @@ public class SubjectsORM {
 					break;
 				}
 				saveOrUpdate(subjAttr);
+				attribute.setFormAttributeId(String.valueOf(subjAttr
+						.getSubjectAttribute()));
 			}
 		}
+	}
+	
+	private void saveCustomer(SubjectForm form, long subjectTypeFk) {
+		Customer customer = new Customer();
+		customer.setSubjectFk(Long.parseLong(form.getSubjectId()));
+		customer.setSubjectTypeFk(subjectTypeFk);
+		saveOrUpdate(customer);
+		
+		form.setCustomerId(String.valueOf(customer.getCustomer()));
 	}
 
 	@SuppressWarnings("unchecked")

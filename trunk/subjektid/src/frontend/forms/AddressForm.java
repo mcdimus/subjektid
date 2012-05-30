@@ -1,5 +1,7 @@
 package frontend.forms;
 
+import java.util.ArrayList;
+
 public class AddressForm {
 	
 	private String addressId;
@@ -9,7 +11,8 @@ public class AddressForm {
 	private String townVillage;
 	private String streetAddress;
 	private String zipcode;
-	
+	private ArrayList<AddressForm> addresses;
+
 	public AddressForm() { }
 
 	public String getAddressId() {
@@ -104,6 +107,12 @@ public class AddressForm {
 		this.zipcode = zipcode;
 	}
 	
-	
+	public ArrayList<AddressForm> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(ArrayList<AddressForm> addresses) {
+		this.addresses = addresses;
+	}
 
 }

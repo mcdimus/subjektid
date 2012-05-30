@@ -15,18 +15,23 @@
 	</listener>
 
 	<servlet>
-		<servlet-name>
-			FrontController
-		</servlet-name>
-		<servlet-class>
-			frontend.control.FrontController
-		</servlet-class>
-
+		<servlet-name>FrontController</servlet-name>
+		<servlet-class>frontend.control.FrontController</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>AjaxController</servlet-name>
+		<servlet-class>frontend.control.AjaxController</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>FrontController</servlet-name>
 		<url-pattern>/s</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>AjaxController</servlet-name>
+		<url-pattern>/ajax</url-pattern>
 	</servlet-mapping>
 
 </web-app>

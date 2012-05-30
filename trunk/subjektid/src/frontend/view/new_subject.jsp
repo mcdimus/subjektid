@@ -2,6 +2,10 @@
 	pageEncoding="UTF-8"%>
 <jsp:include page="header.jsp" />
 <script type="text/javascript" src="static/js/new_subject.js" ></script>
+<jsp:useBean id="subjectTypeFk" scope="request" class="java.lang.String" />
+
+<input type="hidden" name="subjectTypeFk" 
+	value="<%=subjectTypeFk != null ? subjectTypeFk : ""%>" />
 Subject type:
 <select name="subject_type">
 	<option value="1">Person</option>

@@ -5,6 +5,7 @@ public class FormAttribute {
 	public FormAttribute() { }
 	
 	private String name, value;
+	private String formAttributeId;
 	private int type;
 	private long subjectAttributeTypeFk;
 	private long subjectTypeFk;
@@ -25,6 +26,14 @@ public class FormAttribute {
 	
 	public void setValue(String attrValue) {
 		value = attrValue;
+	}
+
+	public String getFormAttributeId() {
+		return formAttributeId;
+	}
+
+	public void setFormAttributeId(String formAttributeId) {
+		this.formAttributeId = formAttributeId;
 	}
 	
 	public int getType() {

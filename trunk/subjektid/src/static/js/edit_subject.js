@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	val subjectTypeFk = $('input[name="subjectTypeFk"]').val();
+	var subjectTypeFk = $('input[name="subjectTypeFk"]').val();
 	
 	switch(subjectTypeFk) {
 	case 1:
@@ -13,6 +13,8 @@ $(document).ready(function() {
 		break;
 	case 4:
 		// TODO: client form should be here
+		break;
+	default:
 		break;
 	}
 });

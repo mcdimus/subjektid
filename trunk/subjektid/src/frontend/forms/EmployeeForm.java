@@ -40,5 +40,17 @@ public class EmployeeForm extends HumanForm {
 	public void setEmployeeAttributes(FormAttribute[] attrs) {
 		employeeAttributes = attrs;
 	}
+
+	public String getCustomer() { 
+		return null;
+	}
+	
+	public void setCustomer(String c) { }
+	
+	public String getCustomerId() { 
+		return null;
+	}
+	
+	public void setCustomerId(String c) { }
 	
 }

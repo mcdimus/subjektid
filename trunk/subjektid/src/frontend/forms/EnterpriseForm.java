@@ -4,7 +4,6 @@ public class EnterpriseForm extends SubjectForm {
 	
 	private String name;
 	private String fullName;
-	private AddressForm addressForm;
 	private FormAttribute[] attributes;
 	
 	public String getName() {
@@ -23,14 +22,6 @@ public class EnterpriseForm extends SubjectForm {
 		this.fullName = fullName;
 	}
 	
-	public AddressForm getAddressForm() {
-		return addressForm;
-	}
-	
-	public void setAddressForm(AddressForm form) {
-		addressForm = form;
-	}
-	
 	public FormAttribute[] getAttributes() {
 		return attributes;
 	}
@@ -38,5 +29,5 @@ public class EnterpriseForm extends SubjectForm {
 	public void setAttributes(FormAttribute[] attrs) {
 		attributes = attrs;
 	}
-	
+
 }
