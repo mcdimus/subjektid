@@ -1,5 +1,6 @@
 package frontend.control;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import frontend.forms.EnterpriseForm;
 import frontend.forms.FormAttribute;
 import frontend.forms.HumanForm;
 import frontend.forms.PersonForm;
+import frontend.forms.SubjectForm;
 import frontend.validator.AddressFormValidator;
 import frontend.validator.EmployeeFormValidator;
 import frontend.validator.EnterpriseFormValidator;
@@ -75,12 +77,13 @@ public class SubjectController extends Controller {
 				
 				if (action.equals("add_person")) {
 					formAndValidateHumanForm(sessionManager, personForm);
-					req.setAttribute("personForm", personForm);	
+					req.setAttribute("personForm", personForm);
+					req.setAttribute("subjectTypeFk", "1");
+					req.setAttribute("addressForm", personForm.getAddressForm());
 					HashMap<String, String> errors = Validator.getErrors();		
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
-						req.setAttribute("subjectTypeFk", "1");
-						personForm.setSubjectId(dao.saveHuman(personForm));
+						dao.saveHuman(personForm);
 						
 						view = "edit_subject_view";
 					} else {
@@ -93,15 +96,13 @@ public class SubjectController extends Controller {
 					formAndValidateHumanForm(sessionManager, employeeForm);
 					formAndValidateEmployeeForm(employeeForm);
 					req.setAttribute("employeeForm", employeeForm);
+					req.setAttribute("subjectTypeFk", "3");
+					req.setAttribute("addressForm", employeeForm.getAddressForm());
 					HashMap<String, String> errors = Validator.getErrors();	
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
-						req.setAttribute("subjectTypeFk", "3");
-						String subjectId = dao.saveHuman(employeeForm);
-						String employeeId = dao.saveEmployee(subjectId,
-								employeeForm);
-						employeeForm.setSubjectId(subjectId);
-						employeeForm.setEmployeeId(employeeId);
+						dao.saveHuman(employeeForm);
+						dao.saveEmployee(employeeForm);
 						
 						view = "edit_subject_view";
 					} else {
@@ -113,12 +114,12 @@ public class SubjectController extends Controller {
 				} else if (action.equals("add_enterprise")) {
 					formAndValidateEnterpriseForm(sessionManager, enterpriseForm);
 					req.setAttribute("enterpriseForm", enterpriseForm);
+					req.setAttribute("subjectTypeFk", "2");
+					req.setAttribute("addressForm", enterpriseForm.getAddressForm());
 					HashMap<String, String> errors = Validator.getErrors();	
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
-						req.setAttribute("subjectTypeFk", "2");
-						enterpriseForm.setSubjectId(dao.saveEnterprise(
-								enterpriseForm));
+						dao.saveEnterprise(enterpriseForm);
 						
 						view = "edit_subject_view";
 					} else {
@@ -127,7 +128,6 @@ public class SubjectController extends Controller {
 						
 						view="add_new_subject_view";
 					}
-					
 				}
 
 			}
@@ -182,11 +182,14 @@ public class SubjectController extends Controller {
 		humanForm.setLastName(params.get("last_name")[0]);
 		humanForm.setIdentityCode(params.get("identity_code")[0]);
 		humanForm.setBirthDate(params.get("birthdate")[0]);
+		humanForm.setCustomer(params.get("customer") != null 
+				? params.get("customer")[0] : null);
 		
 		HumanFormValidator humanFormValidator = new HumanFormValidator(humanForm);
 		humanFormValidator.validate();
 		
-		humanForm.setAddressForm(formAndValidateAddressForm());
+		formAndValidateAddressForms(humanForm);
+		
 		formAndValidateFormAttributes(humanForm.getAttributes());
 		return humanForm;
 	}
@@ -212,7 +215,10 @@ public class SubjectController extends Controller {
 		enterpriseForm.setUpdatedBy(sessionManager.getEmployeeId());
 		enterpriseForm.setName(params.get("name")[0]);
 		enterpriseForm.setFullName(params.get("full_name")[0]);
-		enterpriseForm.setAddressForm(formAndValidateAddressForm());
+		enterpriseForm.setCustomer(params.get("customer") != null 
+				? params.get("customer")[0] : null);
+
+		formAndValidateAddressForms(enterpriseForm);
 		
 		EnterpriseFormValidator enterpriseFormValidator =
 				new EnterpriseFormValidator(enterpriseForm);
@@ -222,18 +228,30 @@ public class SubjectController extends Controller {
 		return enterpriseForm;
 	}
 	
-	private AddressForm formAndValidateAddressForm() {
-		AddressForm addressForm = new AddressForm();
-		addressForm.setAddressId(params.get("addressId")[0]);
-		addressForm.setAddressTypeFk(params.get("address_type_fk")[0]);
-		addressForm.setCountry(params.get("country")[0]);
-		addressForm.setCounty(params.get("county")[0]);
-		addressForm.setStreetAddress(params.get("street_address")[0]);
-		addressForm.setTownVillage(params.get("town_village")[0]);
-		addressForm.setZipcode(params.get("zipcode")[0]);
-		
+	private void formAndValidateAddressForms(SubjectForm form) {
+		AddressForm addressForm = formAddressForm(0);
 		AddressFormValidator addressFormValidator = new AddressFormValidator(addressForm);
 		addressFormValidator.validate();
+		form.setAddressForm(addressForm);
+		
+		ArrayList<AddressForm> addresses = new ArrayList<AddressForm>();
+		for (int i = 1; i < params.get("country").length; i++) {
+			addressForm = formAddressForm(i);
+			addresses.add(addressForm);
+		}
+		form.setAddresses(addresses);
+		addressForm.setAddresses(addresses);
+	}
+	
+	private AddressForm formAddressForm(int i) {
+		AddressForm addressForm = new AddressForm();
+		addressForm.setAddressId(params.get("addressId")[i]);
+		addressForm.setAddressTypeFk(params.get("address_type_fk")[i]);
+		addressForm.setCountry(params.get("country")[i]);
+		addressForm.setCounty(params.get("county")[i]);
+		addressForm.setStreetAddress(params.get("street_address")[i]);
+		addressForm.setTownVillage(params.get("town_village")[i]);
+		addressForm.setZipcode(params.get("zipcode")[i]);
 		return addressForm;
 	}
 	

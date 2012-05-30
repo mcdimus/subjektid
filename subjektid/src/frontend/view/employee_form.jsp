@@ -1,7 +1,6 @@
 <%@page import="backend.model.EmployeeRoleType"%>
 <%@page import="backend.model.Enterprise"%>
 <%@ page import="frontend.forms.FormAttribute" %>
-<%@ page import="frontend.forms.AddressForm" %>
 <jsp:useBean id="enterpriseList" scope="request"
 	class="java.util.ArrayList" />
 <jsp:useBean id="employeeRoleTypeList" scope="request"
@@ -13,7 +12,7 @@
 	String firstName = "", lastName = "", identityCode = "", birthDate = "",
 		country = "", county = "", townVillage = "", streetAddress = "",
 		zipcode = "", status = "", action = "New employee", button = "Submit",
-		subjectId = "", addressId = "", employeeId = "";
+		subjectId = "", employeeId = "";
 	if (employeeForm.getFirstName() != null) {
 		firstName = employeeForm.getFirstName();
 		lastName = employeeForm.getLastName();
@@ -24,18 +23,6 @@
 			employeeId = employeeForm.getEmployeeId();
 			action = "Edit employee";
 			button = "Save";
-		}
-		
-		AddressForm addressForm = employeeForm.getAddressForm();
-		if (addressForm != null) {
-			country = addressForm.getCountry();
-			county = addressForm.getCounty();
-			townVillage = addressForm.getTownVillage();
-			streetAddress = addressForm.getStreetAddress();
-			zipcode = addressForm.getZipcode();
-			if (addressForm.getAddressId() != null) {
-				addressId = addressForm.getAddressId();
-			}
 		}
 	}
 %>
@@ -141,60 +128,11 @@
 		<tr>
 			<td colspan="2" class="centered">
 				<input type="hidden" name="address_type_fk" value="1" />
-				<input type="hidden" name="addressId" value="<%=addressId%>" />
 				---------- Main address ---------
 			</td>
 		</tr>
 		
-		<tr>
-			<th>Country</th>
-			<td><input type="text" name="country" 
-				value="<%=country%>"/></td>
-		</tr>
-		<tr>
-			<td class="error" colspan="2"><%=errors.containsKey("country") ? 
-					errors.get("country") : ""%></td>
-		</tr>
-		
-		<tr>
-			<th>County</th>
-			<td><input type="text" name="county" 
-				value="<%=county%>"/></td>
-		</tr>
-		<tr>
-			<td class="error" colspan="2"><%=errors.containsKey("county") ? 
-					errors.get("county") : ""%></td>
-		</tr>
-		
-		<tr>
-			<th>Town/village</th>
-			<td><input type="text" name="town_village" 
-				value="<%=townVillage%>"/></td>
-		</tr>
-		<tr>
-			<td class="error" colspan="2"><%=errors.containsKey("town_village") ? 
-					errors.get("town_village") : ""%></td>
-		</tr>
-		
-		<tr>
-			<th>Street address</th>
-			<td><input type="text" name="street_address" 
-				value="<%=streetAddress%>"/></td>
-		</tr>
-		<tr>
-			<td class="error" colspan="2"><%=errors.containsKey("street_address") ? 
-					errors.get("street_address") : ""%></td>
-		</tr>
-		
-		<tr>
-			<th>ZipCode</th>
-			<td><input type="text" name="zipcode" 
-				value="<%=zipcode%>"/></td>
-		</tr>
-		<tr>
-			<td class="error" colspan="2"><%=errors.containsKey("zipcode") ? 
-					errors.get("zipcode") : ""%></td>
-		</tr>
+		<jsp:include page="address_form.jsp" />
 		
 		<tr>
 			<td colspan="2" class="centered">
@@ -204,12 +142,17 @@
 			FormAttribute[] attributes = employeeForm.getAttributes();
 			for (FormAttribute attribute : attributes) {
 				String value = attribute.getValue() != null 
-						? attribute.getValue() : "";
+						? attribute.getValue() : "",
+					formAttributeId = attribute.getFormAttributeId() != null
+						? attribute.getFormAttributeId() : "";
 		%>
 		<tr>
 			<th><%=attribute.getName()%></th>
 			<td><input type="text" name="<%=attribute.getName()%>"
-				value="<%=value%>" /></td>
+				value="<%=value%>" />
+				<input type="hidden" name="formAttributeId" 
+					value="<%=formAttributeId%>" />	
+			</td>
 		</tr>
 		<tr>
 			<td class="error" colspan="2"><%=errors.containsKey(attribute.getName()) ? 
@@ -227,12 +170,17 @@
 			attributes = employeeForm.getEmployeeAttributes();
 			for (FormAttribute attribute : attributes) {
 				String value = attribute.getValue() != null 
-						? attribute.getValue() : "";
+						? attribute.getValue() : "",
+					formAttributeId = attribute.getFormAttributeId() != null
+						? attribute.getFormAttributeId() : "";
 		%>
 		<tr>
 			<th><%=attribute.getName()%></th>
 			<td><input type="text" name="<%=attribute.getName()%>"
-				value="<%=value%>" /></td>
+				value="<%=value%>" />
+				<input type="hidden" name="formAttributeId" 
+					value="<%=formAttributeId%>" />	
+			</td>
 		</tr>
 		<tr>
 			<td class="error" colspan="2"><%=errors.containsKey(attribute.getName()) ? 
