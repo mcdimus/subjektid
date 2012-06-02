@@ -2,18 +2,16 @@ package junit.tests;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Test;
 
+import frontend.forms.AddressForm;
 import frontend.forms.SearchForm;
 
 import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.AddressType;
-import backend.model.Employee;
-import backend.model.Person;
 import backend.model.SubjectAttributeType;
 
 public class SubjectsORMTest {
@@ -69,19 +67,20 @@ public class SubjectsORMTest {
 	}
 	
 	@Test
-	public void testSearch() {
+	public void testFormSearchQuery() {
 		SearchForm form = new SearchForm();
-		HashMap<String, String> criterias = new HashMap<String, String>();
-//		criterias.put("birthDate", "11-11-1960 11-11-1970");
-//		form.setMap(criterias, 3);
-		criterias.put("identityCode", "5");
-		form.setMap(criterias, 1);
-		List<Person> persons = orm.search(form, Person.class);
-		assertNotNull("List<Person> persons are null!", persons);
-		assertTrue("types.size = 0", persons.size() > 0);
-//		for (Person p : persons) {
-//			System.out.println(p.getFirstName());
-//		}
+		form.setSubjectType("0");
+		form.setFirstName("");
+		form.setLastName("");
+		AddressForm aform = new AddressForm();
+		aform.setCountry("");
+		aform.setCounty("");
+		aform.setStreetAddress("");
+		aform.setTownVillage("Tallinn");
+		aform.setZipcode("");
+		form.setAddressForm(aform);
+		String answer = orm.formSearchQuery(form);
+		System.out.println(answer);
 	}
 
 }

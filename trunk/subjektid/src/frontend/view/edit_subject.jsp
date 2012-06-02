@@ -5,14 +5,19 @@
 <script type="text/javascript" src="static/js/edit_subject.js" ></script>
 
 <input type="hidden" name="subjectTypeFk" value="<%=subjectTypeFk%>" />
-<div id="person_form" class="form" style="display: block">
-	<jsp:include page="person_form.jsp" />
-</div>
-<div id="enterprise_form" class="form" style="display: none">
-	<jsp:include page="enterprise_form.jsp" />
-</div>
-<div id="employee_form" class="form" style="display: none">
-	<jsp:include page="employee_form.jsp" />
-</div>
+<%
+	int subjectType = Integer.parseInt(subjectTypeFk);
+	switch (subjectType) {
+	case 1:
+		%><jsp:include page="person_form.jsp" /><%
+		break;
+	case 2:
+		%><jsp:include page="enterprise_form.jsp" /><%
+		break;
+	case 3:
+		%><jsp:include page="employee_form.jsp" /><%
+		break;
+	}
+%>
 </body>
 </html>
