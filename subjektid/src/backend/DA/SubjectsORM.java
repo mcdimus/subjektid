@@ -5,14 +5,14 @@ import frontend.forms.EmployeeForm;
 import frontend.forms.EnterpriseForm;
 import frontend.forms.FormAttribute;
 import frontend.forms.HumanForm;
+import frontend.forms.SearchAttribute;
 import frontend.forms.SearchForm;
+import frontend.forms.SearchResult;
 import frontend.forms.SubjectForm;
 import general.Utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import log.MyLogger;
@@ -120,12 +120,7 @@ public class SubjectsORM {
 		person.setFirstName(form.getFirstName());
 		person.setLastName(form.getLastName());
 		person.setIdentityCode(form.getIdentityCode());
-		try {
-			person.setBirthDate(new SimpleDateFormat("dd.MM.yyyy").parse(
-					form.getBirthDate()));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+		person.setBirthDate(Utils.parseDate(form.getBirthDate()));
 		person.setCreatedBy(Long.parseLong(form.getCreatedBy()));
 		person.setCreated(new Date());
 		
@@ -246,49 +241,190 @@ public class SubjectsORM {
 		
 		form.setCustomerId(String.valueOf(customer.getCustomer()));
 	}
-
+	
+//	private String addStringCriterias(HashMap<String, String> criterias) {
+//		String queryPart = "";
+//		for (String key : criterias.keySet()) {
+//			queryPart += " " + key + " like '" + criterias.get(key) + "%' AND";
+//		}
+//		return queryPart;
+//	}
+//	
+//	private String addNumDateCriterias(HashMap<String, String> criterias) {
+//		String queryPart = "";
+//		for (String key : criterias.keySet()) {
+//			String[] words = criterias.get(key).split(" ");
+//			queryPart += String.format(" %s between '%s' AND '%s' AND",
+//					key, words[0], words[1]);
+//		}
+//		return queryPart;
+//	}
+	
 	@SuppressWarnings("unchecked")
-	public <T> List<T> search(SearchForm form, Class<T> _class) {
+	public ArrayList<SearchResult> search(SearchForm form) {
 		Session session = null;
-		List<T> data = null;
+		List<Object[]> data = null;
 		try {
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			session.beginTransaction();
-			String queryStr = "from " + _class.getName() + " where";
-			for (int i = 1; i <= 3; i++) {
-				if (form.getMap(i) != null) {
-					if (i == 1) {
-						queryStr += addStringCriterias(form.getMap(i));
-					} else {
-						queryStr += addNumDateCriterias(form.getMap(i));
-					}
-				}
+			String queryStr = formSearchQuery(form);
+			if (queryStr != null) {
+				data = session.createQuery(queryStr).list();
 			}
-			queryStr = queryStr.substring(0, queryStr.length() - 4);
-		    data = (List<T>) session.createQuery(queryStr).list();
 		} catch(Exception e) {
 			MyLogger.log("SubjectsORM.search(): ", e.getMessage());
 			e.printStackTrace();
 		}
 		session.close();
-		return data;
+		return castSearchResults(data);
 	}
 	
-	private String addStringCriterias(HashMap<String, String> criterias) {
+	public String formSearchQuery(SearchForm form) {
+		addPersonCriterias(form);
+		addEnterpriseCriteria(form);
+		addAddressCriterias(form);
+		String queryPartOne = form.getQueryPart(0), queryPartTwo
+				= form.getQueryPart(1), queryPartThree = form.getQueryPart(2),
+				queryPartFour = form.getQueryPart(3);
+		if (!Utils.checkEmpty(queryPartTwo)) {
+			if (!Utils.checkEmpty(queryPartFour)) {
+				return String.format("select P.person as subject_id,"
+						+ "'person' as subject_type, P.lastName as subject_name"
+						+ " from%s where%s UNION select E.enterprise as subject_id,"
+						+ " 'enterprise' as subject_type, E.name as subject_name"
+						+ " from%s where%s",
+						queryPartOne.substring(0, queryPartOne.length() - 1),
+						queryPartTwo.substring(0, queryPartTwo.length() - 4),
+						queryPartThree.substring(0, queryPartThree.length() - 1),
+						queryPartFour.substring(0, queryPartFour.length() - 4));
+			} else {
+				return getQueryBeginning(form) + " from"
+						+ queryPartOne.substring(0, queryPartOne.length() - 1)
+						+ " where"
+						+ queryPartTwo.substring(0, queryPartTwo.length() - 4);
+			}
+		} else {
+			return null;
+		}
+	}
+	
+	private String getQueryBeginning(SearchForm form) {
 		String queryPart = "";
-		for (String key : criterias.keySet()) {
-			queryPart += " " + key + " like '" + criterias.get(key) + "%' AND";
+		if (!form.getSubjectType().equals("0")
+				&& !form.getSubjectType().equals("4")) {
+			if (!form.getSubjectType().equals("2")) {
+				queryPart = "select P.person as subject_id, 'person' as subject_type,"
+						+ "P.lastName as subject_name";
+			} else {
+				queryPart = "select E.enterprise as subject_id,"
+						+ "'enterprise' as subject_type,"
+						+ "E.name as subject_name";
+			}
 		}
 		return queryPart;
 	}
 	
-	private String addNumDateCriterias(HashMap<String, String> criterias) {
-		String queryPart = "";
-		for (String key : criterias.keySet()) {
-			String[] words = criterias.get(key).split(" ");
-			queryPart += String.format(" %s between '%s' AND '%s' AND",
-					key, words[0], words[1]);
+	private void addPersonCriterias(SearchForm form) {
+		if (!form.getSubjectType().equals("2")) {
+			String queryPartOne = " Person P,", queryPartTwo = "";
+			if (!Utils.checkEmpty(form.getFirstName())) {
+				queryPartTwo += " P.firstName LIKE '%" + form.getFirstName()
+						+ "%' AND";
+				form.setPersonNotEmpty();
+			}
+			if (!Utils.checkEmpty(form.getLastName())) {
+				queryPartTwo += " P.lastName LIKE '%" + form.getLastName()
+						+ "%' AND";
+				form.setPersonNotEmpty();
+			}
+			form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
+			form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
 		}
-		return queryPart;
 	}
+	
+	private void addEnterpriseCriteria(SearchForm form) {
+		if (!form.getSubjectType().equals("1")
+				&& !form.getSubjectType().equals("3")) {
+			String queryPartOne = "", queryPartTwo = "";
+			if (Utils.checkEmpty(form.getFirstName())) {
+				queryPartOne = " Enterprise E,";
+				if(!Utils.checkEmpty(form.getLastName())) {
+					queryPartTwo += " E.name LIKE '%" + form.getLastName()
+							+ "%' AND";
+					form.setEnterpriseNotEmpty();
+				}
+			}
+			if (form.getSubjectType().equals("2")) {
+				form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
+				form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
+			} else {
+				form.setQueryPart(form.getQueryPart(2) + queryPartOne, 2);
+				form.setQueryPart(form.getQueryPart(3) + queryPartTwo, 3);
+			}
+		}
+	}
+	
+	private void addAddressCriterias(SearchForm form) {
+		AddressForm aform = form.getAddressForm();
+		String queryPartOne = " Address A,", queryPartTwo = "",
+				queryPartFour = "";
+		if (!Utils.checkEmpty(aform.getCountry())) {
+			queryPartTwo += " A.country LIKE '%" + aform.getCountry() + "%' AND";
+		}
+		if (!Utils.checkEmpty(aform.getCounty())) {
+			queryPartTwo += " A.county LIKE '%" + aform.getCounty() + "%' AND";
+		}
+		if (!Utils.checkEmpty(aform.getTownVillage())) {
+			queryPartTwo += " A.townVillage LIKE '%" + aform.getTownVillage()
+					+ "%' AND";
+		}
+		if (!Utils.checkEmpty(aform.getStreetAddress())) {
+			queryPartTwo += " A.streetAddress LIKE '%" + aform.getStreetAddress()
+					+ "%' AND";
+		}
+		if (!Utils.checkEmpty(aform.getZipcode())) {
+			queryPartTwo += " A.zipcode LIKE '%" + aform.getZipcode() + "%' AND";
+		}
+		queryPartFour = queryPartTwo;
+		if (!Utils.checkEmpty(queryPartTwo)) {
+			if (!form.getSubjectType().equals("2")) {
+				queryPartTwo += " P.person = A.subjectFk AND";
+			if (!form.getSubjectType().equals("1")
+						&& !form.getSubjectType().equals("3")) {
+					queryPartFour += " E.enterprise = A.subjectFk AND";
+				}
+			}
+			if (form.getSubjectType().equals("0")
+					|| form.getSubjectType().equals("0")) {
+				form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
+				form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
+				form.setQueryPart(form.getQueryPart(2) + queryPartOne, 2);
+				form.setQueryPart(form.getQueryPart(3) + queryPartFour, 3);
+			} else {
+				form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
+				form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
+			}
+		}
+	}
+	
+	private void addSubjectCriterias(SearchForm form) {
+		String queryPartOne = " SubjectAttribute ", queryPartTwo = "";
+		ArrayList<SearchAttribute> attributes = form.getAttributes();
+		for (SearchAttribute attribute : attributes) {
+			 // TODO: in progress
+		}
+	}
+	
+	private ArrayList<SearchResult> castSearchResults(List<Object[]> data) {
+		ArrayList<SearchResult> results = new ArrayList<SearchResult>(); 
+		for (Object[] objects: data) {
+			SearchResult res = new SearchResult();
+			res.setSubjectId((Long) objects[0]);
+			res.setSubjectType((String) objects[1]);
+			res.setSubjectName((String) objects[2]);
+			results.add(res);
+		}
+		return results;
+	}
+	
 }

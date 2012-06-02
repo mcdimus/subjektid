@@ -23,7 +23,7 @@ public class ViewManager {
 				dispatcher = "/new_subject.jsp";
 			} else if (view.equals("edit_subject_view")) {
 				dispatcher = "/edit_subject.jsp";
-			} else if (view.equals("search")) {
+			} else if (view.equals("search_view")) {
 				dispatcher = "/search.jsp";
 			}
 

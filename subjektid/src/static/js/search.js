@@ -9,15 +9,28 @@ $(function() {
 					$place.html('<tr><td colspan="2" class="centered">'
 							+ '---- Subject attributes ----</td></tr>');
 		        	$(answer).each(function(index, element) {
-		        		$place.append($('<tr><th>' + element + '</th><td>'
-			            		+ '<input type="text" name="' + element
-			            		+ '" /></td></tr>'));
+		        		if (element.type != "1") {
+			        		$place.append($('<tr><input type="hidden" name="' 
+			        				+ element.name + '" value="'
+			        				+ element.type + '" /><th>' + element.name
+			        				+ '</th><td class="short">'
+			        				+ '<input type="text" name="' + element.name
+			        				+ '" /><input type="text" name="'
+			        				+ element.name + '" /></td></tr>'));
+		        		} else {
+			        		$place.append($('<tr><input type="hidden" name="' 
+			        				+ element.name + '" value="'
+			        				+ element.type + '" /><th>' + element.name
+			        				+ '</th><td>' + '<input type="text" name="'
+			        				+ element.name + '" /></td></tr>'));
+		        		}
 			        });
-		        	$place.append('<tr><td><button type="submit" name="submitBtn">'
-        			+ 'Search</button></td></tr>');
+		        	$place.append($('<tr><td><button type="submit" name="submitBtn">' +
+						'Search</button></td></tr>'));
 			}, 'json');
 		} else {
-			$place.html('');
+			$place.html('<tr><td><button type="submit" name="submitBtn">' +
+					'Search</button></td></tr>');
 		}
 	});
 

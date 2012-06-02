@@ -91,3 +91,18 @@ td.centered {
 td.right {
 	text-align: right;
 }
+
+td.short input[type="text"] {
+	width: 4em;
+	margin: 0px 10px 0px 1px;
+}
+
+div.search {
+	float: left;
+} 
+
+div.results {
+	position: relative;
+	top: 20px;
+	left: 20px;
+}
