@@ -103,6 +103,13 @@ div.search {
 
 div.results {
 	position: relative;
-	top: 20px;
 	left: 20px;
+}
+
+table.results th {
+	background-color: #D3D3D3;
+}
+
+table.results th, table.results td {
+	border: 1px solid #000000;
 }

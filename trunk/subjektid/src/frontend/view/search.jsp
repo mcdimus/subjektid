@@ -11,7 +11,7 @@
 			<tr>
 				<th>Subject type</th>
 				<td>
-					<select id="subject_type">
+					<select name="subject_type" id="subject_type">
 						<option value="0">All subjects</option>
 						<option value="1">Person</option>
 						<option value="2">Enterprise</option>
@@ -37,6 +37,7 @@
 			<tfoot>
 				<tr>
 					<td><button type="submit" name="submitBtn">Search</button></td>
+					<td></td>
 				</tr>
 			</tfoot>
 		</table>
@@ -44,19 +45,30 @@
 	</form>
 	<div class="search results">
 	<h3>Search results</h3>
-	<table>
+	<table class="results">
 		<%
 			if (action.equals("search")) {
 				if (results.size() != 0) {
-		%><tr><th>Subject id</th><th>Subject name</th><th>Subject type</th></tr><%
+		%><tr><td colspan="4">Found <%=results.size()%> persons.</td></tr>
+		<tr><th>Result #</th><th>Subject name</th><th>Subject type</th><th>Edit</th></tr><%
 					SearchResult res;
 					for (int i = 0; i < results.size(); i++) {
 						res = (SearchResult) results.get(i);
-		%><tr><td><%=res.getSubjectId()%></td><td><%=res.getSubjectName()%></td>
-				<td><%=res.getSubjectType()%></td></tr><%
+		%><tr><td><%=i + 1%></td><td><%=res.getSubjectName()%></td>
+				<td><%=res.getSubjectType()%></td>
+			<%
+				String link = "mode=subject&action=edit_subject&id="
+						+ res.getSubjectId() + "&subject_type=";
+				if (res.getSubjectType().equals("person")) {
+					link += "1";
+				} else {
+					link += "2";
+				}
+			%>
+				<td><a href="<%=link%>" target="_blank">Edit</a></td></tr><%
 					}
 				} else {
-		%><tr><td colspan="3">No persons found.</td></tr><%
+		%><tr><td colspan="4">No persons found.</td></tr><%
 				}
 			}
 		%>

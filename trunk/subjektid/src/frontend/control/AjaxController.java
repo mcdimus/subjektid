@@ -62,8 +62,9 @@ public class AjaxController extends HttpServlet {
 		sortSubjectAttributes(types);
 		String json = "[";
 		for (SubjectAttributeType type : types) {
-			json += "{ \"name\": \"" + type.getTypeName() + "\", \"type\": \""
-					+ type.getDataType() + "\" }, ";
+			json += "{ \"name\" : \"" + type.getTypeName() + "\", \"type\" : \""
+					+ type.getDataType() + "\", \"attr_id\" : "
+					+ type.getSubjectAttributeType() + "\" }, ";
 		}
 		return json.substring(0, json.length() - 2) + "]";
 	}

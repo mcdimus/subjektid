@@ -4,20 +4,19 @@ import java.util.ArrayList;
 
 public class SearchForm {
 
-	private String subjectType;
+	private long subjectType;
 	private String firstName, lastName;
 	private AddressForm addressForm;
 	private ArrayList<SearchAttribute> attributes;
-	private boolean notEmptyPerson, notEmptyEnterprise;
 	private String[] query = { "", "", "", "" };
 	
 	public SearchForm() { }
 	
-	public String getSubjectType() {
+	public long getSubjectType() {
 		return subjectType;
 	}
 
-	public void setSubjectType(String subjType) {
+	public void setSubjectType(long subjType) {
 		subjectType = subjType;
 	}
 
@@ -51,22 +50,6 @@ public class SearchForm {
 
 	public void setAttributes (ArrayList<SearchAttribute> attrs) {
 		attributes = attrs;
-	}
-	
-	public boolean isPersonNotEmpty() {
-		return notEmptyPerson;
-	}
-	
-	public void setPersonNotEmpty() {
-		notEmptyPerson = true;
-	}
-	
-	public boolean isEnterpriseNotEmpty() {
-		return notEmptyEnterprise;
-	}
-	
-	public void setEnterpriseNotEmpty() {
-		notEmptyEnterprise = true;
 	}
 	
 	public String getQueryPart(int i) {
