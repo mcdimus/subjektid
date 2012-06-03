@@ -269,7 +269,15 @@ public class SubjectsORM {
 			session.beginTransaction();
 			String queryStr = formSearchQuery(form);
 			if (queryStr != null) {
-				data = session.createQuery(queryStr).list();
+				if (!Utils.checkEmpty(form.getQueryPart(3))) {
+					String[] queris = queryStr.split("\t");
+					data = session.createQuery(queris[0]).list();
+					data.addAll(session.createQuery(queris[1]).list());
+				} else {
+					data = session.createQuery(queryStr).list();
+				}
+			} else {
+				return new ArrayList<SearchResult>();
 			}
 		} catch(Exception e) {
 			MyLogger.log("SubjectsORM.search(): ", e.getMessage());
@@ -290,7 +298,7 @@ public class SubjectsORM {
 			if (!Utils.checkEmpty(queryPartFour)) {
 				return String.format("select P.person as subject_id,"
 						+ "'person' as subject_type, P.lastName as subject_name"
-						+ " from%s where%s UNION select E.enterprise as subject_id,"
+						+ " from%s where%s\tselect E.enterprise as subject_id,"
 						+ " 'enterprise' as subject_type, E.name as subject_name"
 						+ " from%s where%s",
 						queryPartOne.substring(0, queryPartOne.length() - 1),
@@ -310,9 +318,8 @@ public class SubjectsORM {
 	
 	private String getQueryBeginning(SearchForm form) {
 		String queryPart = "";
-		if (!form.getSubjectType().equals("0")
-				&& !form.getSubjectType().equals("4")) {
-			if (!form.getSubjectType().equals("2")) {
+		if (!(form.getSubjectType() == 0) && !(form.getSubjectType() == 4)) {
+			if (!(form.getSubjectType() == 2 )) {
 				queryPart = "select P.person as subject_id, 'person' as subject_type,"
 						+ "P.lastName as subject_name";
 			} else {
@@ -325,17 +332,15 @@ public class SubjectsORM {
 	}
 	
 	private void addPersonCriterias(SearchForm form) {
-		if (!form.getSubjectType().equals("2")) {
+		if (!(form.getSubjectType() == 2)) {
 			String queryPartOne = " Person P,", queryPartTwo = "";
 			if (!Utils.checkEmpty(form.getFirstName())) {
 				queryPartTwo += " P.firstName LIKE '%" + form.getFirstName()
 						+ "%' AND";
-				form.setPersonNotEmpty();
 			}
 			if (!Utils.checkEmpty(form.getLastName())) {
 				queryPartTwo += " P.lastName LIKE '%" + form.getLastName()
 						+ "%' AND";
-				form.setPersonNotEmpty();
 			}
 			form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
 			form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
@@ -343,18 +348,16 @@ public class SubjectsORM {
 	}
 	
 	private void addEnterpriseCriteria(SearchForm form) {
-		if (!form.getSubjectType().equals("1")
-				&& !form.getSubjectType().equals("3")) {
+		if (!(form.getSubjectType() == 1) && !(form.getSubjectType() == 3)) {
 			String queryPartOne = "", queryPartTwo = "";
 			if (Utils.checkEmpty(form.getFirstName())) {
 				queryPartOne = " Enterprise E,";
 				if(!Utils.checkEmpty(form.getLastName())) {
 					queryPartTwo += " E.name LIKE '%" + form.getLastName()
 							+ "%' AND";
-					form.setEnterpriseNotEmpty();
 				}
 			}
-			if (form.getSubjectType().equals("2")) {
+			if (form.getSubjectType() == 2) {
 				form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
 				form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
 			} else {
@@ -387,15 +390,15 @@ public class SubjectsORM {
 		}
 		queryPartFour = queryPartTwo;
 		if (!Utils.checkEmpty(queryPartTwo)) {
-			if (!form.getSubjectType().equals("2")) {
-				queryPartTwo += " P.person = A.subjectFk AND";
-			if (!form.getSubjectType().equals("1")
-						&& !form.getSubjectType().equals("3")) {
-					queryPartFour += " E.enterprise = A.subjectFk AND";
+			if (!(form.getSubjectType() == 2)) {
+				queryPartTwo += " P.person = A.subjectFk AND A.subjectTypeFk = 1 AND";
+			if (!(form.getSubjectType() == 1)
+				&& !(form.getSubjectType() == 3)) {
+					queryPartFour += " E.enterprise = A.subjectFk"
+							+ " AND A.subjectTypeFk = 2 AND";
 				}
 			}
-			if (form.getSubjectType().equals("0")
-					|| form.getSubjectType().equals("0")) {
+			if (form.getSubjectType() == 0 || form.getSubjectType() == 4) {
 				form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
 				form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
 				form.setQueryPart(form.getQueryPart(2) + queryPartOne, 2);

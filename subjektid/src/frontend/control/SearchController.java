@@ -1,7 +1,6 @@
 package frontend.control;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,15 +20,11 @@ public class SearchController extends Controller {
 		SessionManager sessionManager = new SessionManager(req);
 		if (sessionManager.loggedIn()) {
 			if (action.equals("search")) {
-				HashMap<String, String[]> myParams =
-						new HashMap<String, String[]>();
-				myParams.putAll(params);
-				params = myParams;
 				SearchForm form = formSearchForm();
 				SubjectsORM orm = new SubjectsORM();
 				ArrayList<SearchResult> results = orm.search(form);
 				req.setAttribute("results", results);
-				req.setAttribute("Search", "search");
+				req.setAttribute("action", "search");
 			}
 			view = "search_view";
 		} else {
@@ -40,23 +35,21 @@ public class SearchController extends Controller {
 
 	private SearchForm formSearchForm() {
 		SearchForm searchForm = new SearchForm();
-		searchForm.setSubjectType(params.remove("subject_type")[0]);
-		searchForm.setFirstName(params.remove("fname")[0]);
-		searchForm.setLastName(params.remove("lname")[0]);
+		searchForm.setSubjectType(Long.parseLong(params.get("subject_type")[0]));
+		searchForm.setFirstName(params.get("fname")[0]);
+		searchForm.setLastName(params.get("lname")[0]);
 		searchForm.setAddressForm(formAddressForm());
-		searchForm.setAttributes(formAttributes());
+		searchForm.setAttributes(new ArrayList<SearchAttribute>());
 		return searchForm;
 	}
 	
 	private AddressForm formAddressForm() {
 		AddressForm addressForm = new AddressForm();
-		addressForm.setAddressId(params.remove("addressId")[0]);
-		addressForm.setAddressTypeFk(params.remove("address_type_fk")[0]);
-		addressForm.setCountry(params.remove("country")[0]);
-		addressForm.setCounty(params.remove("county")[0]);
-		addressForm.setStreetAddress(params.remove("street_address")[0]);
-		addressForm.setTownVillage(params.remove("town_village")[0]);
-		addressForm.setZipcode(params.remove("zipcode")[0]);
+		addressForm.setCountry(params.get("country")[0]);
+		addressForm.setCounty(params.get("county")[0]);
+		addressForm.setStreetAddress(params.get("street_address")[0]);
+		addressForm.setTownVillage(params.get("town_village")[0]);
+		addressForm.setZipcode(params.get("zipcode")[0]);
 		return addressForm;
 	}
 	

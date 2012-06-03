@@ -2,12 +2,14 @@ package junit.tests;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
 import frontend.forms.AddressForm;
 import frontend.forms.SearchForm;
+import frontend.forms.SearchResult;
 
 import backend.DA.SubjectsORM;
 import backend.model.Address;
@@ -69,18 +71,37 @@ public class SubjectsORMTest {
 	@Test
 	public void testFormSearchQuery() {
 		SearchForm form = new SearchForm();
-		form.setSubjectType("0");
+		form.setSubjectType(0);
 		form.setFirstName("");
 		form.setLastName("");
 		AddressForm aform = new AddressForm();
 		aform.setCountry("");
 		aform.setCounty("");
 		aform.setStreetAddress("");
-		aform.setTownVillage("Tallinn");
+		aform.setTownVillage("");
 		aform.setZipcode("");
 		form.setAddressForm(aform);
 		String answer = orm.formSearchQuery(form);
 		System.out.println(answer);
+	}
+	
+	@Test
+	public void testSearch() {
+		SearchForm form = new SearchForm();
+		form.setSubjectType(0);
+		form.setFirstName("");
+		form.setLastName("");
+		AddressForm aform = new AddressForm();
+		aform.setCountry("");
+		aform.setCounty("");
+		aform.setStreetAddress("");
+		aform.setTownVillage("");
+		aform.setZipcode("");
+		form.setAddressForm(aform);
+		ArrayList<SearchResult> results = orm.search(form);
+		for (SearchResult res : results) {
+			System.out.println(res.getSubjectName());
+		}
 	}
 
 }

@@ -11,18 +11,18 @@ $(function() {
 		        	$(answer).each(function(index, element) {
 		        		if (element.type != "1") {
 			        		$place.append($('<tr><input type="hidden" name="' 
-			        				+ element.name + '" value="'
-			        				+ element.type + '" /><th>' + element.name
+			        				+ 'attribute' + index + '" value="'
+			        				+ element.attr_id + '" /><th>' + element.name
 			        				+ '</th><td class="short">'
-			        				+ '<input type="text" name="' + element.name
+			        				+ '<input type="text" name="attribute_' + index +
 			        				+ '" /><input type="text" name="'
-			        				+ element.name + '" /></td></tr>'));
+			        				+ 'attribute_' + index + '" /></td></tr>'));
 		        		} else {
 			        		$place.append($('<tr><input type="hidden" name="' 
-			        				+ element.name + '" value="'
-			        				+ element.type + '" /><th>' + element.name
-			        				+ '</th><td>' + '<input type="text" name="'
-			        				+ element.name + '" /></td></tr>'));
+			        				+ 'attribute' + index + '" value="'
+			        				+ element.attr_id + '" /><th>' + element.name
+			        				+ '</th><td><input type="text" name="'
+			        				+ 'attribute_' + index + '" /></td></tr>'));
 		        		}
 			        });
 		        	$place.append($('<tr><td><button type="submit" name="submitBtn">' +
