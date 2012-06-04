@@ -15,11 +15,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMSource;
+
 import log.MyLogger;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import backend.model.Address;
 import backend.model.Customer;
@@ -31,7 +37,7 @@ import backend.model.SubjectAttribute;
 import backend.model.UserAccount;
 
 public class SubjectsORM {
-	
+
 	@SuppressWarnings("unchecked")
 	public <T> List<T> findAll(Class<T> _class) {
 		Session session = null;
@@ -39,9 +45,9 @@ public class SubjectsORM {
 		try {
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			session.beginTransaction();
-		    data = (List<T>) session.createQuery("from "
-		    		+ _class.getName()).list();
-		} catch(Exception e) {
+			data = (List<T>) session.createQuery("from " + _class.getName())
+					.list();
+		} catch (Exception e) {
 			MyLogger.log("SubjectsORM.findAll(): ", e.getMessage());
 			e.printStackTrace();
 		}
@@ -49,7 +55,7 @@ public class SubjectsORM {
 		return data;
 	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public <T> T findByID(Class<T> _class, long id) {
 		Session session = null;
 		T data = null;
@@ -58,36 +64,36 @@ public class SubjectsORM {
 			session.beginTransaction();
 			Query q = session.createQuery("from " + _class.getName()
 					+ " obj where obj.id=:id");
-			q.setLong("id", id);	
-		    data = (T) q.uniqueResult();
-		} catch(Exception e) {
+			q.setLong("id", id);
+			data = (T) q.uniqueResult();
+		} catch (Exception e) {
 			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
 			e.printStackTrace();
 		}
 		session.close();
 		return data;
 	}
-    
-    @SuppressWarnings("unchecked")
-   	public <T> List<T> findByID(Class<T> _class, String attribute, long id) {
-   		Session session = null;
-   		List<T> data = null;
-   		try {
-   			session = HibernateUtil.getSessionFactory().getCurrentSession();
-   			session.beginTransaction();
-   			Query q = session.createQuery("from " + _class.getName()
-   					+ " where " + attribute + "=:id");
-   			q.setLong("id", id);	
-   		    data = (List<T>) q.list();
-   		} catch(Exception e) {
-   			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
-   			e.printStackTrace();
-   		}
-   		session.close();
-   		return data;
-   	}
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
+	public <T> List<T> findByID(Class<T> _class, String attribute, long id) {
+		Session session = null;
+		List<T> data = null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			Query q = session.createQuery("from " + _class.getName()
+					+ " where " + attribute + "=:id");
+			q.setLong("id", id);
+			data = (List<T>) q.list();
+		} catch (Exception e) {
+			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
+			e.printStackTrace();
+		}
+		session.close();
+		return data;
+	}
+
+	@SuppressWarnings("unchecked")
 	public <T> List<T> findBySubjectID(Class<T> _class, long subjectId,
 			long subjectType) {
 		Session session = null;
@@ -95,44 +101,45 @@ public class SubjectsORM {
 		try {
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			session.beginTransaction();
-			Query q = session.createQuery("from " + _class.getName()
-					+ " obj where obj.subjectFk=:id AND obj.subjectTypeFk=:type");
+			Query q = session
+					.createQuery("from "
+							+ _class.getName()
+							+ " obj where obj.subjectFk=:id AND obj.subjectTypeFk=:type");
 			q.setLong("id", subjectId);
 			q.setLong("type", subjectType);
-		    data = (List<T>) q.list();
-		} catch(Exception e) {
+			data = (List<T>) q.list();
+		} catch (Exception e) {
 			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
 			e.printStackTrace();
 		}
 		session.close();
 		return data;
 	}
-    
+
 	public <T> boolean saveOrUpdate(T object) {
-		 Transaction tx = null;
-		 Session session = null;
-		 try {
+		Transaction tx = null;
+		Session session = null;
+		try {
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
-		    tx = session.beginTransaction();
-		    session.saveOrUpdate(object);
+			tx = session.beginTransaction();
+			session.saveOrUpdate(object);
 			tx.commit();
 			return true;
-		 } catch(Exception e) {
+		} catch (Exception e) {
 			MyLogger.log("SubjectsORM.saveOrUpdate(): ", e.getMessage());
-			 e.printStackTrace();
-		      if (tx != null) {
-		    	  tx.rollback();
-		      }
-		      return false;
-		 } 
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			return false;
+		}
 	}
-	
+
 	public boolean saveUserAcc(UserAccount user) {
-		user.setPassw(Utils.generateMD5(user.getUsername()
-				+ user.getPassw()));
+		user.setPassw(Utils.generateMD5(user.getUsername() + user.getPassw()));
 		return saveOrUpdate(user);
 	}
-	
+
 	public String saveHuman(HumanForm form) {
 		Person person = new Person();
 		if (!Utils.checkEmpty(form.getSubjectId())) {
@@ -144,7 +151,7 @@ public class SubjectsORM {
 		person.setBirthDate(Utils.parseDate(form.getBirthDate()));
 		person.setCreatedBy(Long.parseLong(form.getCreatedBy()));
 		person.setCreated(new Date());
-		
+
 		saveOrUpdate(person);
 		form.setSubjectId(String.valueOf(person.getPerson()));
 		saveAddress(form.getAddressForm(), person.getPerson(), 1);
@@ -155,10 +162,10 @@ public class SubjectsORM {
 		if (form.getCustomer() != null) {
 			saveCustomer(form, 1);
 		}
-		
+
 		return form.getSubjectId();
 	}
-	
+
 	public String saveEmployee(EmployeeForm form) {
 		long subjId = Long.parseLong(form.getSubjectId());
 		Employee employee = new Employee();
@@ -168,21 +175,21 @@ public class SubjectsORM {
 		}
 		employee.setEnterpriseFk(Long.parseLong(form.getEnterprise()));
 		employee.setActive("Y");
-		
+
 		saveOrUpdate(employee);
 		form.setEmployeeId(String.valueOf(employee.getEmployee()));
-		
+
 		EmployeeRole employeeRole = new EmployeeRole();
 		employeeRole.setEmployeeFk(employee.getEmployee());
 		employeeRole.setEmployeeRoleTypeFk(Long.parseLong(form
 				.getEmployeeRoleType()));
 		employeeRole.setActive("Y");
-		
+
 		saveAttributes(subjId, form.getEmployeeAttributes());
-		
+
 		return String.valueOf(employee.getEmployee());
 	}
-	
+
 	public String saveEnterprise(EnterpriseForm form) {
 		Enterprise enterprise = new Enterprise();
 		if (!Utils.checkEmpty(form.getSubjectId())) {
@@ -192,7 +199,7 @@ public class SubjectsORM {
 		enterprise.setFullName(form.getFullName());
 		enterprise.setCreatedBy(Long.parseLong(form.getCreatedBy()));
 		enterprise.setCreated(new Date());
-		
+
 		saveOrUpdate(enterprise);
 		form.setSubjectId(String.valueOf(enterprise.getEnterprise()));
 		saveAddress(form.getAddressForm(), enterprise.getEnterprise(), 2);
@@ -203,11 +210,11 @@ public class SubjectsORM {
 		if (form.getCustomer() != null) {
 			saveCustomer(form, 2);
 		}
-		
+
 		return form.getSubjectId();
 	}
-	
-	private void saveAddress(AddressForm form, long subjectFk, 
+
+	private void saveAddress(AddressForm form, long subjectFk,
 			long subjectTypeFk) {
 		Address address = new Address();
 		if (!Utils.checkEmpty(form.getAddressId())) {
@@ -221,11 +228,11 @@ public class SubjectsORM {
 		address.setTownVillage(form.getTownVillage());
 		address.setStreetAddress(form.getStreetAddress());
 		address.setZipcode(form.getZipcode());
-		
+
 		saveOrUpdate(address);
 		form.setAddressId(String.valueOf(address.getAddress()));
 	}
-	
+
 	private void saveAttributes(long id, FormAttribute[] attributes) {
 		for (FormAttribute attribute : attributes) {
 			if (attribute.getValue().length() != 0) {
@@ -240,7 +247,7 @@ public class SubjectsORM {
 						.getSubjectAttributeTypeFk());
 				subjAttr.setOrderby(attribute.getOrderby());
 				subjAttr.setDataType(attribute.getType());
-				switch(subjAttr.getDataType()) {
+				switch (subjAttr.getDataType()) {
 				case 1:
 					subjAttr.setValueText(attribute.getValue());
 					break;
@@ -257,34 +264,34 @@ public class SubjectsORM {
 			}
 		}
 	}
-	
+
 	private void saveCustomer(SubjectForm form, long subjectTypeFk) {
 		Customer customer = new Customer();
 		customer.setSubjectFk(Long.parseLong(form.getSubjectId()));
 		customer.setSubjectTypeFk(subjectTypeFk);
 		saveOrUpdate(customer);
-		
+
 		form.setCustomerId(String.valueOf(customer.getCustomer()));
 	}
-	
-//	private String addStringCriterias(HashMap<String, String> criterias) {
-//		String queryPart = "";
-//		for (String key : criterias.keySet()) {
-//			queryPart += " " + key + " like '" + criterias.get(key) + "%' AND";
-//		}
-//		return queryPart;
-//	}
-//	
-//	private String addNumDateCriterias(HashMap<String, String> criterias) {
-//		String queryPart = "";
-//		for (String key : criterias.keySet()) {
-//			String[] words = criterias.get(key).split(" ");
-//			queryPart += String.format(" %s between '%s' AND '%s' AND",
-//					key, words[0], words[1]);
-//		}
-//		return queryPart;
-//	}
-	
+
+	// private String addStringCriterias(HashMap<String, String> criterias) {
+	// String queryPart = "";
+	// for (String key : criterias.keySet()) {
+	// queryPart += " " + key + " like '" + criterias.get(key) + "%' AND";
+	// }
+	// return queryPart;
+	// }
+	//
+	// private String addNumDateCriterias(HashMap<String, String> criterias) {
+	// String queryPart = "";
+	// for (String key : criterias.keySet()) {
+	// String[] words = criterias.get(key).split(" ");
+	// queryPart += String.format(" %s between '%s' AND '%s' AND",
+	// key, words[0], words[1]);
+	// }
+	// return queryPart;
+	// }
+
 	@SuppressWarnings("unchecked")
 	public ArrayList<SearchResult> search(SearchForm form) {
 		Session session = null;
@@ -304,32 +311,112 @@ public class SubjectsORM {
 			} else {
 				return new ArrayList<SearchResult>();
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			MyLogger.log("SubjectsORM.search(): ", e.getMessage());
 			e.printStackTrace();
 		}
 		session.close();
 		return castSearchResults(data);
 	}
-	
+
+	@SuppressWarnings("unchecked")
+	public DOMSource searchXML(SearchForm form) {
+		Session session = null;
+		List<Object[]> data = null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			String queryStr = formSearchQuery(form);
+			if (queryStr != null) {
+				if (!Utils.checkEmpty(form.getQueryPart(3))) {
+					String[] queris = queryStr.split("\t");
+					data = session.createQuery(queris[0]).list();
+					data.addAll(session.createQuery(queris[1]).list());
+				} else {
+					data = session.createQuery(queryStr).list();
+				}
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			MyLogger.log("SubjectsORM.search(): ", e.getMessage());
+			e.printStackTrace();
+		}
+		session.close();
+
+		return castSearchResultsToXML(data);
+
+	}
+
+	private DOMSource castSearchResultsToXML(List<Object[]> data) {
+		if (data != null) {
+			Document doc = null;
+			try {
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+				// root elements
+				doc = docBuilder.newDocument();
+				Element rootElement = doc.createElement("subjects");
+				doc.appendChild(rootElement);
+				rootElement.setAttribute("quantity", String.valueOf(data.size()));
+
+				for (Object[] objects : data) {
+					// subject elements
+					Element subject = doc.createElement("subject");
+					rootElement.appendChild(subject);
+
+					// id elements
+					Element id = doc.createElement("id");
+					id.appendChild(doc.createTextNode(String.valueOf(objects[0])));
+					subject.appendChild(id);
+
+					// type elements
+					Element type = doc.createElement("type");
+					type.appendChild(doc.createTextNode((String) objects[1]));
+					subject.appendChild(type);
+
+					// name elements
+					Element name = doc.createElement("name");
+					name.appendChild(doc.createTextNode((String) objects[2]));
+					subject.appendChild(name);
+
+				}
+			} catch (Exception e) {
+				MyLogger.log("SubjectsORM.castSearchResultsToXML(): ",
+						e.getMessage());
+			}
+
+			return new DOMSource(doc);
+			
+		} else {
+
+			return null;
+		}
+	}
+
 	public String formSearchQuery(SearchForm form) {
 		addPersonCriterias(form);
 		addEnterpriseCriteria(form);
 		addAddressCriterias(form);
-		String queryPartOne = form.getQueryPart(0), queryPartTwo
-				= form.getQueryPart(1), queryPartThree = form.getQueryPart(2),
-				queryPartFour = form.getQueryPart(3);
+		String queryPartOne = form.getQueryPart(0), queryPartTwo = form
+				.getQueryPart(1), queryPartThree = form.getQueryPart(2), queryPartFour = form
+				.getQueryPart(3);
 		if (!Utils.checkEmpty(queryPartTwo)) {
 			if (!Utils.checkEmpty(queryPartFour)) {
-				return String.format("select P.person as subject_id,"
-						+ "'person' as subject_type, P.lastName as subject_name"
-						+ " from%s where%s\tselect E.enterprise as subject_id,"
-						+ " 'enterprise' as subject_type, E.name as subject_name"
-						+ " from%s where%s",
-						queryPartOne.substring(0, queryPartOne.length() - 1),
-						queryPartTwo.substring(0, queryPartTwo.length() - 4),
-						queryPartThree.substring(0, queryPartThree.length() - 1),
-						queryPartFour.substring(0, queryPartFour.length() - 4));
+				return String
+						.format("select P.person as subject_id,"
+								+ "'person' as subject_type, P.lastName as subject_name"
+								+ " from%s where%s\tselect E.enterprise as subject_id,"
+								+ " 'enterprise' as subject_type, E.name as subject_name"
+								+ " from%s where%s", queryPartOne.substring(0,
+								queryPartOne.length() - 1), queryPartTwo
+								.substring(0, queryPartTwo.length() - 4),
+								queryPartThree.substring(0,
+										queryPartThree.length() - 1),
+								queryPartFour.substring(0,
+										queryPartFour.length() - 4));
 			} else {
 				return getQueryBeginning(form) + " from"
 						+ queryPartOne.substring(0, queryPartOne.length() - 1)
@@ -340,11 +427,11 @@ public class SubjectsORM {
 			return null;
 		}
 	}
-	
+
 	private String getQueryBeginning(SearchForm form) {
 		String queryPart = "";
 		if (!(form.getSubjectType() == 4)) {
-			if (!(form.getSubjectType() == 2 )) {
+			if (!(form.getSubjectType() == 2)) {
 				queryPart = "select P.person as subject_id, 'person' as subject_type,"
 						+ "P.lastName as subject_name";
 			} else {
@@ -355,7 +442,7 @@ public class SubjectsORM {
 		}
 		return queryPart;
 	}
-	
+
 	private void addPersonCriterias(SearchForm form) {
 		if (!(form.getSubjectType() == 2)) {
 			String queryPartOne = " Person P,", queryPartTwo = "";
@@ -371,13 +458,13 @@ public class SubjectsORM {
 			form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
 		}
 	}
-	
+
 	private void addEnterpriseCriteria(SearchForm form) {
 		if (!(form.getSubjectType() == 1) && !(form.getSubjectType() == 3)) {
 			String queryPartOne = "", queryPartTwo = "";
 			if (Utils.checkEmpty(form.getFirstName())) {
 				queryPartOne = " Enterprise E,";
-				if(!Utils.checkEmpty(form.getLastName())) {
+				if (!Utils.checkEmpty(form.getLastName())) {
 					queryPartTwo += " lower(E.name) LIKE '%" + form.getLastName()
 							.toLowerCase() + "%' AND";
 				}
@@ -391,11 +478,10 @@ public class SubjectsORM {
 			}
 		}
 	}
-	
+
 	private void addAddressCriterias(SearchForm form) {
 		AddressForm aform = form.getAddressForm();
-		String queryPartOne = " Address A,", queryPartTwo = "",
-				queryPartFour = "";
+		String queryPartOne = " Address A,", queryPartTwo = "", queryPartFour = "";
 		if (!Utils.checkEmpty(aform.getCountry())) {
 			queryPartTwo += " lower(A.country) LIKE '%" + aform.getCountry()
 					.toLowerCase() + "%' AND";
@@ -409,6 +495,7 @@ public class SubjectsORM {
 					.toLowerCase() + "%' AND";
 		}
 		if (!Utils.checkEmpty(aform.getStreetAddress())) {
+
 			queryPartTwo += " lower(A.streetAddress) LIKE '%" + aform.getStreetAddress()
 					.toLowerCase() + "%' AND";
 		}
@@ -420,8 +507,8 @@ public class SubjectsORM {
 		if (!Utils.checkEmpty(queryPartTwo)) {
 			if (!(form.getSubjectType() == 2)) {
 				queryPartTwo += " P.person = A.subjectFk AND A.subjectTypeFk = 1 AND";
-			if (!(form.getSubjectType() == 1)
-				&& !(form.getSubjectType() == 3)) {
+				if (!(form.getSubjectType() == 1)
+						&& !(form.getSubjectType() == 3)) {
 					queryPartFour += " E.enterprise = A.subjectFk"
 							+ " AND A.subjectTypeFk = 2 AND";
 				}
@@ -437,19 +524,19 @@ public class SubjectsORM {
 			}
 		}
 	}
-	
+
 	private void addSubjectCriterias(SearchForm form) {
 		String queryPartOne = " SubjectAttribute ", queryPartTwo = "";
 		ArrayList<SearchAttribute> attributes = form.getAttributes();
 		for (SearchAttribute attribute : attributes) {
-			 // TODO: in progress
+			// TODO: in progress
 		}
 	}
-	
+
 	private ArrayList<SearchResult> castSearchResults(List<Object[]> data) {
 		if (data != null) {
-			ArrayList<SearchResult> results = new ArrayList<SearchResult>(); 
-			for (Object[] objects: data) {
+			ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+			for (Object[] objects : data) {
 				SearchResult res = new SearchResult();
 				res.setSubjectId((Long) objects[0]);
 				res.setSubjectType((String) objects[1]);
@@ -461,5 +548,5 @@ public class SubjectsORM {
 			return null;
 		}
 	}
-	
+
 }
