@@ -13,6 +13,7 @@ import frontend.forms.SearchResult;
 import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.AddressType;
+import backend.model.EnterprisePersonRelation;
 import backend.model.SubjectAttributeType;
 
 public class SubjectsORMTest {
@@ -100,6 +101,18 @@ public class SubjectsORMTest {
 		List<SearchResult> ress = orm.search(form);
 		for (SearchResult res : ress) {
 			System.out.println(res.getSubjectName());
+		}
+	}
+	
+	@Test
+	public void test() {
+		List<EnterprisePersonRelation> rels = orm.findByID(EnterprisePersonRelation
+			.class, "personFk", 6);
+		if (rels.size() != 0) {
+			System.out.println("Her!");
+			System.out.println(rels.get(0).getEnterpriseFk().toString());
+			System.out.println(String.valueOf(rels.get(0).getEnterprisePersonRelation()));
+			System.out.println(rels.get(0).getEntPerRelationTypeFk().toString());
 		}
 	}
 

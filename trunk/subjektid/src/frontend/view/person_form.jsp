@@ -119,7 +119,9 @@
 		
 		<tr>
 			<td colspan="2" class="centered">
-				------ Enterprise relation -----</td>
+				------ Enterprise relation -----
+				<input type="hidden" value="<%=personForm.getEntPerRelId()
+					!= null ? personForm.getEntPerRelId() : ""%>"/></td>
 		</tr>
 		<tr>
 			<th>Enterprise</th>
@@ -130,12 +132,12 @@
 						for (int i = 0; i < enterpriseList.size(); i++) {
 							enterprise = (Enterprise) enterpriseList.get(i);
 					%>
-					<option value="<%=enterprise.getEnterprise()%>">
-						<%=enterprise.getName()%>
+					<option value="<%=enterprise.getEnterprise()%>" 
 						<%=personForm.getEnterprise() != null &&
 							personForm.getEnterprise().equals(
 							String.valueOf(enterprise.getEnterprise())) ? 
-							"selected='selected'" : "" %>
+							"selected='selected'" : "" %>>
+						<%=enterprise.getName()%>
 					</option>
 					<%
 						}
@@ -151,12 +153,12 @@
 						for (int i = 0; i < ent_per_rels.size(); i++) {
 							rel = (EntPerRelationType) ent_per_rels.get(i);
 					%>
-					<option value="<%=rel.getTypeName()%>">
-						<%=rel.getTypeName()%>
+					<option value="<%=rel.getTypeName()%>" 
 						<%=personForm.getEntPerRelType() != null &&
 							personForm.getEntPerRelType().equals(
 							String.valueOf(rel.getEntPerRelationType())) ? 
-							"selected='selected'" : "" %>
+							"selected='selected'" : "" %>>
+						<%=rel.getTypeName()%>
 					</option>
 					<%
 						}
