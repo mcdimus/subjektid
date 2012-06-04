@@ -10,5 +10,8 @@
 	<form method="post" action="?mode=search">
 		<button type="submit">Search</button>
 	</form>
+	<form method="post" action="?mode=account">
+		<button type="submit">Accounts</button>
+	</form>
 </body>
 </html>

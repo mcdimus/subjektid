@@ -38,7 +38,7 @@
 								<xsl:text>&amp;subject_type=</xsl:text>
 						
 								<xsl:choose>
-								  <xsl:when test="type='Person'">1 </xsl:when>
+								  <xsl:when test="type='person'">1 </xsl:when>
 								  <xsl:otherwise>2</xsl:otherwise>
 								</xsl:choose>
 							</xsl:attribute>
