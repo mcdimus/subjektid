@@ -4,7 +4,6 @@ public class EmployeeForm extends HumanForm {
 
 	String employeeId;
 	String employeeRoleType;
-	String enterprise;
 	FormAttribute[] employeeAttributes;
 	
 	public EmployeeForm() { }
@@ -23,14 +22,6 @@ public class EmployeeForm extends HumanForm {
 
 	public void setEmployeeRoleType(String employeeRoleType) {
 		this.employeeRoleType = employeeRoleType;
-	}
-
-	public String getEnterprise() {
-		return enterprise;
-	}
-
-	public void setEnterprise(String enterprise) {
-		this.enterprise = enterprise;
 	}
 	
 	public FormAttribute[] getEmployeeAttributes() {
@@ -52,5 +43,11 @@ public class EmployeeForm extends HumanForm {
 	}
 	
 	public void setCustomerId(String c) { }
+
+	public FormAttribute[] getCustromerAttributes() {
+		return null;
+	}
+	
+	public void setCustomerAttributes(FormAttribute[] attrs) { }
 	
 }

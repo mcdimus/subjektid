@@ -2,7 +2,6 @@ package junit.tests;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -72,7 +71,7 @@ public class SubjectsORMTest {
 	public void testFormSearchQuery() {
 		SearchForm form = new SearchForm();
 		form.setSubjectType(0);
-		form.setFirstName("");
+		form.setFirstName("juhan");
 		form.setLastName("");
 		AddressForm aform = new AddressForm();
 		aform.setCountry("");
@@ -89,8 +88,8 @@ public class SubjectsORMTest {
 	public void testSearch() {
 		SearchForm form = new SearchForm();
 		form.setSubjectType(0);
-		form.setFirstName("");
-		form.setLastName("Juhan");
+		form.setFirstName("juhan");
+		form.setLastName("");
 		AddressForm aform = new AddressForm();
 		aform.setCountry("");
 		aform.setCounty("");
@@ -98,8 +97,8 @@ public class SubjectsORMTest {
 		aform.setTownVillage("");
 		aform.setZipcode("");
 		form.setAddressForm(aform);
-		ArrayList<SearchResult> results = orm.search(form);
-		for (SearchResult res : results) {
+		List<SearchResult> ress = orm.search(form);
+		for (SearchResult res : ress) {
 			System.out.println(res.getSubjectName());
 		}
 	}

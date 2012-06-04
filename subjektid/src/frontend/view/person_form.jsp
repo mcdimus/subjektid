@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="frontend.forms.FormAttribute" %>
+<%@ page import="backend.model.Enterprise"%>
+<%@ page import="backend.model.EntPerRelationType"%>
+<jsp:useBean id="enterpriseList" scope="request" class="java.util.ArrayList" />
+<jsp:useBean id="ent_per_rels" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="personForm" scope="request" class="frontend.forms.PersonForm" />
 <jsp:useBean id="errors" scope="request" class="java.util.HashMap" />
 
@@ -115,6 +119,53 @@
 		
 		<tr>
 			<td colspan="2" class="centered">
+				------ Enterprise relation -----</td>
+		</tr>
+		<tr>
+			<th>Enterprise</th>
+			<td><select name="enterprise">
+					<option value=""></option>
+					<%
+						Enterprise enterprise;
+						for (int i = 0; i < enterpriseList.size(); i++) {
+							enterprise = (Enterprise) enterpriseList.get(i);
+					%>
+					<option value="<%=enterprise.getEnterprise()%>">
+						<%=enterprise.getName()%>
+						<%=personForm.getEnterprise() != null &&
+							personForm.getEnterprise().equals(
+							String.valueOf(enterprise.getEnterprise())) ? 
+							"selected='selected'" : "" %>
+					</option>
+					<%
+						}
+					%>
+			</select></td>
+		</tr>
+		<tr>
+			<th>Relation type</th>
+			<td><select name="relation_type">
+					<option value=""></option>
+					<%
+						EntPerRelationType rel;
+						for (int i = 0; i < ent_per_rels.size(); i++) {
+							rel = (EntPerRelationType) ent_per_rels.get(i);
+					%>
+					<option value="<%=rel.getTypeName()%>">
+						<%=rel.getTypeName()%>
+						<%=personForm.getEntPerRelType() != null &&
+							personForm.getEntPerRelType().equals(
+							String.valueOf(rel.getEntPerRelationType())) ? 
+							"selected='selected'" : "" %>
+					</option>
+					<%
+						}
+					%>
+			</select></td>
+		</tr>
+		
+		<tr>
+			<td colspan="2" class="centered">
 				------- Person attributes ------</td>
 		</tr>
 		<%
@@ -129,8 +180,6 @@
 			<th><%=attribute.getName()%></th>
 			<td><input type="text" name="<%=attribute.getName()%>"
 				value="<%=value%>" />
-				<input type="hidden" name="attribute_id" 
-					value="<%=formAttributeId%>" />	
 			</td>
 		</tr>
 		<tr>
