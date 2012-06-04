@@ -57,7 +57,7 @@
 		%><tr><td><%=i + 1%></td><td><%=res.getSubjectName()%></td>
 				<td><%=res.getSubjectType()%></td>
 			<%
-				String link = "mode=subject&action=edit_subject&id="
+				String link = "?mode=subject&action=edit_subject&subject_id="
 						+ res.getSubjectId() + "&subject_type=";
 				if (res.getSubjectType().equals("person")) {
 					link += "1";

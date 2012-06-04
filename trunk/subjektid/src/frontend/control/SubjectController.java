@@ -24,32 +24,39 @@ import frontend.validator.Validator;
 import log.MyLogger;
 
 import backend.DA.SubjectsORM;
+import backend.model.Address;
 import backend.model.EmployeeRoleType;
 import backend.model.Enterprise;
+import backend.model.Person;
+import backend.model.SubjectAttribute;
 import backend.model.SubjectAttributeType;
 
 public class SubjectController extends Controller {
+	
+	SubjectsORM dao = new SubjectsORM();
+	PersonForm personForm;
+	EnterpriseForm enterpriseForm;
+	EmployeeForm employeeForm;
 
 	@Override
 	public String service(HttpServletRequest req, HttpServletResponse resp) {
 
 		String view = "default_view";
 		SessionManager sessionManager = new SessionManager(req);
-		SubjectsORM dao = new SubjectsORM();
 		
 		List<SubjectAttributeType> types = dao.findByID(
 				SubjectAttributeType.class, "subjectTypeFk", 1);
-		PersonForm personForm = new PersonForm();
+		personForm = new PersonForm();
 		personForm.setAttributes(sortAndFormAttributes(types));
 		req.setAttribute("personForm", personForm);
 		
 		types = dao.findByID(SubjectAttributeType.class, "subjectTypeFk", 2);
-		EnterpriseForm enterpriseForm = new EnterpriseForm();
+		enterpriseForm = new EnterpriseForm();
 		enterpriseForm.setAttributes(sortAndFormAttributes(types));
 		req.setAttribute("enterpriseForm", enterpriseForm);
 		
 		types = dao.findByID(SubjectAttributeType.class, "subjectTypeFk", 3);
-		EmployeeForm employeeForm = new EmployeeForm();
+		employeeForm = new EmployeeForm();
 		employeeForm.setAttributes(personForm.getAttributes());
 		employeeForm.setEmployeeAttributes(sortAndFormAttributes(types));
 		req.setAttribute("employeeForm", employeeForm);
@@ -71,7 +78,7 @@ public class SubjectController extends Controller {
 					MyLogger.log("SubjectController:AddNewSubject:show_form",
 							e.getMessage());
 				}
-			} else {
+			} else if (action.contains("add")){
 				// Clear previous Validator warnings
 				Validator.getErrors().clear();
 				
@@ -130,9 +137,10 @@ public class SubjectController extends Controller {
 					}
 				}
 
+			} else if (action.equals("edit_subject")) {
+				formEditForm(req);
+				view = "edit_subject_view";
 			}
-		} else if (action.equals("edit_subject")) {
-			view = "edit_subject_view";
 		} else {
 			view = "login_view";
 		}
@@ -175,7 +183,7 @@ public class SubjectController extends Controller {
 	
 	private HumanForm formAndValidateHumanForm(SessionManager sessionManager,
 			HumanForm humanForm) {
-		humanForm.setSubjectId(params.get("subjectId")[0]);
+		humanForm.setSubjectId(params.get("subject_id")[0]);
 		humanForm.setCreatedBy(sessionManager.getEmployeeId());
 		humanForm.setUpdatedBy(sessionManager.getEmployeeId());
 		humanForm.setFirstName(params.get("first_name")[0]);
@@ -195,7 +203,7 @@ public class SubjectController extends Controller {
 	}
 	
 	private EmployeeForm formAndValidateEmployeeForm(EmployeeForm employeeForm) {
-		employeeForm.setSubjectId(params.get("employeeId")[0]);
+		employeeForm.setSubjectId(params.get("employee_id")[0]);
 		employeeForm.setEmployeeRoleType(params.get("employee_role_type")[0]);
 		employeeForm.setEnterprise(params.get("enterprise")[0]);
 		
@@ -210,7 +218,7 @@ public class SubjectController extends Controller {
 	
 	private EnterpriseForm formAndValidateEnterpriseForm(SessionManager sessionManager,
 			EnterpriseForm enterpriseForm) {
-		enterpriseForm.setSubjectId(params.get("subjectId")[0]);
+		enterpriseForm.setSubjectId(params.get("subject_id")[0]);
 		enterpriseForm.setCreatedBy(sessionManager.getEmployeeId());
 		enterpriseForm.setUpdatedBy(sessionManager.getEmployeeId());
 		enterpriseForm.setName(params.get("name")[0]);
@@ -265,5 +273,74 @@ public class SubjectController extends Controller {
 				new FormAttributesValidator(attributes);
 		attrFormValidator.validate();
 		return attributes;
+	}
+	
+	private void formEditForm(HttpServletRequest req) {
+		int subjectType = Integer.parseInt(params.get("subject_type")[0]);
+		switch (subjectType) {
+		case 1:
+			formHumanEdit(personForm);
+			req.setAttribute("subjectTypeFk", "1");
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		}
+	}
+	
+	private HumanForm formHumanEdit(HumanForm form) {
+		Person person = dao.findByID(Person.class,
+				Long.parseLong(params.get("subject_id")[0]));
+		form.setSubjectId(String.valueOf(person.getPerson()));
+		form.setFirstName(person.getFirstName());
+		form.setLastName(person.getLastName());
+		form.setIdentityCode(person.getIdentityCode());
+		form.setBirthDate(person.getBirthDate().toString());
+		form.setCreatedBy(String.valueOf(person.getCreatedBy()));
+		
+		ArrayList<AddressForm> addressForms = formAddressEdit(person.getPerson(),
+				1);
+		form.setAddressForm(addressForms.remove(addressForms.size() - 1));
+		form.setAddresses(addressForms);
+		return form;
+	}
+	
+	private ArrayList<AddressForm> formAddressEdit(long subjectId,
+			long subjectTypeFk) {
+		List<Address> addresses = dao.findBySubjectID(Address.class,
+				subjectId, subjectTypeFk);
+		ArrayList<AddressForm> addressForms = new ArrayList<AddressForm>();
+		AddressForm main = null;
+		for (Address address : addresses) {
+			AddressForm form = new AddressForm();
+			form.setAddressId(String.valueOf(address.getAddress()));
+			form.setCountry(address.getCountry());
+			form.setCounty(form.getCounty());
+			form.setTownVillage(form.getTownVillage());
+			form.setStreetAddress(form.getStreetAddress());
+			form.setZipcode(address.getZipcode());
+			if (address.getAddressTypeFk() != 2) {
+				main = form;
+			} else {
+				addressForms.add(form);
+			}
+		}
+		addressForms.add(main);
+		return addressForms;
+	}
+	
+	private void formAttributesEdit(long subjectId,
+			long subjectTypeFk, SubjectForm form) {
+		List<SubjectAttribute> attrs = dao.findBySubjectID(
+				SubjectAttribute.class, subjectId, subjectTypeFk);
+		FormAttribute[] attributes = form.getAttributes();
+		for (int i = 0; i < attrs.size(); i++) {
+			for (FormAttribute attribute : attributes) {
+				
+			}
+		}
 	}
 }

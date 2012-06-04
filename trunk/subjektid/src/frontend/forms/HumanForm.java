@@ -6,7 +6,6 @@ public abstract class HumanForm extends SubjectForm {
 	String lastName;
 	String identityCode;
 	String birthDate;
-	FormAttribute[] attributes;
 	
 	public HumanForm() { }
 
@@ -64,14 +63,6 @@ public abstract class HumanForm extends SubjectForm {
 	 */
 	public final void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
-	}
-	
-	public FormAttribute[] getAttributes() {
-		return attributes;
-	}
-	
-	public void setAttributes(FormAttribute[] attrs) {
-		attributes = attrs;
 	}
 	
 }

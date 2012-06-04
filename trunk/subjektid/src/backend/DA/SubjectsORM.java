@@ -86,7 +86,28 @@ public class SubjectsORM {
    		session.close();
    		return data;
    	}
-	
+
+    @SuppressWarnings("unchecked")
+	public <T> List<T> findBySubjectID(Class<T> _class, long subjectId,
+			long subjectType) {
+		Session session = null;
+		List<T> data = null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			Query q = session.createQuery("from " + _class.getName()
+					+ " obj where obj.subjectFk=:id AND obj.subjectTypeFk=:type");
+			q.setLong("id", subjectId);
+			q.setLong("type", subjectType);
+		    data = (List<T>) q.list();
+		} catch(Exception e) {
+			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
+			e.printStackTrace();
+		}
+		session.close();
+		return data;
+	}
+    
 	public <T> boolean saveOrUpdate(T object) {
 		 Transaction tx = null;
 		 Session session = null;
@@ -419,15 +440,19 @@ public class SubjectsORM {
 	}
 	
 	private ArrayList<SearchResult> castSearchResults(List<Object[]> data) {
-		ArrayList<SearchResult> results = new ArrayList<SearchResult>(); 
-		for (Object[] objects: data) {
-			SearchResult res = new SearchResult();
-			res.setSubjectId((Long) objects[0]);
-			res.setSubjectType((String) objects[1]);
-			res.setSubjectName((String) objects[2]);
-			results.add(res);
+		if (data != null) {
+			ArrayList<SearchResult> results = new ArrayList<SearchResult>(); 
+			for (Object[] objects: data) {
+				SearchResult res = new SearchResult();
+				res.setSubjectId((Long) objects[0]);
+				res.setSubjectType((String) objects[1]);
+				res.setSubjectName((String) objects[2]);
+				results.add(res);
+			}
+			return results;
+		} else {
+			return null;
 		}
-		return results;
 	}
 	
 }

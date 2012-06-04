@@ -90,7 +90,7 @@ public class SubjectsORMTest {
 		SearchForm form = new SearchForm();
 		form.setSubjectType(0);
 		form.setFirstName("");
-		form.setLastName("");
+		form.setLastName("Juhan");
 		AddressForm aform = new AddressForm();
 		aform.setCountry("");
 		aform.setCounty("");

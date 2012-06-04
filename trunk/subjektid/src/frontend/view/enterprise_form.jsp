@@ -20,7 +20,7 @@
 %>
 
 <form method="post" action="?mode=subject&action=add_enterprise">
-	<input type="hidden" name="subjectId" value="<%=subjectId%>" />
+	<input type="hidden" name="subject_id" value="<%=subjectId%>" />
 	<table>
 		<tr>
 			<th colspan="2" class="main"><%=action%></th>
@@ -74,6 +74,13 @@
 		
 		<%
 			}
+			if (subjectId.length() != 0) {
+		%>
+		
+		<jsp:include page="contact_form.jsp" />
+		
+		<%
+			}
 		%>
 		
 		<tr>
@@ -92,7 +99,7 @@
 			<th><%=attribute.getName()%></th>
 			<td><input type="text" name="<%=attribute.getName()%>"
 				value="<%=value%>" />
-				<input type="hidden" name="formAttributeId" 
+				<input type="hidden" name="attribute_id" 
 					value="<%=formAttributeId%>" />	
 			</td>
 		</tr>
@@ -105,7 +112,7 @@
 		%>
 		
 		<tr>
-			<td colspan="2"><button type="submit" name="submitBtn"><%=button%></button></td>
+			<td colspan="2"><button type="submit" name="submit_button"><%=button%></button></td>
 		</tr>
 	</table>
 </form>

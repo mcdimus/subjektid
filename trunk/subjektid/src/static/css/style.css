@@ -79,6 +79,10 @@ table {
 	border-collapse: collapse;
 }
 
+table th, table td {
+	background-color: #D3D3D3;
+}
+
 th.main {
 	color: #FFFFFF;
 	background-color: #808080;
@@ -110,6 +114,14 @@ table.results th {
 	background-color: #D3D3D3;
 }
 
+table.results td {
+	background-color: #FFFFFF;
+}
+
 table.results th, table.results td {
 	border: 1px solid #000000;
+}
+
+select {
+	border: 0;
 }

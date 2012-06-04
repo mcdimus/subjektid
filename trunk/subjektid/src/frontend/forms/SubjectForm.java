@@ -9,6 +9,8 @@ public abstract class SubjectForm {
 	String updatedBy;
 	AddressForm addressForm;
 	ArrayList<AddressForm> addresses;
+	ArrayList<ContactForm> contacts;
+	FormAttribute[] attributes;
 	String customer;
 	String customerId;
 
@@ -68,6 +70,22 @@ public abstract class SubjectForm {
 
 	public void setAddresses(ArrayList<AddressForm> addresses) {
 		this.addresses = addresses;
+	}
+	
+	public final ArrayList<ContactForm> getContacts() {
+		return contacts;
+	}
+
+	public void setContacts(ArrayList<ContactForm> contacts) {
+		this.contacts = contacts;
+	}
+	
+	public final FormAttribute[] getAttributes() {
+		return attributes;
+	}
+	
+	public final void setAttributes(FormAttribute[] attrs) {
+		attributes = attrs;
 	}
 
 	public String getCustomer() {
