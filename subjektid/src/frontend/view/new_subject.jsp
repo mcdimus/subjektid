@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <jsp:include page="header.jsp" />
 <script type="text/javascript" src="static/js/new_subject.js" ></script>
+<script type="text/javascript" src="static/js/subject.js" ></script>
 <jsp:useBean id="subjectTypeFk" scope="request" class="java.lang.String" />
 
 <input type="hidden" name="subjectTypeFk" 

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <jsp:include page="header.jsp" />
 <jsp:useBean id="subjectTypeFk" scope="request" class="java.lang.String" />
-<script type="text/javascript" src="static/js/edit_subject.js" ></script>
+<script type="text/javascript" src="static/js/subject.js" ></script>
 
 <input type="hidden" name="subjectTypeFk" value="<%=subjectTypeFk%>" />
 <%
