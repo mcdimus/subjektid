@@ -80,7 +80,7 @@
 								link += "2";
 							}
 			%>
-			<td><a href="<%=link%>" target="_blank">Edit</a></td>
+			<td><a href="<%=link%>">Edit</a></td>
 		</tr>
 		<%
 			}

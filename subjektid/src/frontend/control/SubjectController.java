@@ -266,7 +266,8 @@ public class SubjectController extends Controller {
 	
 	private AddressForm formAddressForm(int i) {
 		AddressForm addressForm = new AddressForm();
-		addressForm.setAddressId(params.get("addressId")[i]);
+		addressForm.setAddressId(params.get("addressId")[i] != null
+				? params.get("addressId")[i] : null);
 		addressForm.setAddressTypeFk(params.get("address_type_fk")[i]);
 		addressForm.setCountry(params.get("country")[i]);
 		addressForm.setCounty(params.get("county")[i]);
@@ -293,6 +294,7 @@ public class SubjectController extends Controller {
 		switch (subjectType) {
 		case 1:
 			formHumanEdit(personForm);
+			formEntPerRelationEdit(personForm);
 			req.setAttribute("subjectTypeFk", "1");
 			req.setAttribute("addressForm", personForm.getAddressForm());
 			break;
@@ -318,7 +320,6 @@ public class SubjectController extends Controller {
 		
 		formAttributesEdit(form, person.getPerson(), 1);
 		formCustomerEdit(form, person.getPerson(), 1);
-//		formEntPerRelationEdit(form, subjectId)
 		return form;
 	}
 	
@@ -337,21 +338,22 @@ public class SubjectController extends Controller {
 		return form;
 	}
 	
-	private EmployeeForm formEmployeeEdit(EmployeeForm form, long subjectId) {
+	private boolean formEmployeeEdit(EmployeeForm form, long subjectId) {
 		List<Employee> employees = dao.findByID(Employee.class, "subjectFk",
 				subjectId);
 		if (employees.size() != 0) {
 			form.setEmployeeId(String.valueOf(employees.get(0).getEmployee()));
 			form.setEnterprise(String.valueOf(employees.get(0).getEnterpriseFk()));
 			// TODO! Ask employee role type!
+			return true;
 			
 		}
-		return employeeForm;
+		return false;
 	}
 	
-	private PersonForm formEntPerRelationEdit(PersonForm form, long subjectId) {
+	private PersonForm formEntPerRelationEdit(PersonForm form) {
 		List<EnterprisePersonRelation> rels = dao.findByID(EnterprisePersonRelation
-				.class, "subjectFk", subjectId);
+				.class, "personFk", Long.parseLong(form.getSubjectId()));
 		if (rels.size() != 0) {
 			form.setEnterprise(rels.get(0).getEnterpriseFk().toString());
 			form.setEntPerRelId(String.valueOf(rels.get(0).getEnterprisePersonRelation()));
