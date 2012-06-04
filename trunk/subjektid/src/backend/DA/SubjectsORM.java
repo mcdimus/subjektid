@@ -148,7 +148,7 @@ public class SubjectsORM {
 		saveOrUpdate(person);
 		form.setSubjectId(String.valueOf(person.getPerson()));
 		saveAddress(form.getAddressForm(), person.getPerson(), 1);
-		for (AddressForm address : form.getAddresses()) {
+		for (AddressForm address : form.getAddressForm().getAddresses()) {
 			saveAddress(address, person.getPerson(), 1);
 		}
 		saveAttributes(person.getPerson(), form.getAttributes());
@@ -196,7 +196,7 @@ public class SubjectsORM {
 		saveOrUpdate(enterprise);
 		form.setSubjectId(String.valueOf(enterprise.getEnterprise()));
 		saveAddress(form.getAddressForm(), enterprise.getEnterprise(), 2);
-		for (AddressForm address : form.getAddresses()) {
+		for (AddressForm address : form.getAddressForm().getAddresses()) {
 			saveAddress(address, enterprise.getEnterprise(), 2);
 		}
 		saveAttributes(enterprise.getEnterprise(), form.getAttributes());
@@ -230,6 +230,10 @@ public class SubjectsORM {
 		for (FormAttribute attribute : attributes) {
 			if (attribute.getValue().length() != 0) {
 				SubjectAttribute subjAttr = new SubjectAttribute();
+				if (!Utils.checkEmpty(attribute.getFormAttributeId())) {
+					subjAttr.setSubjectAttribute(Long.parseLong(attribute
+							.getFormAttributeId()));
+				}
 				subjAttr.setSubjectFk(id);
 				subjAttr.setSubjectTypeFk(attribute.getSubjectTypeFk());
 				subjAttr.setSubjectAttributeTypeFk(attribute
@@ -339,7 +343,7 @@ public class SubjectsORM {
 	
 	private String getQueryBeginning(SearchForm form) {
 		String queryPart = "";
-		if (!(form.getSubjectType() == 0) && !(form.getSubjectType() == 4)) {
+		if (!(form.getSubjectType() == 4)) {
 			if (!(form.getSubjectType() == 2 )) {
 				queryPart = "select P.person as subject_id, 'person' as subject_type,"
 						+ "P.lastName as subject_name";
@@ -356,12 +360,12 @@ public class SubjectsORM {
 		if (!(form.getSubjectType() == 2)) {
 			String queryPartOne = " Person P,", queryPartTwo = "";
 			if (!Utils.checkEmpty(form.getFirstName())) {
-				queryPartTwo += " P.firstName LIKE '%" + form.getFirstName()
-						+ "%' AND";
+				queryPartTwo += " lower(P.firstName) LIKE '%" + form.getFirstName()
+						.toLowerCase() + "%' AND";
 			}
 			if (!Utils.checkEmpty(form.getLastName())) {
-				queryPartTwo += " P.lastName LIKE '%" + form.getLastName()
-						+ "%' AND";
+				queryPartTwo += " lower(P.lastName) LIKE '%" + form.getLastName()
+						.toLowerCase() + "%' AND";
 			}
 			form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
 			form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
@@ -374,8 +378,8 @@ public class SubjectsORM {
 			if (Utils.checkEmpty(form.getFirstName())) {
 				queryPartOne = " Enterprise E,";
 				if(!Utils.checkEmpty(form.getLastName())) {
-					queryPartTwo += " E.name LIKE '%" + form.getLastName()
-							+ "%' AND";
+					queryPartTwo += " lower(E.name) LIKE '%" + form.getLastName()
+							.toLowerCase() + "%' AND";
 				}
 			}
 			if (form.getSubjectType() == 2) {
@@ -393,21 +397,24 @@ public class SubjectsORM {
 		String queryPartOne = " Address A,", queryPartTwo = "",
 				queryPartFour = "";
 		if (!Utils.checkEmpty(aform.getCountry())) {
-			queryPartTwo += " A.country LIKE '%" + aform.getCountry() + "%' AND";
+			queryPartTwo += " lower(A.country) LIKE '%" + aform.getCountry()
+					.toLowerCase() + "%' AND";
 		}
 		if (!Utils.checkEmpty(aform.getCounty())) {
-			queryPartTwo += " A.county LIKE '%" + aform.getCounty() + "%' AND";
+			queryPartTwo += " lower(A.county) LIKE '%" + aform.getCounty()
+					.toLowerCase() + "%' AND";
 		}
 		if (!Utils.checkEmpty(aform.getTownVillage())) {
-			queryPartTwo += " A.townVillage LIKE '%" + aform.getTownVillage()
-					+ "%' AND";
+			queryPartTwo += " lower(A.townVillage) LIKE '%" + aform.getTownVillage()
+					.toLowerCase() + "%' AND";
 		}
 		if (!Utils.checkEmpty(aform.getStreetAddress())) {
-			queryPartTwo += " A.streetAddress LIKE '%" + aform.getStreetAddress()
-					+ "%' AND";
+			queryPartTwo += " lower(A.streetAddress) LIKE '%" + aform.getStreetAddress()
+					.toLowerCase() + "%' AND";
 		}
 		if (!Utils.checkEmpty(aform.getZipcode())) {
-			queryPartTwo += " A.zipcode LIKE '%" + aform.getZipcode() + "%' AND";
+			queryPartTwo += " (A.zipcode) LIKE '%" + aform.getZipcode()
+					.toLowerCase() + "%' AND";
 		}
 		queryPartFour = queryPartTwo;
 		if (!Utils.checkEmpty(queryPartTwo)) {

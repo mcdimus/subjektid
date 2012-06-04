@@ -121,7 +121,3 @@ table.results td {
 table.results th, table.results td {
 	border: 1px solid #000000;
 }
-
-select {
-	border: 0;
-}

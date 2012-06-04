@@ -159,9 +159,7 @@
 		<tr>
 			<th><%=attribute.getName()%></th>
 			<td><input type="text" name="<%=attribute.getName()%>"
-				value="<%=value%>" />
-				<input type="hidden" name="formAttributeId" 
-					value="<%=formAttributeId%>" />	
+				value="<%=value%>" />	
 			</td>
 		</tr>
 		<tr>

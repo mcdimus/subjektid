@@ -25,8 +25,12 @@ import log.MyLogger;
 
 import backend.DA.SubjectsORM;
 import backend.model.Address;
+import backend.model.Customer;
+import backend.model.Employee;
 import backend.model.EmployeeRoleType;
+import backend.model.EntPerRelationType;
 import backend.model.Enterprise;
+import backend.model.EnterprisePersonRelation;
 import backend.model.Person;
 import backend.model.SubjectAttribute;
 import backend.model.SubjectAttributeType;
@@ -61,17 +65,27 @@ public class SubjectController extends Controller {
 		employeeForm.setEmployeeAttributes(sortAndFormAttributes(types));
 		req.setAttribute("employeeForm", employeeForm);
 		
+		types = dao.findByID(SubjectAttributeType.class, "subjectTypeFk", 4);
+		employeeForm = new EmployeeForm();
+		employeeForm.setAttributes(personForm.getAttributes());
+		employeeForm.setEmployeeAttributes(sortAndFormAttributes(types));
+		req.setAttribute("employeeForm", employeeForm);
+
+		List<EmployeeRoleType> employeeRoleTypeList = dao
+				.findAll(EmployeeRoleType.class);
+		List<Enterprise> enterpriseList = dao
+				.findAll(Enterprise.class);
+		List<EntPerRelationType> rels = dao.findAll(
+				EntPerRelationType.class);
+		
+		req.setAttribute("employeeRoleTypeList",
+				employeeRoleTypeList);
+		req.setAttribute("enterpriseList", enterpriseList);
+		req.setAttribute("ent_per_rels", rels);
+		
 		if (sessionManager.loggedIn()) {
 			if (action.equals("add_new_subject")) {
 				try {
-					List<EmployeeRoleType> employeeRoleTypeList = dao
-							.findAll(EmployeeRoleType.class);
-					List<Enterprise> enterpriseList = dao
-							.findAll(Enterprise.class);
-					
-					req.setAttribute("employeeRoleTypeList",
-							employeeRoleTypeList);
-					req.setAttribute("enterpriseList", enterpriseList);
 					
 					view = "add_new_subject_view";
 				} catch (Exception e) {
@@ -247,7 +261,6 @@ public class SubjectController extends Controller {
 			addressForm = formAddressForm(i);
 			addresses.add(addressForm);
 		}
-		form.setAddresses(addresses);
 		addressForm.setAddresses(addresses);
 	}
 	
@@ -281,12 +294,12 @@ public class SubjectController extends Controller {
 		case 1:
 			formHumanEdit(personForm);
 			req.setAttribute("subjectTypeFk", "1");
+			req.setAttribute("addressForm", personForm.getAddressForm());
 			break;
 		case 2:
-			break;
-		case 3:
-			break;
-		case 4:
+			formEnterpriseEdit(enterpriseForm);
+			req.setAttribute("subjectTypeFk", "2");
+			req.setAttribute("addressForm", enterpriseForm.getAddressForm());
 			break;
 		}
 	}
@@ -301,46 +314,113 @@ public class SubjectController extends Controller {
 		form.setBirthDate(person.getBirthDate().toString());
 		form.setCreatedBy(String.valueOf(person.getCreatedBy()));
 		
-		ArrayList<AddressForm> addressForms = formAddressEdit(person.getPerson(),
-				1);
-		form.setAddressForm(addressForms.remove(addressForms.size() - 1));
-		form.setAddresses(addressForms);
+		form.setAddressForm(formAddressEdit(person.getPerson(), 1));
+		
+		formAttributesEdit(form, person.getPerson(), 1);
+		formCustomerEdit(form, person.getPerson(), 1);
+//		formEntPerRelationEdit(form, subjectId)
 		return form;
 	}
 	
-	private ArrayList<AddressForm> formAddressEdit(long subjectId,
+	private EnterpriseForm formEnterpriseEdit(EnterpriseForm form) {
+		Enterprise enterprise = dao.findByID(Enterprise.class,
+				Long.parseLong(params.get("subject_id")[0]));
+		form.setSubjectId(String.valueOf(enterprise.getEnterprise()));
+		form.setName(enterprise.getName());
+		form.setFullName(enterprise.getFullName());
+		form.setCreatedBy(String.valueOf(enterprise.getCreatedBy()));
+		
+		form.setAddressForm(formAddressEdit(enterprise.getEnterprise(), 2));
+		
+		formAttributesEdit(form, enterprise.getEnterprise(), 2);
+		formCustomerEdit(form, enterprise.getEnterprise(), 2);
+		return form;
+	}
+	
+	private EmployeeForm formEmployeeEdit(EmployeeForm form, long subjectId) {
+		List<Employee> employees = dao.findByID(Employee.class, "subjectFk",
+				subjectId);
+		if (employees.size() != 0) {
+			form.setEmployeeId(String.valueOf(employees.get(0).getEmployee()));
+			form.setEnterprise(String.valueOf(employees.get(0).getEnterpriseFk()));
+			// TODO! Ask employee role type!
+			
+		}
+		return employeeForm;
+	}
+	
+	private PersonForm formEntPerRelationEdit(PersonForm form, long subjectId) {
+		List<EnterprisePersonRelation> rels = dao.findByID(EnterprisePersonRelation
+				.class, "subjectFk", subjectId);
+		if (rels.size() != 0) {
+			form.setEnterprise(rels.get(0).getEnterpriseFk().toString());
+			form.setEntPerRelId(String.valueOf(rels.get(0).getEnterprisePersonRelation()));
+			form.setEntPerRelType(rels.get(0).getEntPerRelationTypeFk().toString());
+		}
+		return form;
+	}
+	
+	private AddressForm formAddressEdit(long subjectId,
 			long subjectTypeFk) {
 		List<Address> addresses = dao.findBySubjectID(Address.class,
 				subjectId, subjectTypeFk);
 		ArrayList<AddressForm> addressForms = new ArrayList<AddressForm>();
-		AddressForm main = null;
-		for (Address address : addresses) {
-			AddressForm form = new AddressForm();
-			form.setAddressId(String.valueOf(address.getAddress()));
-			form.setCountry(address.getCountry());
-			form.setCounty(form.getCounty());
-			form.setTownVillage(form.getTownVillage());
-			form.setStreetAddress(form.getStreetAddress());
-			form.setZipcode(address.getZipcode());
-			if (address.getAddressTypeFk() != 2) {
-				main = form;
-			} else {
-				addressForms.add(form);
+		AddressForm main = new AddressForm();
+		if (addresses != null) {
+			for (Address address : addresses) {
+				AddressForm form = new AddressForm();
+				form.setAddressId(String.valueOf(address.getAddress()));
+				form.setCountry(address.getCountry());
+				form.setCounty(address.getCounty());
+				form.setTownVillage(address.getTownVillage());
+				form.setStreetAddress(address.getStreetAddress());
+				form.setZipcode(address.getZipcode());
+				if (address.getAddressTypeFk() != 2) {
+					main = form;
+				} else {
+					addressForms.add(form);
+				}
 			}
+			main.setAddresses(addressForms);
 		}
-		addressForms.add(main);
-		return addressForms;
+		return main;
 	}
 	
-	private void formAttributesEdit(long subjectId,
-			long subjectTypeFk, SubjectForm form) {
+	private void formAttributesEdit(SubjectForm form, long subjectId,
+			long subjectType) {
 		List<SubjectAttribute> attrs = dao.findBySubjectID(
-				SubjectAttribute.class, subjectId, subjectTypeFk);
+				SubjectAttribute.class, subjectId, subjectType);
 		FormAttribute[] attributes = form.getAttributes();
 		for (int i = 0; i < attrs.size(); i++) {
 			for (FormAttribute attribute : attributes) {
-				
+				if (attribute.getSubjectAttributeTypeFk() == 
+						attrs.get(i).getSubjectAttributeTypeFk()) {
+					attribute.setFormAttributeId(String.valueOf(attrs.get(i)
+							.getSubjectAttribute()));
+					switch (attrs.get(i).getDataType()) {
+					case 1:
+						attribute.setValue(attrs.get(i).getValueText());
+						break;
+					case 2:
+						attribute.setValue(attrs.get(i).getValueNumber().toString());
+						break;
+					case 3:
+						attribute.setValue(attrs.get(i).getValueDate().toString());
+						break;
+					}
+					break;
+				}
 			}
+		}
+	}
+	
+	private void formCustomerEdit(SubjectForm form, long subjectId,
+			long subjectType) {
+		List<Customer> customers = dao.findBySubjectID(Customer.class,
+				subjectId, subjectType);
+		if (customers.size() != 0) {
+			form.setCustomerId(String.valueOf(customers.get(0).getCustomer()));
+			formAttributesEdit(form, subjectId, 4);
 		}
 	}
 }
