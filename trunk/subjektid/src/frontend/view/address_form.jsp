@@ -21,7 +21,6 @@
 	}
 %>
 		<input type="hidden" name="addressId" value="<%=addressId%>" />
-				<input type="hidden" name="address_type_fk" value="1" />
 		<tr>
 			<th>Country</th>
 			<td><input type="text" name="country" 

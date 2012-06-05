@@ -30,6 +30,7 @@
 <form method="post" action="?mode=subject&action=add_employee">
 	<input type="hidden" name="subject_id" value="<%=subjectId%>" />
 	<input type="hidden" name="employee_id" value="<%=employeeId%>" />
+	<div class="float-left">
 	<table>
 		<tr>
 			<th colspan="2" class="main"><%=action%></th>
@@ -92,7 +93,11 @@
 						for (int i = 0; i < enterpriseList.size(); i++) {
 							enterprise = (Enterprise) enterpriseList.get(i);
 					%>
-					<option value="<%=enterprise.getEnterprise()%>">
+					<option value="<%=enterprise.getEnterprise()%>"
+					<%=employeeForm.getEnterprise() != null &&
+							employeeForm.getEnterprise().equals(
+							String.valueOf(enterprise.getEnterprise())) ? 
+							"selected='selected'" : "" %>>
 						<%=enterprise.getName()%></option>
 					<%
 						}
@@ -113,7 +118,11 @@
 							employeeRoleType = (EmployeeRoleType) 
 									employeeRoleTypeList.get(i);
 					%>
-					<option value="<%=employeeRoleType.getEmployeeRoleType()%>">
+					<option value="<%=employeeRoleType.getEmployeeRoleType()%>"
+						<%=employeeForm.getEmployeeRoleType() != null &&
+							employeeForm.getEmployeeRoleType().equals(
+							String.valueOf(employeeRoleType.getEmployeeRoleType())) ? 
+							"selected='selected'" : "" %>>
 						<%=employeeRoleType.getTypeName()%></option>
 					<%
 						}
@@ -124,25 +133,6 @@
 			<td class="error" colspan="2"><%=errors.containsKey("employee_role_type") ? 
 					errors.get("employee_role_type") : ""%></td>
 		</tr>
-		
-		<tr>
-			<td colspan="2" class="centered">
-				<input type="hidden" name="address_type_fk" value="1" />
-				---------- Main address ---------
-			</td>
-		</tr>
-		
-		<jsp:include page="address_form.jsp" />
-		
-		<%
-			if (subjectId.length() != 0) {
-		%>
-		
-		<jsp:include page="contact_form.jsp" />
-		
-		<%
-			}
-		%>
 		
 		<tr>
 			<td colspan="2" class="centered">
@@ -202,4 +192,33 @@
 			<td colspan="2"><button type="submit" name="submit_button"><%=button%></button></td>
 		</tr>
 	</table>
+</div>
+<div class="float-left">
+	<table>
+		<tr>
+			<th colspan="2" class="main">Addresses</th>
+		</tr>
+		<tr>
+			<td colspan="2" class="centered">
+				<input type="hidden" name="address_type_fk" value="1" />
+				---------- Main address ---------
+			</td>
+		</tr>
+		
+		<jsp:include page="address_form.jsp" />
+	</table>
+</div>
+<div class="float-left">
+	<table>
+		<%
+			if (!subjectId.isEmpty()) {
+		%>
+		
+		<jsp:include page="contact_form.jsp" />
+		
+		<%
+			}
+		%>
+	</table>
+</div>
 </form>
