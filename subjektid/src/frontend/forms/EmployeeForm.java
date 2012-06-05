@@ -1,11 +1,14 @@
 package frontend.forms;
 
+import java.util.ArrayList;
+
 public class EmployeeForm extends HumanForm {
 
 	String employeeId;
-	String employeeRoleType;
+	ArrayList<EmployeeRoleForm> roles;
 	FormAttribute[] employeeAttributes;
-	
+	AccountForm accForm;
+
 	public EmployeeForm() { }
 	
 	public String getEmployeeId() {
@@ -16,14 +19,14 @@ public class EmployeeForm extends HumanForm {
 		this.employeeId = employeeId;
 	}
 
-	public String getEmployeeRoleType() {
-		return employeeRoleType;
+	public ArrayList<EmployeeRoleForm> getRoles() {
+		return roles;
 	}
 
-	public void setEmployeeRoleType(String employeeRoleType) {
-		this.employeeRoleType = employeeRoleType;
+	public void setRoles(ArrayList<EmployeeRoleForm> roles) {
+		this.roles = roles;
 	}
-	
+
 	public FormAttribute[] getEmployeeAttributes() {
 		return employeeAttributes;
 	}
@@ -49,5 +52,13 @@ public class EmployeeForm extends HumanForm {
 	}
 	
 	public void setCustomerAttributes(FormAttribute[] attrs) { }
+	
+	public AccountForm getAccForm() {
+		return accForm;
+	}
+
+	public void setAccForm(AccountForm accForm) {
+		this.accForm = accForm;
+	}
 	
 }

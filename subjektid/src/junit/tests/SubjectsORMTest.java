@@ -2,6 +2,7 @@ package junit.tests;
 
 import static org.junit.Assert.*;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.junit.Test;
@@ -14,6 +15,7 @@ import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.AddressType;
 import backend.model.EnterprisePersonRelation;
+import backend.model.Person;
 import backend.model.SubjectAttributeType;
 
 public class SubjectsORMTest {
@@ -114,6 +116,13 @@ public class SubjectsORMTest {
 			System.out.println(String.valueOf(rels.get(0).getEnterprisePersonRelation()));
 			System.out.println(rels.get(0).getEntPerRelationTypeFk().toString());
 		}
+	}
+	
+	@Test
+	public void testTwo() {
+		Person person = orm.findByID(Person.class, 1);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		System.out.println(sdf.format(person.getBirthDate()));
 	}
 
 }

@@ -86,23 +86,7 @@
 		</tr>
 		<tr>
 			<th>Enterprise</th>
-			<td><select name="enterprise">
-					<option value="">Select one...</option>
-					<%
-						Enterprise enterprise;
-						for (int i = 0; i < enterpriseList.size(); i++) {
-							enterprise = (Enterprise) enterpriseList.get(i);
-					%>
-					<option value="<%=enterprise.getEnterprise()%>"
-					<%=employeeForm.getEnterprise() != null &&
-							employeeForm.getEnterprise().equals(
-							String.valueOf(enterprise.getEnterprise())) ? 
-							"selected='selected'" : "" %>>
-						<%=enterprise.getName()%></option>
-					<%
-						}
-					%>
-			</select></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td class="error" colspan="2"><%=errors.containsKey("enterprise") ? 
@@ -110,24 +94,7 @@
 		</tr>
 		<tr>
 			<th>Role</th>
-			<td><select name="employee_role_type">
-					<option value="">Select one...</option>
-					<%
-						EmployeeRoleType employeeRoleType;
-						for (int i = 0; i < employeeRoleTypeList.size(); i++) {
-							employeeRoleType = (EmployeeRoleType) 
-									employeeRoleTypeList.get(i);
-					%>
-					<option value="<%=employeeRoleType.getEmployeeRoleType()%>"
-						<%=employeeForm.getEmployeeRoleType() != null &&
-							employeeForm.getEmployeeRoleType().equals(
-							String.valueOf(employeeRoleType.getEmployeeRoleType())) ? 
-							"selected='selected'" : "" %>>
-						<%=employeeRoleType.getTypeName()%></option>
-					<%
-						}
-					%>
-			</select></td>
+			<td></td>
 		</tr>
 		<tr>
 			<td class="error" colspan="2"><%=errors.containsKey("employee_role_type") ? 

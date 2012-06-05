@@ -19,9 +19,9 @@ public class EmployeeFormValidator extends Validator {
 
 	
 	private void validateEmployeeRoleType() {
-		if (Utils.checkEmpty(form.getEmployeeRoleType())) {
-			errors.put("employee_role_type", "Employee role should be specified!");
-		}
+//		if (Utils.checkEmpty(form.getEmployeeRoleType())) {
+//			errors.put("employee_role_type", "Employee role should be specified!");
+//		}
 	}
 	
 	private void validateEnterpise() {

@@ -1,5 +1,6 @@
 package frontend.control;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +8,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import frontend.forms.AccountForm;
 import frontend.forms.AddressForm;
 import frontend.forms.EmployeeForm;
+import frontend.forms.EmployeeRoleForm;
 import frontend.forms.EnterpriseForm;
 import frontend.forms.FormAttribute;
 import frontend.forms.HumanForm;
@@ -35,6 +38,7 @@ import backend.model.EnterprisePersonRelation;
 import backend.model.Person;
 import backend.model.SubjectAttribute;
 import backend.model.SubjectAttributeType;
+import backend.model.UserAccount;
 
 public class SubjectController extends Controller {
 	
@@ -220,7 +224,8 @@ public class SubjectController extends Controller {
 	private EmployeeForm formAndValidateEmployeeForm(EmployeeForm employeeForm) {
 //		employeeForm.getEmployeeId()
 		employeeForm.setSubjectId(params.get("employee_id")[0]);
-		employeeForm.setEmployeeRoleType(params.get("employee_role_type")[0]);
+//		employeeForm.setEmployeeRoleType(params.get("employee_role_type")[0]);
+		// TODO!!!
 		employeeForm.setEnterprise(params.get("enterprise")[0]);
 		
 		EmployeeFormValidator employeeFormValidator =
@@ -325,7 +330,8 @@ public class SubjectController extends Controller {
 		form.setFirstName(person.getFirstName());
 		form.setLastName(person.getLastName());
 		form.setIdentityCode(person.getIdentityCode());
-		form.setBirthDate(person.getBirthDate().toString());
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		form.setBirthDate(sdf.format(person.getBirthDate()));
 		form.setCreatedBy(String.valueOf(person.getCreatedBy()));
 		
 		form.setAddressForm(formAddressEdit(person.getPerson(), 1));
@@ -352,17 +358,32 @@ public class SubjectController extends Controller {
 	private boolean formEmployeeEdit(EmployeeForm form, long subjectId) {
 		List<Employee> employees = dao.findByID(Employee.class, "personFk",
 				subjectId);
-		if (employees.size() != 0) {
+		if (!employees.isEmpty()) {
+			formUserAccEdit(employeeForm, subjectId);
 			form.setEmployeeId(String.valueOf(employees.get(0).getEmployee()));
-			form.setEnterprise(String.valueOf(employees.get(0).getEnterpriseFk()));
 			List<EmployeeRole> roles = dao.findByID(EmployeeRole.class,
 					"employee_fk", employees.get(0).getEmployee());
-			// TODO: There could be many roles
+			ArrayList<EmployeeRoleForm> formRoles =
+					new ArrayList<EmployeeRoleForm>();
+			for (EmployeeRole role : roles) {
+				EmployeeRoleForm formRole = new EmployeeRoleForm();
+				formRole.setRoleID(String.valueOf(role.getEmployeeRole()));
+//				formRole.setEnterprise(role.ge)
+			}
 			
 			return true;
 			
 		} else {
 			return false;
+		}
+	}
+	
+	private void formUserAccEdit(EmployeeForm form, long subjectId) {
+		List<UserAccount> accs = dao.findByID(UserAccount.class, "subjectFk",
+				subjectId);
+		if (!accs.isEmpty()) {
+			AccountForm accForm = new AccountForm(accs.get(0));
+			form.setAccForm(accForm);
 		}
 	}
 	
