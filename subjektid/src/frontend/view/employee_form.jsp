@@ -1,6 +1,8 @@
 <%@page import="backend.model.EmployeeRoleType"%>
 <%@page import="backend.model.Enterprise"%>
 <%@ page import="frontend.forms.FormAttribute" %>
+<%@ page import="frontend.forms.EmployeeRoleForm" %>
+<%@ page import="java.util.ArrayList" %>
 <jsp:useBean id="enterpriseList" scope="request"
 	class="java.util.ArrayList" />
 <jsp:useBean id="employeeRoleTypeList" scope="request"
@@ -86,7 +88,24 @@
 		</tr>
 		<tr>
 			<th>Enterprise</th>
-			<td></td>
+			<td><select name="enterprise">
+					<option value="">Select one...</option>
+					<%
+						Enterprise enterprise;
+						String entName = "";
+						for (int i = 0; i < enterpriseList.size(); i++) {
+							enterprise = (Enterprise) enterpriseList.get(i);
+							if (enterprise.getEnterprise() == Long.parseLong(
+									employeeForm.getEnterprise())) {
+								entName = enterprise.getName();
+							}
+					%>
+					<option value="<%=enterprise.getEnterprise()%>">
+						<%=enterprise.getName()%></option>
+					<%
+						}
+					%>
+			</select></td>
 		</tr>
 		<tr>
 			<td class="error" colspan="2"><%=errors.containsKey("enterprise") ? 
@@ -94,7 +113,22 @@
 		</tr>
 		<tr>
 			<th>Role</th>
-			<td></td>
+			<td><select name="employee_role_type">
+					<option value="">Select one...</option>
+					<%
+						EmployeeRoleType employeeRoleType;
+						ArrayList<EmployeeRoleForm> roles =
+								employeeForm.getRoles();
+						for (int i = 0; i < employeeRoleTypeList.size(); i++) {
+							employeeRoleType = (EmployeeRoleType) 
+									employeeRoleTypeList.get(i);
+					%>
+					<option value="<%=employeeRoleType.getEmployeeRoleType()%>">
+						<%=employeeRoleType.getTypeName()%></option>
+					<%
+						}
+					%>
+			</select></td>
 		</tr>
 		<tr>
 			<td class="error" colspan="2"><%=errors.containsKey("employee_role_type") ? 
@@ -116,7 +150,9 @@
 		<tr>
 			<th><%=attribute.getName()%></th>
 			<td><input type="text" name="<%=attribute.getName()%>"
-				value="<%=value%>" />	
+				value="<%=value%>" />
+				<input type="hidden" name="attribute_id" 
+					value="<%=formAttributeId%>" />
 			</td>
 		</tr>
 		<tr>
