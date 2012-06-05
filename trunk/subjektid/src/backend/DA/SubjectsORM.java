@@ -197,8 +197,9 @@ public class SubjectsORM {
 
 		EmployeeRole employeeRole = new EmployeeRole();
 		employeeRole.setEmployeeFk(employee.getEmployee());
-		employeeRole.setEmployeeRoleTypeFk(Long.parseLong(form
-				.getEmployeeRoleType()));
+//		employeeRole.setEmployeeRoleTypeFk(Long.parseLong(form
+//				.getEmployeeRoleType()));
+		// TODO!!
 		employeeRole.setActive("Y");
 
 		saveAttributes(subjId, form.getEmployeeAttributes());
