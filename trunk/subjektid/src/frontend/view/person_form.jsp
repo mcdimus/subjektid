@@ -80,7 +80,7 @@
 		
 		<tr>
 			<td colspan="2" class="centered">
-				--------------------------------</td>
+				----------------------------------</td>
 		</tr>
 		<%
 			if (personForm.getCustomerId() != null) {
@@ -121,6 +121,8 @@
 			<th><%=attribute.getName()%></th>
 			<td><input type="text" name="<%=attribute.getName()%>"
 				value="<%=value%>" />
+				<input type="hidden" name="attribute_id" 
+					value="<%=formAttributeId%>" />	
 			</td>
 		</tr>
 		<tr>
@@ -129,38 +131,39 @@
 		</tr>
 		<%
 			}
+			if (!personForm.getCustomerId().isEmpty()) {
+		%>
+		<tr>
+			<td colspan="2" class="centered">
+				------ Customer attributes -----</td>
+		</tr>
+		<%
+				attributes = personForm.getCustromerAttributes();
+				for (FormAttribute attribute : attributes) {
+					String value = attribute.getValue() != null 
+							? attribute.getValue() : "",
+						formAttributeId = attribute.getFormAttributeId() != null
+							? attribute.getFormAttributeId() : "";
+		%>
+		<tr>
+			<th><%=attribute.getName()%></th>
+			<td><input type="text" name="<%=attribute.getName()%>"
+				value="<%=value%>" />
+				<input type="hidden" name="attribute_id" 
+					value="<%=formAttributeId%>" />	
+			</td>
+		</tr>
+		<tr>
+			<td class="error" colspan="2"><%=errors.containsKey(attribute.getName()) ? 
+					errors.get(attribute.getName()) : ""%></td>
+		</tr>
+		<%
+				}
+			}
 		%>
 		<tr>
 			<td colspan="2"><button type="submit" name="submit_button"><%=button%></button></td>
 		</tr>
-	</table>
-</div>
-<div class="float-left">
-	<table>
-		<tr>
-			<th colspan="2" class="main">Addresses</th>
-		</tr>
-		<tr>
-			<td colspan="2" class="centered">
-				<input type="hidden" name="address_type_fk" value="1" />
-				---------- Main address ---------
-			</td>
-		</tr>
-		
-		<jsp:include page="address_form.jsp" />
-	</table>
-</div>
-<div class="float-left">
-	<table>
-		<%
-			if (!subjectId.isEmpty()) {
-		%>
-		
-		<jsp:include page="contact_form.jsp" />
-		
-		<%
-			}
-		%>
 	</table>
 </div>
 <div class="float-left">
@@ -212,6 +215,34 @@
 					%>
 			</select></td>
 		</tr>
+	</table>
+</div>
+<div class="float-left">
+	<table>
+		<tr>
+			<th colspan="2" class="main">Addresses</th>
+		</tr>
+		<tr>
+			<td colspan="2" class="centered">
+				<input type="hidden" name="address_type_fk" value="1" />
+				---------- Main address ---------
+			</td>
+		</tr>
+		
+		<jsp:include page="address_form.jsp" />
+	</table>
+</div>
+<div class="float-left">
+	<table>
+		<%
+			if (!subjectId.isEmpty()) {
+		%>
+		
+		<jsp:include page="contact_form.jsp" />
+		
+		<%
+			}
+		%>
 	</table>
 </div>
 </form>
