@@ -67,7 +67,7 @@ public class SubjectsORM {
 			q.setLong("id", id);
 			data = (T) q.uniqueResult();
 		} catch (Exception e) {
-			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
+			MyLogger.log("SubjectsORM.findByID(): ", e.getMessage());
 			e.printStackTrace();
 		}
 		session.close();
@@ -86,7 +86,7 @@ public class SubjectsORM {
 			q.setLong("id", id);
 			data = (List<T>) q.list();
 		} catch (Exception e) {
-			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
+			MyLogger.log("SubjectsORM.findByID(): ", e.getMessage());
 			e.printStackTrace();
 		}
 		session.close();
@@ -109,7 +109,7 @@ public class SubjectsORM {
 			q.setLong("type", subjectType);
 			data = (List<T>) q.list();
 		} catch (Exception e) {
-			MyLogger.log("SubjectsORM.findById(): ", e.getMessage());
+			MyLogger.log("SubjectsORM.findByID(): ", e.getMessage());
 			e.printStackTrace();
 		}
 		session.close();
@@ -133,6 +133,22 @@ public class SubjectsORM {
 			}
 			return false;
 		}
+	}
+
+	public void deleteByID(String object, String attribute, long id) {
+		Session session = null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			session.beginTransaction();
+			Query q = session.createQuery("delete from " + object
+					+ " where " + attribute + "=:id");
+			q.setLong("id", id);
+			q.executeUpdate();
+		} catch (Exception e) {
+			MyLogger.log("SubjectsORM.deleteByID(): ", e.getMessage());
+			e.printStackTrace();
+		}
+		session.close();
 	}
 
 	public boolean saveUserAcc(UserAccount user) {
@@ -207,7 +223,7 @@ public class SubjectsORM {
 			saveAddress(address, enterprise.getEnterprise(), 2);
 		}
 		saveAttributes(enterprise.getEnterprise(), form.getAttributes());
-		if (form.getCustomer() != null) {
+		if (form.getCustomerId() == null && form.getCustomer() != null) {
 			saveCustomer(form, 2);
 		}
 
@@ -272,6 +288,13 @@ public class SubjectsORM {
 		saveOrUpdate(customer);
 
 		form.setCustomerId(String.valueOf(customer.getCustomer()));
+	}
+	
+//	public void deletePerson
+//	public void deleteEnterprise
+	
+	public void deleteUserAccount(String id) {
+		deleteByID("UserAccount", "userAccount", Long.parseLong(id));
 	}
 
 	// private String addStringCriterias(HashMap<String, String> criterias) {

@@ -27,6 +27,7 @@ import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.Customer;
 import backend.model.Employee;
+import backend.model.EmployeeRole;
 import backend.model.EmployeeRoleType;
 import backend.model.EntPerRelationType;
 import backend.model.Enterprise;
@@ -239,6 +240,8 @@ public class SubjectController extends Controller {
 		enterpriseForm.setFullName(params.get("full_name")[0]);
 		enterpriseForm.setCustomer(params.get("customer") != null 
 				? params.get("customer")[0] : null);
+		enterpriseForm.setCustomerId(params.get("customer_id") != null 
+				? params.get("customer_id")[0] : null);
 
 		formAndValidateAddressForms(enterpriseForm);
 		
@@ -293,10 +296,18 @@ public class SubjectController extends Controller {
 		int subjectType = Integer.parseInt(params.get("subject_type")[0]);
 		switch (subjectType) {
 		case 1:
-			formHumanEdit(personForm);
-			formEntPerRelationEdit(personForm);
-			req.setAttribute("subjectTypeFk", "1");
-			req.setAttribute("addressForm", personForm.getAddressForm());
+			if (formEmployeeEdit(employeeForm, Long.parseLong(params
+					.get("subject_id")[0]))) {
+				formHumanEdit(employeeForm);
+				req.setAttribute("subjectTypeFk", "3");
+				req.setAttribute("addressForm", employeeForm.getAddressForm());
+			} else {
+				formHumanEdit(personForm);
+				formEntPerRelationEdit(personForm);
+				formCustomerEdit(personForm, 1);
+				req.setAttribute("subjectTypeFk", "1");
+				req.setAttribute("addressForm", personForm.getAddressForm());
+			}
 			break;
 		case 2:
 			formEnterpriseEdit(enterpriseForm);
@@ -319,7 +330,6 @@ public class SubjectController extends Controller {
 		form.setAddressForm(formAddressEdit(person.getPerson(), 1));
 		
 		formAttributesEdit(form, person.getPerson(), 1);
-		formCustomerEdit(form, person.getPerson(), 1);
 		return form;
 	}
 	
@@ -334,21 +344,25 @@ public class SubjectController extends Controller {
 		form.setAddressForm(formAddressEdit(enterprise.getEnterprise(), 2));
 		
 		formAttributesEdit(form, enterprise.getEnterprise(), 2);
-		formCustomerEdit(form, enterprise.getEnterprise(), 2);
+		formCustomerEdit(form, 2);
 		return form;
 	}
 	
 	private boolean formEmployeeEdit(EmployeeForm form, long subjectId) {
-		List<Employee> employees = dao.findByID(Employee.class, "subjectFk",
+		List<Employee> employees = dao.findByID(Employee.class, "personFk",
 				subjectId);
 		if (employees.size() != 0) {
 			form.setEmployeeId(String.valueOf(employees.get(0).getEmployee()));
 			form.setEnterprise(String.valueOf(employees.get(0).getEnterpriseFk()));
-			// TODO! Ask employee role type!
+			List<EmployeeRole> roles = dao.findByID(EmployeeRole.class,
+					"employee_fk", employees.get(0).getEmployee());
+			// TODO: There could be many roles
+			
 			return true;
 			
+		} else {
+			return false;
 		}
-		return false;
 	}
 	
 	private PersonForm formEntPerRelationEdit(PersonForm form) {
@@ -416,8 +430,8 @@ public class SubjectController extends Controller {
 		}
 	}
 	
-	private void formCustomerEdit(SubjectForm form, long subjectId,
-			long subjectType) {
+	private void formCustomerEdit(SubjectForm form, long subjectType) {
+		long subjectId = Long.parseLong(form.getSubjectId());
 		List<Customer> customers = dao.findBySubjectID(Customer.class,
 				subjectId, subjectType);
 		if (customers.size() != 0) {

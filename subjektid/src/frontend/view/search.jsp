@@ -8,7 +8,7 @@
 	class="java.lang.String" />
 <script type="text/javascript" src="static/js/search.js"></script>
 <form method="post" action="?mode=search&action=search_xml">
-	<div class="search">
+	<div class="float-left">
 		<table>
 			<tr>
 				<th>Subject type</th>
@@ -44,7 +44,7 @@
 		</table>
 	</div>
 </form>
-<div class="search results">
+<div class="float-left results">
 	<h3>Search results</h3>
 
 	<%

@@ -27,6 +27,7 @@
 %>
 
 <form method="post" action="?mode=subject&action=add_person">
+<div class="float-left">
 	<input type="hidden" name="subject_id" value="<%=subjectId%>" />
 	<table>
 		<tr>
@@ -79,15 +80,6 @@
 		
 		<tr>
 			<td colspan="2" class="centered">
-				<input type="hidden" name="address_type_fk" value="1" />
-				---------- Main address ---------
-			</td>
-		</tr>
-		
-		<jsp:include page="address_form.jsp" />
-		
-		<tr>
-			<td colspan="2" class="centered">
 				--------------------------------</td>
 		</tr>
 		<%
@@ -95,7 +87,10 @@
 		%>
 		<tr>
 			<th>Customer ?</th>
-			<td class="centered">Yes</td>
+			<td class="centered">Yes
+				<input type="hidden" name="customer_id"
+					value="<%=personForm.getCustomerId()%>" />
+			</td>
 		</tr>
 		<%
 			} else {
@@ -108,7 +103,57 @@
 		
 		<%
 			}
-			if (subjectId.length() != 0) {
+		%>
+		
+		<tr>
+			<td colspan="2" class="centered">
+				------- Person attributes ------</td>
+		</tr>
+		<%
+			FormAttribute[] attributes = personForm.getAttributes();
+			for (FormAttribute attribute : attributes) {
+				String value = attribute.getValue() != null 
+						? attribute.getValue() : "",
+					formAttributeId = attribute.getFormAttributeId() != null
+						? attribute.getFormAttributeId() : "";
+		%>
+		<tr>
+			<th><%=attribute.getName()%></th>
+			<td><input type="text" name="<%=attribute.getName()%>"
+				value="<%=value%>" />
+			</td>
+		</tr>
+		<tr>
+			<td class="error" colspan="2"><%=errors.containsKey(attribute.getName()) ? 
+					errors.get(attribute.getName()) : ""%></td>
+		</tr>
+		<%
+			}
+		%>
+		<tr>
+			<td colspan="2"><button type="submit" name="submit_button"><%=button%></button></td>
+		</tr>
+	</table>
+</div>
+<div class="float-left">
+	<table>
+		<tr>
+			<th colspan="2" class="main">Addresses</th>
+		</tr>
+		<tr>
+			<td colspan="2" class="centered">
+				<input type="hidden" name="address_type_fk" value="1" />
+				---------- Main address ---------
+			</td>
+		</tr>
+		
+		<jsp:include page="address_form.jsp" />
+	</table>
+</div>
+<div class="float-left">
+	<table>
+		<%
+			if (!subjectId.isEmpty()) {
 		%>
 		
 		<jsp:include page="contact_form.jsp" />
@@ -116,12 +161,14 @@
 		<%
 			}
 		%>
-		
+	</table>
+</div>
+<div class="float-left">
+	<table>
 		<tr>
-			<td colspan="2" class="centered">
-				------ Enterprise relation -----
+			<th colspan="2" class="main">Enterprise relation
 				<input type="hidden" value="<%=personForm.getEntPerRelId()
-					!= null ? personForm.getEntPerRelId() : ""%>"/></td>
+					!= null ? personForm.getEntPerRelId() : ""%>"/></th>
 		</tr>
 		<tr>
 			<th>Enterprise</th>
@@ -132,7 +179,7 @@
 						for (int i = 0; i < enterpriseList.size(); i++) {
 							enterprise = (Enterprise) enterpriseList.get(i);
 					%>
-					<option value="<%=enterprise.getEnterprise()%>" 
+					<option value="<%=enterprise.getEnterprise()%>"
 						<%=personForm.getEnterprise() != null &&
 							personForm.getEnterprise().equals(
 							String.valueOf(enterprise.getEnterprise())) ? 
@@ -165,34 +212,9 @@
 					%>
 			</select></td>
 		</tr>
-		
-		<tr>
-			<td colspan="2" class="centered">
-				------- Person attributes ------</td>
-		</tr>
-		<%
-			FormAttribute[] attributes = personForm.getAttributes();
-			for (FormAttribute attribute : attributes) {
-				String value = attribute.getValue() != null 
-						? attribute.getValue() : "",
-					formAttributeId = attribute.getFormAttributeId() != null
-						? attribute.getFormAttributeId() : "";
-		%>
-		<tr>
-			<th><%=attribute.getName()%></th>
-			<td><input type="text" name="<%=attribute.getName()%>"
-				value="<%=value%>" />
-			</td>
-		</tr>
-		<tr>
-			<td class="error" colspan="2"><%=errors.containsKey(attribute.getName()) ? 
-					errors.get(attribute.getName()) : ""%></td>
-		</tr>
-		<%
-			}
-		%>
-		<tr>
-			<td colspan="2"><button type="submit" name="submit_button"><%=button%></button></td>
-		</tr>
 	</table>
+</div>
 </form>
+
+
+			

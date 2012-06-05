@@ -21,6 +21,7 @@
 
 <form method="post" action="?mode=subject&action=add_enterprise">
 	<input type="hidden" name="subject_id" value="<%=subjectId%>" />
+	<div class="float-left">
 	<table>
 		<tr>
 			<th colspan="2" class="main"><%=action%></th>
@@ -44,15 +45,6 @@
 		
 		<tr>
 			<td colspan="2" class="centered">
-				<input type="hidden" name="address_type_fk" value="2" />
-				---------- Legal address ---------
-			</td>
-		</tr>
-		
-		<jsp:include page="address_form.jsp" />
-		
-		<tr>
-			<td colspan="2" class="centered">
 				--------------------------------</td>
 		</tr>
 		<%
@@ -60,7 +52,10 @@
 		%>
 		<tr>
 			<th>Customer ?</th>
-			<td class="centered">Yes</td>
+			<td class="centered">Yes
+				<input type="hidden" name="customer_id"
+					value="<%=enterpriseForm.getCustomerId()%>" />
+			</td>
 		</tr>
 		<%
 			} else {
@@ -71,14 +66,6 @@
 				value="<%=enterpriseForm.getCustomer() != null 
 				? "checked='checked'" : ""%>" /></td>
 		</tr>
-		
-		<%
-			}
-			if (subjectId.length() != 0) {
-		%>
-		
-		<jsp:include page="contact_form.jsp" />
-		
 		<%
 			}
 		%>
@@ -113,4 +100,31 @@
 			<td colspan="2"><button type="submit" name="submit_button"><%=button%></button></td>
 		</tr>
 	</table>
+
+</div>
+<div class="float-left">
+	<table>
+		<tr>
+			<td colspan="2" class="centered">
+				<input type="hidden" name="address_type_fk" value="2" />
+				---------- Legal address ---------
+			</td>
+		</tr>
+		
+		<jsp:include page="address_form.jsp" />
+	</table>
+</div>
+<div class="float-left">
+	<table>
+		<%
+			if (!subjectId.isEmpty()) {
+		%>
+		
+		<jsp:include page="contact_form.jsp" />
+		
+		<%
+			}
+		%>
+	</table>
+</div>
 </form>

@@ -3,14 +3,11 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="frontend.forms.ContactForm" %>
 <jsp:useBean id="contacts" scope="request" class="java.util.ArrayList" />
+			
+		<tr>
+			<th colspan="2" class="main">Contacts</th>
+		</tr>
 		<%
-			if (true) {
-				//contacts.size() != 0
-		%>
-			<td colspan="2" class="centered">
-					------------- Contacts ------------</td>
-		<%
-			}
 			for (int i = 0; i < contacts.size(); i++) {
 				ContactForm contact = (ContactForm) contacts.get(i);
 		%>

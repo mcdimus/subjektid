@@ -42,9 +42,6 @@
 								  <xsl:otherwise>2</xsl:otherwise>
 								</xsl:choose>
 							</xsl:attribute>
-							<xsl:attribute name="target">
-								_blank
-							</xsl:attribute>
 							Edit
 						</xsl:element>
 					</td>
