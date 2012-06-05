@@ -6,7 +6,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <jsp:useBean id="accounts" scope="request" class="java.util.ArrayList" />
-<jsp:useBean id="message" scope="request" class="java.lang.String" />
 <jsp:include page="header.jsp" />
 
 <h1>Accounts:</h1>
@@ -59,57 +58,9 @@
 	}
 %>
 <br />
-<%
-	if (message != null && !message.isEmpty()) {
-		out.println(message);
-	}
-%>
-<br />
-<h2>Add new account:</h2>
-<form method="post" action="?mode=account&action=add">
-	<table>
-		<tr>
-			<th>Username</th>
-			<td><input type="text" name="username" /></td>
-		</tr>
-		<tr>
-			<th>Password</th>
-			<td><input type="password" name="password" /></td>
-		</tr>
 
-		<tr>
-			<th>Valid from</th>
-			<%
-				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				String formattedDate = df.format(new Date());
-			%>
-			<td><input type="text" name="validFrom"
-				value="<%=formattedDate%>" /></td>
-		</tr>
-		<tr>
-			<th>Valid to</th>
-			<%
-				Calendar c = Calendar.getInstance();
-				c.setTime(df.parse(formattedDate));
-				c.add(Calendar.YEAR, 1); // number of years to add
-				formattedDate = df.format(c.getTime()); // the new date
-			%>
-			<td><input type="text" name="validTo" value="<%=formattedDate%>" /></td>
-		</tr>
-		<tr>
-			<th>Pass Never Exp.</th>
-			<td><input type="text" name="passwordNeverExpires" value="1" /></td>
-		</tr>
-		<tr>
-			<th>&nbsp;<input type="hidden" name="status" value="1" /> <input
-				type="hidden" name="createdBy"
-				value="<%=session.getAttribute("employee_id")%>" /> <input
-				type="hidden" name="created" value="<%=new Date().getTime()%>" /></th>
-			<td><button type="submit">Save</button></td>
-		</tr>
-
-	</table>
-
+<form method="post" action="?mode=account&action=form">
+	<button type="submit">Add new account</button>
 </form>
 </body>
 </html>

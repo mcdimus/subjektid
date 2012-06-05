@@ -221,4 +221,17 @@
 		%>
 	</table>
 </div>
+<div class="float-left">
+	<table>
+		<%
+			if (!subjectId.isEmpty()) {
+		%>
+		
+		<jsp:include page="account_form.jsp" />
+		
+		<%
+			}
+		%>
+	</table>
+</div>
 </form>

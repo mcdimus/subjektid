@@ -25,6 +25,8 @@ public class ViewManager {
 				dispatcher = "/search.jsp";
 			} else if (view.equals("accounts_view")){
 				dispatcher = "/accounts.jsp";
+			} else if (view.equals("accountForm_view")){
+				dispatcher = "/account_form.jsp";
 			}
 
 			context.getRequestDispatcher(dispatcher).forward(req, resp);

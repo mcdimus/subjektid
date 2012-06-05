@@ -1,5 +1,7 @@
 package frontend.control;
 
+import general.Utils;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -36,6 +38,10 @@ public class AccountController extends Controller {
 				view = "accounts_view";
 			} else if (action.equals("edit")) {
 
+			} else if (action.equals("form")) {
+
+				
+				view = "accountForm_view";
 			} else if (action.equals("add")) {
 
 				DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -43,7 +49,8 @@ public class AccountController extends Controller {
 
 				try {
 					account.setUsername(params.get("username")[0]);
-					account.setPassw(md5(params.get("password")[0]));
+					account.setPassw(Utils.generateMD5(params.get("username")[0]
+							+ params.get("password")[0]));
 					account.setStatus(Long.valueOf(params.get("status")[0]));
 					account.setValidFrom(df.parse(params.get("validFrom")[0]));
 					account.setValidTo(df.parse(params.get("validTo")[0]));
@@ -61,9 +68,6 @@ public class AccountController extends Controller {
 				} catch (NullPointerException e) {
 					MyLogger.log("AccountController: add new", e.getMessage());
 					System.exit(0);
-				} catch (NoSuchAlgorithmException e) {
-					MyLogger.log("AccountController: add new", e.getMessage());
-					System.exit(0);
 				}
 
 				SubjectsORM orm = new SubjectsORM();
@@ -71,8 +75,8 @@ public class AccountController extends Controller {
 
 				req.setAttribute("message",
 						"New account for " + account.getUsername() + " saved");
-				this.getAllAccounts(req);
-				view = "accounts_view";
+
+				view = "accountForm_view";
 			}
 
 		} else {
@@ -86,21 +90,5 @@ public class AccountController extends Controller {
 		List<UserAccount> accounts = orm.findAll(UserAccount.class);
 
 		req.setAttribute("accounts", accounts);
-	}
-
-	private String md5(String message) throws NoSuchAlgorithmException {
-		MessageDigest md = MessageDigest.getInstance("MD5");
-		md.update(message.getBytes());
-
-		byte byteData[] = md.digest();
-
-		// convert the byte to hex format method 1
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < byteData.length; i++) {
-			sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16)
-					.substring(1));
-		}
-
-		return sb.toString();
 	}
 }

@@ -218,6 +218,7 @@ public class SubjectController extends Controller {
 	}
 	
 	private EmployeeForm formAndValidateEmployeeForm(EmployeeForm employeeForm) {
+//		employeeForm.getEmployeeId()
 		employeeForm.setSubjectId(params.get("employee_id")[0]);
 		employeeForm.setEmployeeRoleType(params.get("employee_role_type")[0]);
 		employeeForm.setEnterprise(params.get("enterprise")[0]);
