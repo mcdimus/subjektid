@@ -23,9 +23,10 @@ public class ControllerFactory {
 			controller = new SubjectController();
 		} else if (mode.equals("search")) {
 			controller = new SearchController();
+		} else if (mode.equals("account")) {
+			controller = new AccountController();
 		} else {
 			controller = new LoginController();
-
 		}
 
 		controller.setParams((HashMap<String, String[]>) params);
