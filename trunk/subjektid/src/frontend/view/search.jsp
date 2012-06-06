@@ -35,6 +35,21 @@
 
 			<jsp:include page="address_form.jsp" />
 
+			<tr>
+				<td colspan="2" class="centered">---------- Contact ---------</td>
+			</tr>
+			<tr>
+				<th>Type</th>
+				<td><select name="contact_type">
+					<option value="1">Email</option>
+					<option value="2">Phone number</option>
+				</select></td>
+			</tr>
+			<tr>
+				<th>Contact</th>
+				<td><input type="text" name="contact" /></td>
+			</tr>
+			
 			<tfoot>
 				<tr>
 					<td><button type="submit" name="submitBtn">Search</button></td>

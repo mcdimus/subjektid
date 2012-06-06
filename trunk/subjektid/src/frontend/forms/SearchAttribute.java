@@ -2,9 +2,17 @@ package frontend.forms;
 
 public class SearchAttribute {
 
-	private String name, type, firstValue, secondValue;
+	private String attrID, name, type, firstValue, secondValue;
 
 	public SearchAttribute() { }
+
+	public String getAttrID() {
+		return attrID;
+	}
+
+	public void setAttrID(String attrID) {
+		this.attrID = attrID;
+	}
 	
 	public String getName() {
 		return name;

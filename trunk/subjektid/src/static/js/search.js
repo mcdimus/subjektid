@@ -9,28 +9,32 @@ $(function() {
 					$place.html('<tr><td colspan="2" class="centered">'
 							+ '---- Subject attributes ----</td></tr>');
 		        	$(answer).each(function(index, element) {
-		        		if (element.type != "1") {
-			        		$place.append($('<tr><input type="hidden" name="' 
-			        				+ 'attribute' + index + '" value="'
-			        				+ element.attr_id + '" /><th>' + element.name
-			        				+ '</th><td class="short">'
-			        				+ '<input type="text" name="attribute_' + index +
-			        				+ '" /><input type="text" name="'
-			        				+ 'attribute_' + index + '" /></td></tr>'));
+		        		var secondInput;
+		        		if (element.type != 1) {
+		        			secondInput = '<input type="text" name="'
+			        				+ 'attribute_sval" />';
 		        		} else {
-			        		$place.append($('<tr><input type="hidden" name="' 
-			        				+ 'attribute' + index + '" value="'
-			        				+ element.attr_id + '" /><th>' + element.name
-			        				+ '</th><td><input type="text" name="'
-			        				+ 'attribute_' + index + '" /></td></tr>'));
+		        			secondInput = '<input type="hidden" name="'
+		        				+ 'attribute_sval" value="" />';
 		        		}
+		        		$place.append($('<tr><input type="hidden" name="'
+		        				+ 'attribute_id" value="' + element.attr_id
+		        				+ '" /><input type="hidden" name="'
+		        				+ 'attribute_name" value="'
+		        				+ element.name + '" />'
+		        				+ '<input type="hidden" name="'
+		        				+ 'attribute_type" value="'
+		        				+ element.type + '" /><th>' + element.name
+		        				+ '</th><td class="short">'
+		        				+ '<input type="text" name="attribute_fval'
+		        				+ '" />' + secondInput + '</td></tr>'));
 			        });
 		        	$place.append($('<tr><td><button type="submit" name="submitBtn">' +
-						'Search</button></td></tr>'));
+						'Search</button></td><td></td></tr>'));
 			}, 'json');
 		} else {
 			$place.html('<tr><td><button type="submit" name="submitBtn">' +
-					'Search</button></td></tr>');
+					'Search</button></td><td></td></tr>');
 		}
 	});
 

@@ -7,6 +7,8 @@ public class SearchForm {
 	private long subjectType;
 	private String firstName, lastName;
 	private AddressForm addressForm;
+	private ContactForm contactForm;
+
 	private ArrayList<SearchAttribute> attributes;
 	private String[] query = { "", "", "", "" };
 	
@@ -42,6 +44,14 @@ public class SearchForm {
 
 	public void setAddressForm(AddressForm form) {
 		addressForm = form;
+	}
+	
+	public ContactForm getContactForm() {
+		return contactForm;
+	}
+
+	public void setContactForm(ContactForm contactForm) {
+		this.contactForm = contactForm;
 	}
 
 	public ArrayList<SearchAttribute> getAttributes() {

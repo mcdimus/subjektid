@@ -142,10 +142,7 @@
 		</tr>
 		
 		<jsp:include page="address_form.jsp" />
-	</table>
-</div>
-<div class="float-left">
-	<table>
+		
 		<%
 			if (!subjectId.isEmpty()) {
 		%>
