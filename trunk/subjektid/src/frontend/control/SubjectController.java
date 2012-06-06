@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import frontend.forms.AccountForm;
 import frontend.forms.AddressForm;
+import frontend.forms.ContactForm;
 import frontend.forms.EmployeeForm;
 import frontend.forms.EmployeeRoleForm;
 import frontend.forms.EnterpriseForm;
@@ -28,6 +29,7 @@ import log.MyLogger;
 
 import backend.DA.SubjectsORM;
 import backend.model.Address;
+import backend.model.Contact;
 import backend.model.Customer;
 import backend.model.Employee;
 import backend.model.EmployeeRole;
@@ -305,18 +307,21 @@ public class SubjectController extends Controller {
 				formHumanEdit(employeeForm);
 				req.setAttribute("subjectTypeFk", "3");
 				req.setAttribute("addressForm", employeeForm.getAddressForm());
+				req.setAttribute("contacts", employeeForm.getContacts());
 			} else {
 				formHumanEdit(personForm);
 				formEntPerRelationEdit(personForm);
 				formCustomerEdit(personForm, 1);
 				req.setAttribute("subjectTypeFk", "1");
 				req.setAttribute("addressForm", personForm.getAddressForm());
+				req.setAttribute("contacts", personForm.getContacts());
 			}
 			break;
 		case 2:
 			formEnterpriseEdit(enterpriseForm);
 			req.setAttribute("subjectTypeFk", "2");
 			req.setAttribute("addressForm", enterpriseForm.getAddressForm());
+			req.setAttribute("contacts", enterpriseForm.getContacts());
 			break;
 		}
 	}
@@ -334,6 +339,8 @@ public class SubjectController extends Controller {
 		
 		form.setAddressForm(formAddressEdit(person.getPerson(), 1));
 		
+		form.setContacts(formContactsEdit(person.getPerson(), 1));
+		
 		form.setAttributes(formAttributesEdit(form.getAttributes(),
 				person.getPerson(), 1));
 		return form;
@@ -348,6 +355,8 @@ public class SubjectController extends Controller {
 		form.setCreatedBy(String.valueOf(enterprise.getCreatedBy()));
 		
 		form.setAddressForm(formAddressEdit(enterprise.getEnterprise(), 2));
+		
+		form.setContacts(formContactsEdit(enterprise.getEnterprise(), 2));
 		
 		form.setAttributes(formAttributesEdit(form.getAttributes(),
 				enterprise.getEnterprise(), 2));
@@ -467,5 +476,24 @@ public class SubjectController extends Controller {
 			form.setCustomerAttributes(formAttributesEdit(form
 					.getCustromerAttributes(), customers.get(0).getCustomer(), 4));
 		}
+	}
+	
+	private ArrayList<ContactForm> formContactsEdit(long subjectId, long subjectTypeFk) {
+		List<Contact> contacts = dao.findBySubjectID(Contact.class,
+				subjectId, subjectTypeFk);
+		ArrayList<ContactForm> contactForms = new ArrayList<ContactForm>();
+		if (contacts != null) {
+			for (Contact contact : contacts) {
+				ContactForm form = new ContactForm();
+				form.setContactId(String.valueOf(contact.getContact()));
+				form.setContact(contact.getValueText());
+				form.setContactType(String.valueOf(contact.getContactTypeFk()));
+				form.setNote(contact.getNote());
+				form.setOrderBy(String.valueOf(contact.getOrderby()));
+
+				contactForms.add(form);
+			}
+		}
+		return contactForms;
 	}
 }

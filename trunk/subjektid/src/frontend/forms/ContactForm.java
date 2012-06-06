@@ -2,9 +2,12 @@ package frontend.forms;
 
 public class ContactForm {
 
+	private String contactId;
 	private String contactType;
 	private String contact;
-	private String contactId;
+	private String orderBy;
+	private String note;
+	
 	
 	public String getContactType() {
 		return contactType;
@@ -28,6 +31,34 @@ public class ContactForm {
 	
 	public void setContactId(String id) {
 		contactId = id;
+	}
+
+	/**
+	 * @return the orderBy
+	 */
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	/**
+	 * @param orderBy the orderBy to set
+	 */
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
+	/**
+	 * @return the note
+	 */
+	public String getNote() {
+		return note;
+	}
+
+	/**
+	 * @param note the note to set
+	 */
+	public void setNote(String note) {
+		this.note = note;
 	}
 	
 }
