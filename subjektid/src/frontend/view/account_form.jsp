@@ -58,7 +58,7 @@
 	</td>
 </tr>
 <tr>
-	<th>&nbsp;<input type="hidden" name="status"
+	<th colspan="2">&nbsp;<input type="hidden" name="status"
 		value="<%=(accountForm != null) ? accountForm.getStatus() : "1"%>" />
 		<input type="hidden" name="createdBy"
 		value="<%=(accountForm != null) ? accountForm.getCreatedBy()

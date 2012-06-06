@@ -20,7 +20,8 @@ $(document).ready(function() {
 '---------------  #' + (num + 1) + ' --------------</td></tr>'
 + '<tr><th>Type</th><td><select name="contact_type"><option value="1">Email</option>'
 + '<option value="2">Phone number</option></select></td></tr><tr><th>Contact</th>'
-+ '<td><input type="text" name="contact" /></td></tr>'));
++ '<td><input type="text" name="contact" /></td></tr><tr><th>Note</th>'
++ '<td><input type="text" name="note" /></td></tr>'));
 		$addrNumInput.val(num);
 	});
 	

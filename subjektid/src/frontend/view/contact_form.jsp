@@ -5,8 +5,7 @@
 <jsp:useBean id="contacts" scope="request" class="java.util.ArrayList" />
 			
 		<tr>
-			<td colspan="2" class="centered">
-				------------ Contacts -----------</td>
+			<th colspan="2" class="main">Contacts</th>
 		</tr>
 		<%
 			for (int i = 0; i < contacts.size(); i++) {
@@ -22,15 +21,25 @@
 		</tr>
 		<tr>
 			<th>Type</th>
-			<td><select name="contact_type">
-				<option value="1">Email</option>
-				<option value="2">Phone number</option>
+			<td>
+			<%
+			String selected = "selected=\"selected\"";
+			%>
+			
+			<select name="contact_type">
+				<option <%= (contact.getContactType().equals("1")) ? selected : "" %> value="1">Email</option>
+				<option <%= (contact.getContactType().equals("2")) ? selected : "" %> value="2">Phone number</option>
 			</select></td>
 		</tr>
 		<tr>
 			<th>Contact</th>
 			<td><input type="text" name="contact" 
 				value="<%=contact.getContact() != null ? contact.getContact() : ""%>"/></td>
+		</tr>
+		<tr>
+			<th>Note</th>
+			<td><input type="text" name="note" 
+				value="<%=contact.getNote() != null ? contact.getNote() : ""%>"/></td>
 		</tr>
 		<%
 			}

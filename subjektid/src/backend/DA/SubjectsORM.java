@@ -426,7 +426,6 @@ public class SubjectsORM {
 		addEnterpriseCriteria(form);
 		addAddressCriterias(form);
 		addContactCriterias(form);
-		addSubjectCriterias(form);
 		String queryPartOne = form.getQueryPart(0), queryPartTwo = form
 				.getQueryPart(1), queryPartThree = form.getQueryPart(2), queryPartFour = form
 				.getQueryPart(3);
