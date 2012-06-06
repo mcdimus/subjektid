@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import backend.DA.SubjectsDAO;
 import backend.DA.SubjectsORM;
 import backend.model.SubjectAttributeType;
 
@@ -32,7 +33,7 @@ public class AjaxController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
-		
+
 	}
 
 	@Override
@@ -46,31 +47,46 @@ public class AjaxController extends HttpServlet {
 		}
 		if (sessionManager.loggedIn()) {
 			String mode = req.getParameter("mode");
-			
+
 			MyLogger.logMessage("Ajax mode: " + mode);
-			
+
 			if (mode.equals("get")) {
 				if (req.getParameter("attribute").equals("subjectTypeFk")) {
-					String json = getSubjectAttributes(Long.parseLong(
-							req.getParameter("value")));
+					String json = getSubjectAttributes(Long.parseLong(req
+							.getParameter("value")));
 					out.write(json);
 					out.flush();
 				}
 			} else if (mode.equals("delete")) {
 				String what = req.getParameter("what");
-				
+
 				MyLogger.logMessage("  WHAT: " + what);
-				
+
 				if (what.equals("subject")) {
-					String json = "{\"answer\" : \"yey\"}";
+					SubjectsDAO dao = new SubjectsDAO();
+					String answer = "";
+					if (req.getParameter("subjectType").equals(1)
+							|| req.getParameter("subjectType").equals("1")) {
+						
+						MyLogger.logMessage("Deleting person with id: " + req.getParameter("subjectId"));
+						
+						answer = dao
+								.deletePerson(req.getParameter("subjectId"));
+					} else {
+						// delete enterprise
+					}
+					
+					MyLogger.logMessage("Answer from dao: " + answer);
+					
+					String json = "{\"answer\" : \"" + answer + "\"}";
 					out.write(json);
 					out.flush();
 				}
 			}
 		}
-		
+
 	}
-	
+
 	private String getSubjectAttributes(long subjectTypeFk) {
 		SubjectsORM orm = new SubjectsORM();
 		List<SubjectAttributeType> types = orm.findByID(
@@ -84,7 +100,7 @@ public class AjaxController extends HttpServlet {
 		}
 		return json.substring(0, json.length() - 2) + "]";
 	}
-	
+
 	private List<SubjectAttributeType> sortSubjectAttributes(
 			List<SubjectAttributeType> types) {
 		for (int i = 0; i < types.size(); i++) {

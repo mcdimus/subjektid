@@ -109,6 +109,9 @@
 	</table>
 	<%
 		}
+	%>
+	<div id="message"></div>
+	<%
 	if (htmlWithResults != null && !htmlWithResults.isEmpty()) {
 		out.print(htmlWithResults);
 	}

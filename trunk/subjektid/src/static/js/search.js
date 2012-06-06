@@ -39,6 +39,7 @@ $(function() {
 	});
 
 	$(document).on('click', 'a[name="deleteSubject"]', function(event) {
+		$this = $(this);
 		event.preventDefault();
 		if (confirm("Are you sure?")) {
 			var data = {
@@ -48,10 +49,20 @@ $(function() {
 					subjectType : $(this).data("subjectType")
 					};
 			$.post('ajax', data, function(answer) {
-				alert(answer);
+				var message = '';
+				if (answer.answer == 'OK') {
+					message = "Subject successfully deleted.";
+					$this.parents('tr').remove();
+				} else if (answer.answer == 'NOT DELETED') {
+					message = "Subject in realtion with enterprise, thus cannot be deleted.";
+				}
+				
+				$('div#message').html(message);
+				
 			}, 'json').fail(function(answer) {
 				alert("Something went wrong. Sorry!");
 			});
+			//console.log(data);
 		}
 	});
 	

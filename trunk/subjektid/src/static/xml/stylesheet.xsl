@@ -61,16 +61,14 @@
 							<xsl:attribute name="name">
 								<xsl:text>deleteSubject</xsl:text>
 							</xsl:attribute>
-							<xsl:attribute name="data-subjectId">
+							<xsl:attribute name="data-subject-id">
 								<xsl:text><xsl:value-of select="id" /></xsl:text>
 							</xsl:attribute>
-							<xsl:attribute name="data-subjectType">
-								<xsl:text>
-								<xsl:choose>
+							<xsl:attribute name="data-subject-type">
+								<xsl:text><xsl:choose>
 								  <xsl:when test="type='person'">1</xsl:when>
 								  <xsl:otherwise>2</xsl:otherwise>
-								</xsl:choose>
-								</xsl:text>
+								</xsl:choose></xsl:text>
 							</xsl:attribute>
 							Delete
 						</xsl:element>
