@@ -88,7 +88,9 @@ public class SearchController extends Controller {
 		searchForm.setLastName(params.get("lname")[0]);
 		searchForm.setAddressForm(formAddressForm());
 		searchForm.setContactForm(formContactForm());
-		searchForm.setAttributes(formAttributes());
+		if (searchForm.getSubjectType() != 0) {
+			searchForm.setAttributes(formAttributes());
+		}
 		return searchForm;
 	}
 
