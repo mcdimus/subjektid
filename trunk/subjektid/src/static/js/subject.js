@@ -25,4 +25,14 @@ $(document).ready(function() {
 		$addrNumInput.val(num);
 	});
 	
+	$('select[name="employee_role_type"]').on('change', function() {
+		$this = $(this);
+		var $newInput = $('<input type="hidden">').attr({
+			name : "role_type",
+			value : $this.val()
+		});
+		
+	$this.after("<br />", $this.find("option:selected").text(), $newInput);
+	
+	});
 });

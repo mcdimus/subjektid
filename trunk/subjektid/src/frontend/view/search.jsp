@@ -49,6 +49,10 @@
 				<th>Contact</th>
 				<td><input type="text" name="contact" /></td>
 			</tr>
+			<tr>
+				<th>Note</th>
+				<td><input type="text" name="contact_note" /></td>
+			</tr>
 			
 			<tfoot>
 				<tr>

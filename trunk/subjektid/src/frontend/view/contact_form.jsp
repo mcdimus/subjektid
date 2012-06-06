@@ -14,7 +14,7 @@
 		<tr>
 			<td colspan="2" class="centered">
 		
-				<input type="hidden" name="contactId"
+				<input type="hidden" name="contact_id"
 					value="<%=contact.getContactId() != null ? contact.getContactId() : ""%>" />
 				---------------  #<%=i + 1%> --------------
 			</td>

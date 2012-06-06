@@ -108,13 +108,13 @@ public class SearchController extends Controller {
 		ContactForm form = new ContactForm();
 		form.setContact(params.get("contact")[0]);
 		form.setContactType(params.get("contact_type")[0]);
+		form.setNote(params.get("contact_note")[0]);
 		return form;
 	}
 
 	private ArrayList<SearchAttribute> formAttributes() {
 		ArrayList<SearchAttribute> attributes = new ArrayList<SearchAttribute>();
-		int i = 0;
-		while ((params.get("attribute_id")[i]) != null) {
+		for (int i = 0; i < params.get("attribute_id").length; i++) {
 			SearchAttribute attribute = new SearchAttribute();
 			attribute.setAttrID((params.get("attribute_id")[i]));
 			attribute.setName(params.get("attribute_name")[i]);
@@ -122,7 +122,6 @@ public class SearchController extends Controller {
 			attribute.setSecondValue(params.get("attribute_sval")[i]);
 			attribute.setType(params.get("attribute_type")[i]);
 			attributes.add(attribute);
-			i++;
 		}
 		return attributes;
 	}

@@ -131,7 +131,8 @@
 		</tr>
 		<%
 			}
-			if (!personForm.getCustomerId().isEmpty()) {
+			if (personForm.getCustomerId() != null
+					&& !personForm.getCustomerId().isEmpty()) {
 		%>
 		<tr>
 			<td colspan="2" class="centered">
@@ -170,8 +171,9 @@
 	<table>
 		<tr>
 			<th colspan="2" class="main">Enterprise relation
-				<input type="hidden" value="<%=personForm.getEntPerRelId()
-					!= null ? personForm.getEntPerRelId() : ""%>"/></th>
+				<input type="hidden" name="ent_rel_id" 
+					value="<%=personForm.getEntPerRelId() != null
+					? personForm.getEntPerRelId() : ""%>"/></th>
 		</tr>
 		<tr>
 			<th>Enterprise</th>
@@ -230,7 +232,10 @@
 		</tr>
 		
 		<jsp:include page="address_form.jsp" />
-		
+	</table>
+</div>
+<div class="float-left">
+	<table>
 		<%
 			if (!subjectId.isEmpty()) {
 		%>
