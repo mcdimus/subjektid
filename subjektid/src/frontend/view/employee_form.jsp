@@ -152,7 +152,7 @@
 				<%
 				ArrayList<EmployeeRoleForm> emplyeeRoles = employeeForm.getRoles();
 				for (EmployeeRoleForm role : emplyeeRoles) {
-					out.println("<br/>" + role.getRoleName());
+					out.println("<br/>" + role.getRoleName() + "<input type=\"hidden\" name=\"role_type\" value=\""+ role.getRoleID()+"\" />");
 				}
 				%>
 			</td>

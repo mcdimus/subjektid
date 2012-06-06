@@ -4,7 +4,7 @@ $(function() {
 		$place = $('tfoot');
 	$select.on('change', function() {
 		if ($select.val() != 0) {
-			$.post('ajax', { attribute : "subjectTypeFk",
+			$.post('ajax', { mode : "get", attribute : "subjectTypeFk",
 				value : $select.val() }, function(answer) {
 					$place.html('<tr><td colspan="2" class="centered">'
 							+ '---- Subject attributes ----</td></tr>');
@@ -38,4 +38,21 @@ $(function() {
 		}
 	});
 
+	$(document).on('click', 'a[name="deleteSubject"]', function(event) {
+		event.preventDefault();
+		if (confirm("Are you sure?")) {
+			var data = {
+					mode : "delete", 
+					what : "subject", 
+					subjectId : $(this).data("subjectId"), 
+					subjectType : $(this).data("subjectType")
+					};
+			$.post('ajax', data, function(answer) {
+				alert(answer);
+			}, 'json').fail(function(answer) {
+				alert("Something went wrong. Sorry!");
+			});
+		}
+	});
+	
 });
