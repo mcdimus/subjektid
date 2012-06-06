@@ -92,15 +92,18 @@
 					<option value="">Select one...</option>
 					<%
 						Enterprise enterprise;
+						String selected = "";
 						String entName = "";
 						for (int i = 0; i < enterpriseList.size(); i++) {
+							selected = "";
 							enterprise = (Enterprise) enterpriseList.get(i);
 							if (enterprise.getEnterprise() == Long.parseLong(
 									employeeForm.getEnterprise())) {
-								entName = enterprise.getName();
+								entName = enterprise.getName(); // what for?
+								selected = "selected=\"selected\"";
 							}
 					%>
-					<option value="<%=enterprise.getEnterprise()%>">
+					<option <%=selected %> value="<%=enterprise.getEnterprise()%>">
 						<%=enterprise.getName()%></option>
 					<%
 						}
@@ -111,24 +114,48 @@
 			<td class="error" colspan="2"><%=errors.containsKey("enterprise") ? 
 					errors.get("enterprise") : ""%></td>
 		</tr>
+		
 		<tr>
 			<th>Role</th>
-			<td><select name="employee_role_type">
-					<option value="">Select one...</option>
-					<%
-						EmployeeRoleType employeeRoleType;
-						ArrayList<EmployeeRoleForm> roles =
-								employeeForm.getRoles();
-						for (int i = 0; i < employeeRoleTypeList.size(); i++) {
-							employeeRoleType = (EmployeeRoleType) 
-									employeeRoleTypeList.get(i);
-					%>
-					<option value="<%=employeeRoleType.getEmployeeRoleType()%>">
-						<%=employeeRoleType.getTypeName()%></option>
-					<%
-						}
-					%>
-			</select></td>
+			<td>
+				<script type="text/javascript">
+				$(document).ready(function() {
+					
+					$('select[name="employee_role_type"]').on('change', function() {
+						$this = $(this);
+						var $newInput = $('<input type="hidden">').attr({
+							name : "role_type",
+							value : $this.val()
+							});
+						
+						$this.after("<br />", $this.find("option:selected").text(), $newInput);
+					});
+				});
+				
+				</script>
+				<select name="employee_role_type">
+						<option value="">Select one...</option>
+						<%
+							EmployeeRoleType employeeRoleType;
+							ArrayList<EmployeeRoleForm> roles =
+									employeeForm.getRoles();
+							for (int i = 0; i < employeeRoleTypeList.size(); i++) {
+								employeeRoleType = (EmployeeRoleType) 
+										employeeRoleTypeList.get(i);
+						%>
+						<option value="<%=employeeRoleType.getEmployeeRoleType()%>">
+							<%=employeeRoleType.getTypeName()%></option>
+						<%
+							}
+						%>
+				</select>
+				<%
+				ArrayList<EmployeeRoleForm> emplyeeRoles = employeeForm.getRoles();
+				for (EmployeeRoleForm role : emplyeeRoles) {
+					out.println("<br/>" + role.getRoleName());
+				}
+				%>
+			</td>
 		</tr>
 		<tr>
 			<td class="error" colspan="2"><%=errors.containsKey("employee_role_type") ? 

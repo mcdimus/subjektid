@@ -367,11 +367,14 @@ public class SubjectController extends Controller {
 			ArrayList<EmployeeRoleForm> formRoles =
 					new ArrayList<EmployeeRoleForm>();
 			for (EmployeeRole role : roles) {
+				EmployeeRoleType ert = dao.findByID(EmployeeRoleType.class, role.getEmployeeRoleTypeFk());
 				EmployeeRoleForm formRole = new EmployeeRoleForm();
 				formRole.setRoleID(String.valueOf(role.getEmployeeRole()));
 				formRole.setRole(String.valueOf(role.getEmployeeRoleTypeFk()));
+				formRole.setRoleName(ert.getTypeName());
 				formRoles.add(formRole);
 			}
+			form.setRoles(formRoles);
 			form.setEmployeeAttributes(formAttributesEdit(
 					form.getEmployeeAttributes(), employees.get(0)
 					.getEmployee(), 3));
