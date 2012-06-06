@@ -34,11 +34,4 @@ public class Utils {
 		return null;
 	}
 	
-	public static boolean checkEmpty(String toCheck) {
-		if (toCheck.length() == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 }

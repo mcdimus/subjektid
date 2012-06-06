@@ -55,26 +55,26 @@ public class SubjectController extends Controller {
 		String view = "default_view";
 		SessionManager sessionManager = new SessionManager(req);
 		
-		List<SubjectAttributeType> types = dao.findByID(
+		List<SubjectAttributeType> types = dao.findByIdAndOrder(
 				SubjectAttributeType.class, "subjectTypeFk", 1);
 		personForm = new PersonForm();
-		personForm.setAttributes(sortAndFormAttributes(types));
+		personForm.setAttributes(formAttributes(types));
 		req.setAttribute("personForm", personForm);
 		
-		types = dao.findByID(SubjectAttributeType.class, "subjectTypeFk", 2);
+		types = dao.findByIdAndOrder(SubjectAttributeType.class, "subjectTypeFk", 2);
 		enterpriseForm = new EnterpriseForm();
-		enterpriseForm.setAttributes(sortAndFormAttributes(types));
+		enterpriseForm.setAttributes(formAttributes(types));
 		req.setAttribute("enterpriseForm", enterpriseForm);
 		
-		types = dao.findByID(SubjectAttributeType.class, "subjectTypeFk", 3);
+		types = dao.findByIdAndOrder(SubjectAttributeType.class, "subjectTypeFk", 3);
 		employeeForm = new EmployeeForm();
 		employeeForm.setAttributes(personForm.getAttributes());
-		employeeForm.setEmployeeAttributes(sortAndFormAttributes(types));
+		employeeForm.setEmployeeAttributes(formAttributes(types));
 		req.setAttribute("employeeForm", employeeForm);
 		
-		types = dao.findByID(SubjectAttributeType.class, "subjectTypeFk", 4);
-		personForm.setCustomerAttributes(sortAndFormAttributes(types));
-		enterpriseForm.setCustomerAttributes(sortAndFormAttributes(types));
+		types = dao.findByIdAndOrder(SubjectAttributeType.class, "subjectTypeFk", 4);
+		personForm.setCustomerAttributes(formAttributes(types));
+		enterpriseForm.setCustomerAttributes(formAttributes(types));
 
 		List<EmployeeRoleType> employeeRoleTypeList = dao
 				.findAll(EmployeeRoleType.class);
@@ -103,13 +103,16 @@ public class SubjectController extends Controller {
 				
 				if (action.equals("add_person")) {
 					formAndValidateHumanForm(sessionManager, personForm);
+					formPersonForm(personForm);
 					req.setAttribute("personForm", personForm);
 					req.setAttribute("subjectTypeFk", "1");
 					req.setAttribute("addressForm", personForm.getAddressForm());
+					req.setAttribute("contacts", personForm.getContacts());
 					HashMap<String, String> errors = Validator.getErrors();		
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
 						dao.saveHuman(personForm);
+						dao.savePerson(personForm);
 						
 						view = "edit_subject_view";
 					} else {
@@ -124,6 +127,7 @@ public class SubjectController extends Controller {
 					req.setAttribute("employeeForm", employeeForm);
 					req.setAttribute("subjectTypeFk", "3");
 					req.setAttribute("addressForm", employeeForm.getAddressForm());
+					req.setAttribute("contacts", employeeForm.getContacts());
 					HashMap<String, String> errors = Validator.getErrors();	
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
@@ -142,6 +146,7 @@ public class SubjectController extends Controller {
 					req.setAttribute("enterpriseForm", enterpriseForm);
 					req.setAttribute("subjectTypeFk", "2");
 					req.setAttribute("addressForm", enterpriseForm.getAddressForm());
+					req.setAttribute("contacts", enterpriseForm.getContacts());
 					HashMap<String, String> errors = Validator.getErrors();	
 					if (errors.isEmpty()) {
 						req.setAttribute("status", "SUCCESS");
@@ -167,7 +172,7 @@ public class SubjectController extends Controller {
 		return view;
 	}
 	
-	private FormAttribute[] sortAndFormAttributes(List<SubjectAttributeType> types) {
+	private FormAttribute[] formAttributes(List<SubjectAttributeType> types) {
 		FormAttribute[] attributes = new FormAttribute[types.size()];
 		for (int i = 0; i < types.size(); i++) {
 			SubjectAttributeType type = types.get(i);
@@ -179,23 +184,6 @@ public class SubjectController extends Controller {
 			attribute.setSubjectTypeFk(type.getSubjectTypeFk());
 			attribute.setRequired(type.getRequired().equals("Y") ? true : false);
 			attributes[i] = attribute;
-		}
-		return sortAttributes(attributes);
-	}
-	
-	private FormAttribute[] sortAttributes(FormAttribute[] attributes) {
-		for (int i = 0; i < attributes.length; i++) {
-			int min = i;
-			for (int j = i + 1; j < attributes.length; j++) {
-				if (attributes[min].getOrderby() > attributes[j].getOrderby()) {
-					min = j;
-				}
-			}
-			if (i != min) {
-				FormAttribute spare = attributes[i];
-				attributes[i] = attributes[min];
-				attributes[min] = spare;
-			}
 		}
 		return attributes;
 	}
@@ -209,29 +197,48 @@ public class SubjectController extends Controller {
 		humanForm.setLastName(params.get("last_name")[0]);
 		humanForm.setIdentityCode(params.get("identity_code")[0]);
 		humanForm.setBirthDate(params.get("birthdate")[0]);
-		humanForm.setCustomer(params.get("customer") != null 
-				? params.get("customer")[0] : null);
-		
+		if (params.get("customer_id")[0] == null) {
+			humanForm.setCustomer(params.get("customer")[0] != null 
+					? params.get("customer")[0] : null);
+		} else {
+			humanForm.setCustomerId(params.get("customer_id")[0]);
+		}
 		HumanFormValidator humanFormValidator = new HumanFormValidator(humanForm);
 		humanFormValidator.validate();
 		
 		formAndValidateAddressForms(humanForm);
+		formContactForms(humanForm);
 		
 		formAndValidateFormAttributes(humanForm.getAttributes());
+		if (humanForm.getCustomerId() != null) {
+			formAndValidateFormAttributes(humanForm.getCustromerAttributes());
+		}
 		return humanForm;
 	}
 	
+	private PersonForm formPersonForm(PersonForm personForm) {
+		personForm.setEntPerRelId(params.get("ent_rel_id")[0]);
+		personForm.setEnterprise(params.get("enterprise")[0]);
+		personForm.setEntPerRelType(params.get("relation_type")[0]);
+		return personForm;
+	}
+	
 	private EmployeeForm formAndValidateEmployeeForm(EmployeeForm employeeForm) {
-//		employeeForm.getEmployeeId()
-		employeeForm.setSubjectId(params.get("employee_id")[0]);
-//		employeeForm.setEmployeeRoleType(params.get("employee_role_type")[0]);
-		// TODO!!!
+		employeeForm.setEmployeeId(params.get("employee_id")[0]);
 		employeeForm.setEnterprise(params.get("enterprise")[0]);
+		ArrayList<EmployeeRoleForm> roles = new ArrayList<EmployeeRoleForm>();
+		for (int i = 0; i < params.get("role_type_id").length; i++) {
+			EmployeeRoleForm role = new EmployeeRoleForm();
+			role.setRoleID(params.get("role_type_id")[i]);
+			roles.add(role);
+		}
+		employeeForm.setRoles(roles);
 		
 		EmployeeFormValidator employeeFormValidator =
 				new EmployeeFormValidator(employeeForm);
 		employeeFormValidator.validate();
 
+		formAndValidateFormAttributes(employeeForm.getEmployeeAttributes());
 		formAndValidateFormAttributes(employeeForm.getEmployeeAttributes());
 		
 		return employeeForm;
@@ -244,12 +251,13 @@ public class SubjectController extends Controller {
 		enterpriseForm.setUpdatedBy(sessionManager.getEmployeeId());
 		enterpriseForm.setName(params.get("name")[0]);
 		enterpriseForm.setFullName(params.get("full_name")[0]);
-		enterpriseForm.setCustomer(params.get("customer") != null 
-				? params.get("customer")[0] : null);
-		enterpriseForm.setCustomerId(params.get("customer_id") != null 
-				? params.get("customer_id")[0] : null);
+		if (params.get("customer_id")[0] == null) {
+			enterpriseForm.setCustomer(params.get("customer")[0] != null 
+					? params.get("customer")[0] : null);
+		}
 
 		formAndValidateAddressForms(enterpriseForm);
+		formContactForms(enterpriseForm);
 		
 		EnterpriseFormValidator enterpriseFormValidator =
 				new EnterpriseFormValidator(enterpriseForm);
@@ -267,16 +275,15 @@ public class SubjectController extends Controller {
 		
 		ArrayList<AddressForm> addresses = new ArrayList<AddressForm>();
 		for (int i = 1; i < params.get("country").length; i++) {
-			addressForm = formAddressForm(i);
-			addresses.add(addressForm);
+			AddressForm aForm = formAddressForm(i);
+			addresses.add(aForm);
 		}
 		addressForm.setAddresses(addresses);
 	}
 	
 	private AddressForm formAddressForm(int i) {
 		AddressForm addressForm = new AddressForm();
-		addressForm.setAddressId(params.get("addressId")[i] != null
-				? params.get("addressId")[i] : null);
+		addressForm.setAddressId(params.get("address_id")[i]);
 		addressForm.setAddressTypeFk(params.get("address_type_fk")[i]);
 		addressForm.setCountry(params.get("country")[i]);
 		addressForm.setCounty(params.get("county")[i]);
@@ -286,11 +293,26 @@ public class SubjectController extends Controller {
 		return addressForm;
 	}
 	
+	private void formContactForms(SubjectForm form) {
+		ArrayList<ContactForm> contacts = new ArrayList<ContactForm>();
+		for (int i = 0; i < params.get("contact").length; i++) {
+			ContactForm contact = new ContactForm();
+			contact.setContactId(params.get("contact_id")[i]);
+			contact.setContactType(params.get("contact_type")[i]);
+			contact.setContact(params.get("contact")[i]);
+			contact.setNote(params.get("note")[i]);
+			contacts.add(contact);
+		}
+		form.setContacts(contacts);
+	}
+	
 	private FormAttribute[] formAndValidateFormAttributes(
 			FormAttribute[] attributes) {
-		
+		int i = 0;
 		for (FormAttribute attribute : attributes) {
+			attribute.setFormAttributeId(params.get("attribute_id")[i]);
 			attribute.setValue(params.get(attribute.getName())[0]);
+			i++;
 		}
 		FormAttributesValidator attrFormValidator = 
 				new FormAttributesValidator(attributes);
@@ -439,9 +461,28 @@ public class SubjectController extends Controller {
 		return main;
 	}
 	
+	private ArrayList<ContactForm> formContactsEdit(long subjectId, long subjectTypeFk) {
+		List<Contact> contacts = dao.findBySubjectIdAndOrderContacts(
+				Contact.class, subjectId, subjectTypeFk);
+		ArrayList<ContactForm> contactForms = new ArrayList<ContactForm>();
+		if (contacts != null) {
+			for (Contact contact : contacts) {
+				ContactForm form = new ContactForm();
+				form.setContactId(String.valueOf(contact.getContact()));
+				form.setContact(contact.getValueText());
+				form.setContactType(String.valueOf(contact.getContactTypeFk()));
+				form.setNote(contact.getNote());
+				form.setOrderBy(String.valueOf(contact.getOrderby()));
+
+				contactForms.add(form);
+			}
+		}
+		return contactForms;
+	}
+	
 	private FormAttribute[] formAttributesEdit(FormAttribute[] attributes,
 			long subjectId, long subjectType) {
-		List<SubjectAttribute> attrs = dao.findBySubjectID(
+		List<SubjectAttribute> attrs = dao.findBySubjectIdAndOrder(
 				SubjectAttribute.class, subjectId, subjectType);
 		for (int i = 0; i < attrs.size(); i++) {
 			for (FormAttribute attribute : attributes) {
@@ -476,24 +517,5 @@ public class SubjectController extends Controller {
 			form.setCustomerAttributes(formAttributesEdit(form
 					.getCustromerAttributes(), customers.get(0).getCustomer(), 4));
 		}
-	}
-	
-	private ArrayList<ContactForm> formContactsEdit(long subjectId, long subjectTypeFk) {
-		List<Contact> contacts = dao.findBySubjectID(Contact.class,
-				subjectId, subjectTypeFk);
-		ArrayList<ContactForm> contactForms = new ArrayList<ContactForm>();
-		if (contacts != null) {
-			for (Contact contact : contacts) {
-				ContactForm form = new ContactForm();
-				form.setContactId(String.valueOf(contact.getContact()));
-				form.setContact(contact.getValueText());
-				form.setContactType(String.valueOf(contact.getContactTypeFk()));
-				form.setNote(contact.getNote());
-				form.setOrderBy(String.valueOf(contact.getOrderby()));
-
-				contactForms.add(form);
-			}
-		}
-		return contactForms;
 	}
 }

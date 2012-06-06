@@ -1,7 +1,6 @@
 package frontend.validator;
 
 import frontend.forms.AddressForm;
-import general.Utils;
 
 public class AddressFormValidator extends Validator {
 	
@@ -21,7 +20,7 @@ public class AddressFormValidator extends Validator {
 	}
 	
 	private void validateCountry() {
-		if(Utils.checkEmpty(form.getCountry())) {
+		if(form.getCountry().isEmpty()) {
 			errors.put("country", "Country name is empty!");
 		} else if (!form.getCountry().matches("[A-Za-z]+[-_]?[A-Za-z]+")) {
 			errors.put("country", "Country contains non-letters!");
@@ -31,7 +30,7 @@ public class AddressFormValidator extends Validator {
 	}
 	
 	private void validateCounty() {
-		if(Utils.checkEmpty(form.getCounty())) {
+		if(form.getCounty().isEmpty()) {
 			errors.put("county", "County name is empty!");
 		} else if (!form.getCounty().matches("[A-Za-z]+[-_]?[A-Za-z]+")) {
 			errors.put("county", "County contains non-letters!");
@@ -41,7 +40,7 @@ public class AddressFormValidator extends Validator {
 	}
 	
 	private void validateTownVillage() {
-		if(Utils.checkEmpty(form.getTownVillage())) {
+		if(form.getTownVillage().isEmpty()) {
 			errors.put("town_village", "Town/village name is empty!");
 		} else if (!form.getTownVillage().matches("[A-Za-z]+")) {
 			errors.put("town_village", "Town/village name contains non-letters!");
@@ -51,7 +50,7 @@ public class AddressFormValidator extends Validator {
 	}
 	
 	private void validateStreetAddress() {
-		if(Utils.checkEmpty(form.getStreetAddress())) {
+		if(form.getStreetAddress().isEmpty()) {
 			errors.put("street_address", "Street address is empty!");
 		} else if (form.getStreetAddress().length() > 100) {
 			errors.put("street_address", "Street address should not exceed"
@@ -60,7 +59,7 @@ public class AddressFormValidator extends Validator {
 	}
 	
 	private void validateZipcode() {
-		if(Utils.checkEmpty(form.getZipcode())) {
+		if(form.getZipcode().isEmpty()) {
 			errors.put("zipcode", "Zipcode is empty!");
 		} else if (!form.getZipcode().matches("\\d+")) {
 			errors.put("zipcode", "Zipcode contains non-numbers!");

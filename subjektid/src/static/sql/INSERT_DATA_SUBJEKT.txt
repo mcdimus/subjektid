@@ -173,7 +173,7 @@ INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple
 
 /* lisame employee  konfigureerimiseks ka yhe atribuudi tyybi */
 /* vaartus sisestatakse subject_attribute tabelis valjale [value_number]  */
-INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (2,'laste arv',2,'N',2,'N');
+INSERT INTO subject_attribute_type (subject_type_fk,type_name,data_type,multiple_attributes,orderby,required) VALUES (3,'laste arv',2,'N',2,'N');
 
 /* lisame customeri  konfigureerimiseks ka kaks atribuudi tyypi - huvialad ja allahindluse protsendi */
 /* vaartus sisestatakse subject_attribute tabelis valjale [value_number]  */

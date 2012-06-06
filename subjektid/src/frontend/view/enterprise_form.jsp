@@ -96,7 +96,8 @@
 		</tr>
 		<%
 			}
-			if (!enterpriseForm.getCustomerId().isEmpty()) {
+			if (enterpriseForm.getCustomerId() != null
+					&& !enterpriseForm.getCustomerId().isEmpty()) {
 		%>
 		<tr>
 			<td colspan="2" class="centered">
@@ -135,14 +136,20 @@
 <div class="float-left">
 	<table>
 		<tr>
+			<th colspan="2" class="main">Addresses</th>
+		</tr>
+		<tr>
 			<td colspan="2" class="centered">
-				<input type="hidden" name="address_type_fk" value="2" />
+				<input type="hidden" name="address_type_fk" value="3" />
 				---------- Legal address ---------
 			</td>
 		</tr>
 		
 		<jsp:include page="address_form.jsp" />
-		
+	</table>
+</div>
+<div class="float-left">
+	<table>
 		<%
 			if (!subjectId.isEmpty()) {
 		%>

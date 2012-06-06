@@ -84,17 +84,18 @@ public class SubjectsORMTest {
 		aform.setZipcode("");
 		form.setAddressForm(aform);
 		ContactForm cform = new ContactForm();
-		cform.setContact("");
+		cform.setContact("@");
 		cform.setContactType("1");
+		cform.setNote("");
 		form.setContactForm(cform);
-		ArrayList<SearchAttribute> attrs =  new ArrayList<SearchAttribute>();
-		SearchAttribute attr = new SearchAttribute();
-		attr.setType("2");
-		attr.setAttrID("2");
-		attr.setFirstValue("1996");
-		attr.setSecondValue("2000");
-		attrs.add(attr);
-		form.setAttributes(attrs);
+//		ArrayList<SearchAttribute> attrs =  new ArrayList<SearchAttribute>();
+//		SearchAttribute attr = new SearchAttribute();
+//		attr.setType("1");
+//		attr.setAttrID("5");
+//		attr.setFirstValue("d");
+//		attr.setSecondValue("");
+//		attrs.add(attr);
+//		form.setAttributes(attrs);
 		String answer = orm.formSearchQuery(form);
 		System.out.println(answer);
 	}
@@ -113,9 +114,18 @@ public class SubjectsORMTest {
 		aform.setZipcode("");
 		form.setAddressForm(aform);
 		ContactForm cform = new ContactForm();
-		cform.setContact("el");
+		cform.setContact("@");
 		cform.setContactType("1");
+		cform.setNote("");
 		form.setContactForm(cform);
+//		ArrayList<SearchAttribute> attrs =  new ArrayList<SearchAttribute>();
+//		SearchAttribute attr = new SearchAttribute();
+//		attr.setType("1");
+//		attr.setAttrID("5");
+//		attr.setFirstValue("d");
+//		attr.setSecondValue("");
+//		attrs.add(attr);
+//		form.setAttributes(attrs);
 		List<SearchResult> ress = orm.search(form);
 		for (SearchResult res : ress) {
 			System.out.println(res.getSubjectName());

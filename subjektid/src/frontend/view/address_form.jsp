@@ -20,7 +20,7 @@
 		}
 	}
 %>
-		<input type="hidden" name="addressId" value="<%=addressId%>" />
+		<input type="hidden" name="address_id" value="<%=addressId%>" />
 		<tr>
 			<th>Country</th>
 			<td><input type="text" name="country" 
@@ -33,8 +33,7 @@
 		
 		<tr>
 			<th>County</th>
-			<td><input type="text" name="county" 
-				value="<%=county%>"/></td>
+			<td><input type="text" name="county" value="<%=county%>"/></td>
 		</tr>
 		<tr>
 			<td class="error" colspan="2"><%=errors.containsKey("county") ? 
@@ -83,7 +82,7 @@
 		<tr>
 			<td colspan="2" class="centered">
 				<input type="hidden" name="address_type_fk" value="2" />
-				<input type="hidden" name="addressId"
+				<input type="hidden" name="address_id"
 					value="<%=form.getAddressId() != null ? form.getAddressId() : ""%>" />
 				---------- Additional address #<%=i + 1%> ---------
 			</td>

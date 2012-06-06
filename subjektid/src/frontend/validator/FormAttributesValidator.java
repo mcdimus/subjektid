@@ -19,7 +19,7 @@ public class FormAttributesValidator extends Validator {
 	public void validate() {
 		for (int i = 0; i < attributes.length; i++) {
 			if (attributes[i].getRequired()
-					|| !Utils.checkEmpty(attributes[i].getValue())) {
+					|| !attributes[i].getValue().isEmpty()) {
 				if (attributes[i].getType() == 1) {
 					validateString(attributes[i]);
 				} else if (attributes[i].getType() == 2) {

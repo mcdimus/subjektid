@@ -22,7 +22,7 @@ public class HumanFormValidator extends Validator {
 	}
 
 	private void validateFirstName() {
-		if (Utils.checkEmpty(form.getFirstName())) {
+		if (form.getFirstName().isEmpty()) {
 			errors.put("first_name", "First name is empty");
 		} else if (!form.getFirstName().matches("[A-Za-z]+[-_]?[A-Za-z]+")) {
 			errors.put("first_name", "First name contains non-letters!");
@@ -32,7 +32,7 @@ public class HumanFormValidator extends Validator {
 	}
 	
 	private void validateLastName() {
-		if (Utils.checkEmpty(form.getLastName())) {
+		if (form.getLastName().isEmpty()) {
 			errors.put("last_name", "Last name is empty");
 		} else if (!form.getLastName().matches("[A-Za-z]+[-_]?[A-Za-z]+")) {
 			errors.put("last_name", "Last name contains non-letters!");
@@ -42,7 +42,7 @@ public class HumanFormValidator extends Validator {
 	}
 	
 	private void validateIdentityCode() {
-		if (Utils.checkEmpty(form.getIdentityCode())) {
+		if (form.getIdentityCode().isEmpty()) {
 			errors.put("identity_code", "Identity code is empty!");
 		} else if (!form.getIdentityCode().matches("\\w+")) {
 			errors.put("identity_code", "Identity code"
@@ -53,7 +53,7 @@ public class HumanFormValidator extends Validator {
 	}
 	
 	private void validateBirthDate() {
-		if (Utils.checkEmpty(form.getIdentityCode())) {
+		if (form.getIdentityCode().isEmpty()) {
 			errors.put("birthdate", "Birthdate is empty!");
 		} else {
 			Date birthDate = Utils.parseDate(form.getBirthDate());

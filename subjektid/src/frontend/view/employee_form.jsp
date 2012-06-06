@@ -97,14 +97,14 @@
 						for (int i = 0; i < enterpriseList.size(); i++) {
 							selected = "";
 							enterprise = (Enterprise) enterpriseList.get(i);
-							if (enterprise.getEnterprise() == Long.parseLong(
-									employeeForm.getEnterprise())) {
-								entName = enterprise.getName(); // what for?
-								selected = "selected=\"selected\"";
-							}
 					%>
-					<option <%=selected %> value="<%=enterprise.getEnterprise()%>">
-						<%=enterprise.getName()%></option>
+					<option value="<%=enterprise.getEnterprise()%>">
+						<%=enterprise.getName()%>
+						<%=employeeForm.getEnterprise() != null &&
+							employeeForm.getEnterprise().equals(
+							String.valueOf(enterprise.getEnterprise())) ? 
+							"selected='selected'" : "" %>
+						</option>
 					<%
 						}
 					%>
@@ -118,21 +118,6 @@
 		<tr>
 			<th>Role</th>
 			<td>
-				<script type="text/javascript">
-				$(document).ready(function() {
-					
-					$('select[name="employee_role_type"]').on('change', function() {
-						$this = $(this);
-						var $newInput = $('<input type="hidden">').attr({
-							name : "role_type",
-							value : $this.val()
-							});
-						
-						$this.after("<br />", $this.find("option:selected").text(), $newInput);
-					});
-				});
-				
-				</script>
 				<select name="employee_role_type">
 						<option value="">Select one...</option>
 						<%
@@ -150,9 +135,15 @@
 						%>
 				</select>
 				<%
-				ArrayList<EmployeeRoleForm> emplyeeRoles = employeeForm.getRoles();
+				ArrayList<EmployeeRoleForm> emplyeeRoles =
+						new ArrayList<EmployeeRoleForm>();
+				if (employeeForm.getRoles() != null) {
+					emplyeeRoles = employeeForm.getRoles();
+				}
 				for (EmployeeRoleForm role : emplyeeRoles) {
-					out.println("<br/>" + role.getRoleName() + "<input type=\"hidden\" name=\"role_type\" value=\""+ role.getRoleID()+"\" />");
+					out.println("<br/>" + role.getRoleName()
+							+ "<input type=\"hidden\" name=\"role_type_id\" value=\""
+							+ role.getRoleID() + "\" />");
 				}
 				%>
 			</td>
