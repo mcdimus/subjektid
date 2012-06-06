@@ -45,11 +45,27 @@ public class AjaxController extends HttpServlet {
 			MyLogger.log("AjaxController.doPost()", e.getMessage());
 		}
 		if (sessionManager.loggedIn()) {
-			if (req.getParameter("attribute").equals("subjectTypeFk")) {
-				String json = getSubjectAttributes(Long.parseLong(
-						req.getParameter("value")));
-				out.write(json);
-				out.flush();
+			String mode = req.getParameter("mode");
+			
+			MyLogger.logMessage("Ajax mode: " + mode);
+			
+			if (mode.equals("get")) {
+				if (req.getParameter("attribute").equals("subjectTypeFk")) {
+					String json = getSubjectAttributes(Long.parseLong(
+							req.getParameter("value")));
+					out.write(json);
+					out.flush();
+				}
+			} else if (mode.equals("delete")) {
+				String what = req.getParameter("what");
+				
+				MyLogger.logMessage("  WHAT: " + what);
+				
+				if (what.equals("subject")) {
+					String json = "{\"answer\" : \"yey\"}";
+					out.write(json);
+					out.flush();
+				}
 			}
 		}
 		
