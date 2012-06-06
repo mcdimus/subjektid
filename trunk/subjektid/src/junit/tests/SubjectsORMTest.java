@@ -89,7 +89,12 @@ public class SubjectsORMTest {
 		form.setContactForm(cform);
 		ArrayList<SearchAttribute> attrs =  new ArrayList<SearchAttribute>();
 		SearchAttribute attr = new SearchAttribute();
-//		attr.set;
+		attr.setType("2");
+		attr.setAttrID("2");
+		attr.setFirstValue("1996");
+		attr.setSecondValue("2000");
+		attrs.add(attr);
+		form.setAttributes(attrs);
 		String answer = orm.formSearchQuery(form);
 		System.out.println(answer);
 	}

@@ -426,6 +426,7 @@ public class SubjectsORM {
 		addEnterpriseCriteria(form);
 		addAddressCriterias(form);
 		addContactCriterias(form);
+		addSubjectCriterias(form);
 		String queryPartOne = form.getQueryPart(0), queryPartTwo = form
 				.getQueryPart(1), queryPartThree = form.getQueryPart(2), queryPartFour = form
 				.getQueryPart(3);
@@ -580,7 +581,7 @@ public class SubjectsORM {
 	}
 
 	private void addSubjectCriterias(SearchForm form) {
-		String queryPartOne = " SubjectAttribute S", queryPartTwo = "";
+		String queryPartOne = " SubjectAttribute S,", queryPartTwo = "";
 		ArrayList<SearchAttribute> attributes = form.getAttributes();
 		for (SearchAttribute attribute : attributes) {
 			if (!attribute.getFirstValue().isEmpty()) {
@@ -605,6 +606,8 @@ public class SubjectsORM {
 				}
 			}
 		}
+		form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
+		form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
 	}
 
 	private ArrayList<SearchResult> castSearchResults(List<Object[]> data) {
