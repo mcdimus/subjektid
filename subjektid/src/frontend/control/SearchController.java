@@ -20,6 +20,7 @@ import log.MyLogger;
 
 import backend.DA.SubjectsORM;
 import frontend.forms.AddressForm;
+import frontend.forms.ContactForm;
 import frontend.forms.SearchAttribute;
 import frontend.forms.SearchForm;
 import frontend.forms.SearchResult;
@@ -81,12 +82,13 @@ public class SearchController extends Controller {
 
 	private SearchForm formSearchForm() {
 		SearchForm searchForm = new SearchForm();
-		searchForm
-				.setSubjectType(Long.parseLong(params.get("subject_type")[0]));
+		searchForm.setSubjectType(Long.parseLong(params.get("subject_type")
+				[0]));
 		searchForm.setFirstName(params.get("fname")[0]);
 		searchForm.setLastName(params.get("lname")[0]);
 		searchForm.setAddressForm(formAddressForm());
-		searchForm.setAttributes(new ArrayList<SearchAttribute>());
+		searchForm.setContactForm(formContactForm());
+		searchForm.setAttributes(formAttributes());
 		return searchForm;
 	}
 
@@ -99,18 +101,26 @@ public class SearchController extends Controller {
 		addressForm.setZipcode(params.get("zipcode")[0]);
 		return addressForm;
 	}
+	
+	private ContactForm formContactForm() {
+		ContactForm form = new ContactForm();
+		form.setContact(params.get("contact")[0]);
+		form.setContactType(params.get("contact_type")[0]);
+		return form;
+	}
 
 	private ArrayList<SearchAttribute> formAttributes() {
 		ArrayList<SearchAttribute> attributes = new ArrayList<SearchAttribute>();
-		for (String key : params.keySet()) {
+		int i = 0;
+		while ((params.get("attribute_id")[i]) != null) {
 			SearchAttribute attribute = new SearchAttribute();
-			attribute.setName(key);
-			attribute.setType(params.get(key)[0]);
-			attribute.setFirstValue(params.get(key)[1]);
-			if (params.get(key).length > 2) {
-				attribute.setSecondValue(params.get(key)[2]);
-			}
+			attribute.setAttrID((params.get("attribute_id")[i]));
+			attribute.setName(params.get("attribute_name")[i]);
+			attribute.setFirstValue(params.get("attribute_fval")[i]);
+			attribute.setSecondValue(params.get("attribute_sval")[i]);
+			attribute.setType(params.get("attribute_type")[i]);
 			attributes.add(attribute);
+			i++;
 		}
 		return attributes;
 	}

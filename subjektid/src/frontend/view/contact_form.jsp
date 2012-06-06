@@ -5,7 +5,8 @@
 <jsp:useBean id="contacts" scope="request" class="java.util.ArrayList" />
 			
 		<tr>
-			<th colspan="2" class="main">Contacts</th>
+			<td colspan="2" class="centered">
+				------------ Contacts -----------</td>
 		</tr>
 		<%
 			for (int i = 0; i < contacts.size(); i++) {
@@ -28,7 +29,7 @@
 		</tr>
 		<tr>
 			<th>Contact</th>
-			<td><input type="text" name="county" 
+			<td><input type="text" name="contact" 
 				value="<%=contact.getContact() != null ? contact.getContact() : ""%>"/></td>
 		</tr>
 		<%

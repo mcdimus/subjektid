@@ -1,6 +1,7 @@
 package backend.DA;
 
 import frontend.forms.AddressForm;
+import frontend.forms.ContactForm;
 import frontend.forms.EmployeeForm;
 import frontend.forms.EnterpriseForm;
 import frontend.forms.FormAttribute;
@@ -424,15 +425,16 @@ public class SubjectsORM {
 		addPersonCriterias(form);
 		addEnterpriseCriteria(form);
 		addAddressCriterias(form);
+		addContactCriterias(form);
 		String queryPartOne = form.getQueryPart(0), queryPartTwo = form
 				.getQueryPart(1), queryPartThree = form.getQueryPart(2), queryPartFour = form
 				.getQueryPart(3);
 		if (!Utils.checkEmpty(queryPartTwo)) {
 			if (!Utils.checkEmpty(queryPartFour)) {
 				return String
-						.format("select P.person as subject_id,"
+						.format("select distinct P.person as subject_id,"
 								+ "'person' as subject_type, P.lastName as subject_name"
-								+ " from%s where%s\tselect E.enterprise as subject_id,"
+								+ " from%s where%s\tselect distinct E.enterprise as subject_id,"
 								+ " 'enterprise' as subject_type, E.name as subject_name"
 								+ " from%s where%s", queryPartOne.substring(0,
 								queryPartOne.length() - 1), queryPartTwo
@@ -456,10 +458,10 @@ public class SubjectsORM {
 		String queryPart = "";
 		if (!(form.getSubjectType() == 4)) {
 			if (!(form.getSubjectType() == 2)) {
-				queryPart = "select P.person as subject_id, 'person' as subject_type,"
+				queryPart = "select distinct P.person as subject_id, 'person' as subject_type,"
 						+ "P.lastName as subject_name";
 			} else {
-				queryPart = "select E.enterprise as subject_id,"
+				queryPart = "select distinct E.enterprise as subject_id,"
 						+ "'enterprise' as subject_type,"
 						+ "E.name as subject_name";
 			}
@@ -524,7 +526,7 @@ public class SubjectsORM {
 					.toLowerCase() + "%' AND";
 		}
 		if (!Utils.checkEmpty(aform.getZipcode())) {
-			queryPartTwo += " (A.zipcode) LIKE '%" + aform.getZipcode()
+			queryPartTwo += " lower(A.zipcode) LIKE '%" + aform.getZipcode()
 					.toLowerCase() + "%' AND";
 		}
 		queryPartFour = queryPartTwo;
@@ -548,12 +550,60 @@ public class SubjectsORM {
 			}
 		}
 	}
+	
+	private void addContactCriterias(SearchForm form) {
+		ContactForm cform = form.getContactForm();
+		if (!cform.getContact().isEmpty()) {
+			String queryPartOne = " Contact C,", queryPartTwo =
+					" lower(C.valueText) LIKE '%" + cform.getContact()
+					.toLowerCase() + "%' AND C.contactTypeFk=" 
+					+ Long.parseLong(cform.getContactType()) + " AND";
+			String queryPartFour = queryPartTwo;
+			if (!(form.getSubjectType() == 2)) {
+				queryPartTwo += " P.person = C.subjectFk AND C.subjectTypeFk = 1 AND";
+				if (!(form.getSubjectType() == 1)
+						&& !(form.getSubjectType() == 3)) {
+					queryPartFour += " E.enterprise = C.subjectFk"
+							+ " AND C.subjectTypeFk = 2 AND";
+				}
+			}
+			if (form.getSubjectType() == 0 || form.getSubjectType() == 4) {
+				form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
+				form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
+				form.setQueryPart(form.getQueryPart(2) + queryPartOne, 2);
+				form.setQueryPart(form.getQueryPart(3) + queryPartFour, 3);
+			} else {
+				form.setQueryPart(form.getQueryPart(0) + queryPartOne, 0);
+				form.setQueryPart(form.getQueryPart(1) + queryPartTwo, 1);
+			}
+		}
+	}
 
 	private void addSubjectCriterias(SearchForm form) {
-		String queryPartOne = " SubjectAttribute ", queryPartTwo = "";
+		String queryPartOne = " SubjectAttribute S", queryPartTwo = "";
 		ArrayList<SearchAttribute> attributes = form.getAttributes();
 		for (SearchAttribute attribute : attributes) {
-			// TODO: in progress
+			if (!attribute.getFirstValue().isEmpty()) {
+				queryPartTwo += " S.subjectAttributeTypeFk=" + Long.parseLong(
+						attribute.getAttrID()) + " AND";
+				int type = Integer.parseInt(attribute.getType());
+				switch(type) {
+				case 1:
+					queryPartTwo += " lower(S.valueText) LIKE '%" + attribute
+							.getFirstValue().toLowerCase() + "%' AND";
+					break;
+				case 2:
+					queryPartTwo += " lower(S.valueNumber) BETWEEN " + attribute
+							.getFirstValue() + " AND" + attribute
+							.getSecondValue() + " AND";
+					break;
+				case 3:
+					queryPartTwo += " lower(S.valueDate) BETWEEN " + attribute
+							.getFirstValue() + " AND" + attribute
+							.getSecondValue() + " AND";
+					break;
+				}
+			}
 		}
 	}
 

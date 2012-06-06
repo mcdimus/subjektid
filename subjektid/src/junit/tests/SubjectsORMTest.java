@@ -2,20 +2,20 @@ package junit.tests;
 
 import static org.junit.Assert.*;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
 import frontend.forms.AddressForm;
+import frontend.forms.ContactForm;
+import frontend.forms.SearchAttribute;
 import frontend.forms.SearchForm;
 import frontend.forms.SearchResult;
 
 import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.AddressType;
-import backend.model.EnterprisePersonRelation;
-import backend.model.Person;
 import backend.model.SubjectAttributeType;
 
 public class SubjectsORMTest {
@@ -74,7 +74,7 @@ public class SubjectsORMTest {
 	public void testFormSearchQuery() {
 		SearchForm form = new SearchForm();
 		form.setSubjectType(0);
-		form.setFirstName("juhan");
+		form.setFirstName("");
 		form.setLastName("");
 		AddressForm aform = new AddressForm();
 		aform.setCountry("");
@@ -83,6 +83,13 @@ public class SubjectsORMTest {
 		aform.setTownVillage("");
 		aform.setZipcode("");
 		form.setAddressForm(aform);
+		ContactForm cform = new ContactForm();
+		cform.setContact("");
+		cform.setContactType("1");
+		form.setContactForm(cform);
+		ArrayList<SearchAttribute> attrs =  new ArrayList<SearchAttribute>();
+		SearchAttribute attr = new SearchAttribute();
+//		attr.set;
 		String answer = orm.formSearchQuery(form);
 		System.out.println(answer);
 	}
@@ -91,7 +98,7 @@ public class SubjectsORMTest {
 	public void testSearch() {
 		SearchForm form = new SearchForm();
 		form.setSubjectType(0);
-		form.setFirstName("juhan");
+		form.setFirstName("");
 		form.setLastName("");
 		AddressForm aform = new AddressForm();
 		aform.setCountry("");
@@ -100,29 +107,14 @@ public class SubjectsORMTest {
 		aform.setTownVillage("");
 		aform.setZipcode("");
 		form.setAddressForm(aform);
+		ContactForm cform = new ContactForm();
+		cform.setContact("el");
+		cform.setContactType("1");
+		form.setContactForm(cform);
 		List<SearchResult> ress = orm.search(form);
 		for (SearchResult res : ress) {
 			System.out.println(res.getSubjectName());
 		}
-	}
-	
-	@Test
-	public void test() {
-		List<EnterprisePersonRelation> rels = orm.findByID(EnterprisePersonRelation
-			.class, "personFk", 6);
-		if (rels.size() != 0) {
-			System.out.println("Her!");
-			System.out.println(rels.get(0).getEnterpriseFk().toString());
-			System.out.println(String.valueOf(rels.get(0).getEnterprisePersonRelation()));
-			System.out.println(rels.get(0).getEntPerRelationTypeFk().toString());
-		}
-	}
-	
-	@Test
-	public void testTwo() {
-		Person person = orm.findByID(Person.class, 1);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-		System.out.println(sdf.format(person.getBirthDate()));
 	}
 
 }
