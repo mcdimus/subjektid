@@ -80,6 +80,28 @@ public class SubjectsDAO {
 		return answer;
 	}
 	
+	public String deleteEnterprise(String id) {
+		String answer = null;
+		Connection db;
+		ResultSet results;
+		try {
+			db = DriverManager.getConnection(url, user, password);
+			Statement st = db.createStatement();
+			results = st.executeQuery("SELECT func_delete_enterprise AS answer FROM func_delete_enterprise("+id+");");
+			
+			if (results.next()) {
+				
+				answer = results.getString("answer");
+			}
+			db.close();
+		} catch(Exception e) {
+			MyLogger.log("SubjectsDAO.deleteEnterprise(): ", e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return answer;
+	}
+	
 //	public void findAddresses() {
 //		List<Address> addresses = null;
 //		Connection db;
