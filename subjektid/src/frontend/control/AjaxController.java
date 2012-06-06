@@ -73,7 +73,10 @@ public class AjaxController extends HttpServlet {
 						answer = dao
 								.deletePerson(req.getParameter("subjectId"));
 					} else {
-						// delete enterprise
+						
+						MyLogger.logMessage("Deleting enterprise with id: " + req.getParameter("subjectId"));
+						
+						answer = dao.deleteEnterprise(req.getParameter("subjectId"));
 					}
 					
 					MyLogger.logMessage("Answer from dao: " + answer);

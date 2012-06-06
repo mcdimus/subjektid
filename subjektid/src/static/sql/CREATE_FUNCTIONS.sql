@@ -28,3 +28,25 @@ BEGIN
   RETURN answer;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION func_delete_enterprise(enterprise_id integer)
+  RETURNS text
+AS $$
+DECLARE
+  answer text;
+  subject_type integer default 2;
+  customer_id integer default 0;
+BEGIN
+    SELECT INTO customer_id customer.customer FROM customer WHERE customer.subject_type_fk=subject_type AND customer.subject_fk=enterprise_id LIMIT 1;
+
+    DELETE FROM address WHERE address.subject_type_fk=subject_type AND address.subject_fk=enterprise_id;
+    DELETE FROM contact WHERE contact.subject_type_fk=subject_type AND contact.subject_fk=enterprise_id;
+    DELETE FROM customer WHERE customer.subject_type_fk=subject_type AND customer.subject_fk=enterprise_id;
+    DELETE FROM enterprise WHERE enterprise.enterprise=enterprise_id;
+    DELETE FROM enterprise_person_relation WHERE enterprise_person_relation.enterprise_fk=enterprise_id;
+    DELETE FROM subject_attribute WHERE subject_attribute.subject_type_fk IN (2) AND (subject_attribute.subject_fk=enterprise_id OR subject_attribute.subject_fk=customer_id);
+    
+    answer := 'OK';
+  RETURN answer;
+END;
+$$ LANGUAGE plpgsql;
