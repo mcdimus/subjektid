@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import backend.DA.SubjectsDAO;
 import backend.DA.SubjectsORM;
+import backend.model.Address;
 import backend.model.SubjectAttributeType;
 
 import log.MyLogger;
@@ -47,6 +48,7 @@ public class AjaxController extends HttpServlet {
 		}
 		if (sessionManager.loggedIn()) {
 			String mode = req.getParameter("mode");
+			String what = req.getParameter("what");
 
 			MyLogger.logMessage("Ajax mode: " + mode);
 
@@ -58,7 +60,6 @@ public class AjaxController extends HttpServlet {
 					out.flush();
 				}
 			} else if (mode.equals("delete")) {
-				String what = req.getParameter("what");
 
 				MyLogger.logMessage("  WHAT: " + what);
 
@@ -123,6 +124,19 @@ public class AjaxController extends HttpServlet {
 					String json = "{\"answer\" : \"" + answer + "\"}";
 					out.write(json);
 					out.flush();
+				}
+			} else if (mode.equals("update")) {
+				if (what.equals("address")) {
+					SubjectsORM orm = new SubjectsORM();
+					Address oldAddress = orm.findByID(Address.class,
+							Long.parseLong(req.getParameter("old_id"))),
+							newAddress = orm.findByID(Address.class,
+							Long.parseLong(req.getParameter("new_id")));
+					long addressTypeFk = oldAddress.getAddressTypeFk();
+					oldAddress.setAddressTypeFk((long) 2);
+					newAddress.setAddressTypeFk(addressTypeFk);
+					orm.saveOrUpdate(oldAddress);
+					orm.saveOrUpdate(newAddress);
 				}
 			}
 		}

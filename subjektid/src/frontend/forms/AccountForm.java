@@ -1,5 +1,7 @@
 package frontend.forms;
 
+import java.text.SimpleDateFormat;
+
 import backend.model.UserAccount;
 
 public class AccountForm {
@@ -21,17 +23,21 @@ public class AccountForm {
 	}
 
 	public AccountForm(UserAccount account) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		this.accountId = String.valueOf(account.getUserAccount());
 		this.subjectTypeFk = String.valueOf(account.getSubjectTypeFk());
 		this.subjectFk = String.valueOf(account.getSubjectFk());
 		this.username = account.getUsername();
 		this.password = account.getPassw();
 		this.status = String.valueOf(account.getStatus());
-		this.validFrom = String.valueOf(account.getValidFrom());
-		this.validTo = String.valueOf(account.getValidTo());
+		this.validFrom = account.getValidFrom() != null ?
+				sdf.format(account.getValidFrom()) : null;
+		this.validTo = account.getValidFrom() != null ?
+				sdf.format(account.getValidTo()) : null;
 		this.createdBy = String.valueOf(account.getCreatedBy());
 		this.created = String.valueOf(account.getCreated());
-		this.passwordNeverExpires = String.valueOf(account.getPasswordNeverExpires());
+		this.passwordNeverExpires = account.getValidFrom() != null ?
+				account.getPasswordNeverExpires() : null;
 	}
 
 	/**

@@ -128,8 +128,7 @@
 								employeeRoleType = (EmployeeRoleType) 
 										employeeRoleTypeList.get(i);
 						%>
-						<option value="<%=employeeRoleType.getEmployeeRoleType()%>">
-							<%=employeeRoleType.getTypeName()%></option>
+						<option value="<%=employeeRoleType.getEmployeeRoleType()%>"><%=employeeRoleType.getTypeName()%></option>
 						<%
 							}
 						%>

@@ -2,8 +2,6 @@ package frontend.control;
 
 import general.Utils;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,9 +29,6 @@ public class AccountController extends Controller {
 				this.getAllAccounts(req);
 				view = "accounts_view";
 			} else if (action.equals("delete")) {
-
-				SubjectsORM orm = new SubjectsORM();
-
 				this.getAllAccounts(req);
 				view = "accounts_view";
 			} else if (action.equals("edit")) {
@@ -51,7 +46,7 @@ public class AccountController extends Controller {
 					account.setUsername(params.get("username")[0]);
 					account.setPassw(Utils.generateMD5(params.get("username")[0]
 							+ params.get("password")[0]));
-					account.setStatus(Long.valueOf(params.get("status")[0]));
+					account.setStatus(params.get("status")[0]);
 					account.setValidFrom(df.parse(params.get("validFrom")[0]));
 					account.setValidTo(df.parse(params.get("validTo")[0]));
 					account.setCreatedBy(Long.valueOf(params.get("createdBy")[0]));

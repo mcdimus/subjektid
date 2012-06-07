@@ -1,5 +1,6 @@
 package backend.DA;
 
+import frontend.forms.AccountForm;
 import frontend.forms.AddressForm;
 import frontend.forms.ContactForm;
 import frontend.forms.EmployeeForm;
@@ -184,11 +185,6 @@ public class SubjectsORM {
 		session.close();
 	}
 
-	public boolean saveUserAcc(UserAccount user) {
-		user.setPassw(Utils.generateMD5(user.getUsername() + user.getPassw()));
-		return saveOrUpdate(user);
-	}
-
 	public String saveHuman(HumanForm form) {
 		Person person = new Person();
 		if (!form.getSubjectId().isEmpty()) {
@@ -263,6 +259,7 @@ public class SubjectsORM {
 						.getEmployeeRole()));
 			}
 		}
+		saveUserAccount(form.getAccForm(), employee.getEmployee());
 
 		saveAttributes(employee.getEmployee(), form.getEmployeeAttributes());
 
@@ -304,6 +301,24 @@ public class SubjectsORM {
 		saveAttributes(customer.getCustomer(), form.getCustromerAttributes());
 
 		form.setCustomerId(String.valueOf(customer.getCustomer()));
+	}
+	
+	private void saveUserAccount(AccountForm form, long employeeID) {
+		UserAccount account = new UserAccount();
+		if (!form.getAccountId().isEmpty()) {
+			account.setUserAccount(Long.parseLong(form.getAccountId()));
+		}
+		account.setSubjectFk(employeeID);
+		account.setSubjectTypeFk((long) 3);
+		account.setUsername(form.getUsername());
+		account.setPassw(Utils.generateMD5(form.getUsername() +
+				form.getPassword()));
+		account.setValidFrom(Utils.parseDate(form.getValidFrom()));
+		account.setValidTo(Utils.parseDate(form.getValidTo()));
+		account.setPasswordNeverExpires(form.getPasswordNeverExpires());
+		account.setStatus(form.getStatus());
+		account.setCreated(Utils.parseDate(form.getCreated()));
+		account.setCreatedBy(Long.parseLong(form.getCreatedBy()));
 	}
 
 	private void saveAddress(AddressForm form, long subjectFk,
@@ -373,13 +388,6 @@ public class SubjectsORM {
 						.getSubjectAttribute()));
 			}
 		}
-	}
-	
-//	public void deletePerson
-//	public void deleteEnterprise
-	
-	public void deleteUserAccount(String id) {
-		deleteByID("UserAccount", "userAccount", Long.parseLong(id));
 	}
 
 	@SuppressWarnings("unchecked")
