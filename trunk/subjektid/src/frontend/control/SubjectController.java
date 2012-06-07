@@ -244,7 +244,9 @@ public class SubjectController extends Controller {
 		formAndValidateFormAttributes(employeeForm.getEmployeeAttributes());
 		formAndValidateFormAttributes(employeeForm.getEmployeeAttributes());
 		
-		employeeForm.setAccForm(formAndValidateAccountForm());
+		if (params.containsKey("account_id")) {
+			employeeForm.setAccForm(formAndValidateAccountForm());
+		}
 		
 		return employeeForm;
 	}
@@ -384,6 +386,7 @@ public class SubjectController extends Controller {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		form.setBirthDate(sdf.format(person.getBirthDate()));
 		form.setCreatedBy(String.valueOf(person.getCreatedBy()));
+		form.setCreated(person.getCreated());
 		
 		form.setAddressForm(formAddressEdit(person.getPerson(), 1));
 		
@@ -401,6 +404,7 @@ public class SubjectController extends Controller {
 		form.setName(enterprise.getName());
 		form.setFullName(enterprise.getFullName());
 		form.setCreatedBy(String.valueOf(enterprise.getCreatedBy()));
+		form.setCreated(enterprise.getCreated());
 		
 		form.setAddressForm(formAddressEdit(enterprise.getEnterprise(), 2));
 		

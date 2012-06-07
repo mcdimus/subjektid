@@ -259,7 +259,9 @@ public class SubjectsORM {
 						.getEmployeeRole()));
 			}
 		}
-		saveUserAccount(form.getAccForm(), employee.getEmployee());
+		if (form.getAccForm() != null) {
+			saveUserAccount(form.getAccForm(), employee.getEmployee());
+		}
 
 		saveAttributes(employee.getEmployee(), form.getEmployeeAttributes());
 
