@@ -2,6 +2,7 @@ package frontend.control;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -192,8 +193,13 @@ public class SubjectController extends Controller {
 	private HumanForm formAndValidateHumanForm(SessionManager sessionManager,
 			HumanForm humanForm) {
 		humanForm.setSubjectId(params.get("subject_id")[0]);
-		humanForm.setCreatedBy(sessionManager.getEmployeeId());
-		humanForm.setUpdatedBy(sessionManager.getEmployeeId());
+		if (humanForm.getCreatedBy() != null) {
+			humanForm.setUpdatedBy(sessionManager.getEmployeeId());
+			humanForm.setUpdated(new Date());
+		} else {
+			humanForm.setCreatedBy(sessionManager.getEmployeeId());
+			humanForm.setCreated(new Date());
+		}
 		humanForm.setFirstName(params.get("first_name")[0]);
 		humanForm.setLastName(params.get("last_name")[0]);
 		humanForm.setIdentityCode(params.get("identity_code")[0]);
@@ -271,8 +277,13 @@ public class SubjectController extends Controller {
 	private EnterpriseForm formAndValidateEnterpriseForm(SessionManager sessionManager,
 			EnterpriseForm enterpriseForm) {
 		enterpriseForm.setSubjectId(params.get("subject_id")[0]);
-		enterpriseForm.setCreatedBy(sessionManager.getEmployeeId());
-		enterpriseForm.setUpdatedBy(sessionManager.getEmployeeId());
+		if (enterpriseForm.getCreatedBy() != null) {
+			enterpriseForm.setUpdatedBy(sessionManager.getEmployeeId());
+			enterpriseForm.setUpdated(new Date());
+		} else {
+			enterpriseForm.setCreatedBy(sessionManager.getEmployeeId());
+			enterpriseForm.setCreated(new Date());
+		}
 		enterpriseForm.setName(params.get("name")[0]);
 		enterpriseForm.setFullName(params.get("full_name")[0]);
 		if (params.containsKey("customer_id")) {
