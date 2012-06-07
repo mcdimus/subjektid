@@ -98,12 +98,12 @@
 							selected = "";
 							enterprise = (Enterprise) enterpriseList.get(i);
 					%>
-					<option value="<%=enterprise.getEnterprise()%>">
-						<%=enterprise.getName()%>
+					<option value="<%=enterprise.getEnterprise()%>"
 						<%=employeeForm.getEnterprise() != null &&
 							employeeForm.getEnterprise().equals(
 							String.valueOf(enterprise.getEnterprise())) ? 
-							"selected='selected'" : "" %>
+							"selected='selected'" : "" %>>
+						<%=enterprise.getName()%>
 						</option>
 					<%
 						}
@@ -143,6 +143,8 @@
 				for (EmployeeRoleForm role : emplyeeRoles) {
 					out.println("<br/>" + role.getRoleName()
 							+ "<input type=\"hidden\" name=\"role_type_id\" value=\""
+							+ role.getRole() + "\" /><input type=\"hidden\""
+							+ " name=\"role_id\" value=\""
 							+ role.getRoleID() + "\" />");
 				}
 				%>
