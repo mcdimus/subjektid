@@ -116,6 +116,34 @@ public class SubjectsDAO {
 			if (results > 0) {
 				
 				answer = "OK";
+			}else {
+				answer = "FAIL";
+			}
+			db.close();
+		} catch(Exception e) {
+			MyLogger.log("SubjectsDAO.deleteEnterprise(): ", e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return answer;
+	}
+
+	public String deleteAccount(String id) {
+		String answer = null;
+		Connection db;
+		int results = 0;
+		try {
+			db = DriverManager.getConnection(url, user, password);
+			Statement st = db.createStatement();
+			results = st.executeUpdate("DELETE FROM user_account WHERE user_account="+id+";");
+			
+			MyLogger.logMessage("Deleted " + results + " account with id " + id);
+			
+			if (results > 0) {
+				
+				answer = "OK";
+			} else {
+				answer = "FAIL";
 			}
 			db.close();
 		} catch(Exception e) {

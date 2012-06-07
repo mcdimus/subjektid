@@ -97,6 +97,19 @@ public class AjaxController extends HttpServlet {
 					String json = "{\"answer\" : \"" + answer + "\"}";
 					out.write(json);
 					out.flush();
+				} else if (what.equals("account")) {
+					SubjectsDAO dao = new SubjectsDAO();
+					String answer = "";
+					
+					MyLogger.logMessage("Deleting account with id: " + req.getParameter("accountId"));
+					
+					answer = dao.deleteAccount(req.getParameter("accountId"));
+					
+					MyLogger.logMessage("Answer from dao: " + answer);
+					
+					String json = "{\"answer\" : \"" + answer + "\"}";
+					out.write(json);
+					out.flush();
 				}
 			}
 		}

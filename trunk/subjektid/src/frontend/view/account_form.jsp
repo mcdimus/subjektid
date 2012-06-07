@@ -58,7 +58,7 @@
 	</td>
 </tr>
 <tr>
-	<th colspan="2">&nbsp;<input type="hidden" name="status"
+	<th>&nbsp;<input type="hidden" name="status"
 		value="<%=(accountForm != null) ? accountForm.getStatus() : "1"%>" />
 		<input type="hidden" name="createdBy"
 		value="<%=(accountForm != null) ? accountForm.getCreatedBy()
@@ -67,5 +67,10 @@
 		value="<%=(accountForm != null) ? accountForm.getCreated()
 					: new Date().getTime()%>" />
 	</th>
+	<td>
+	<% if (accountForm != null && accountForm.getUsername() != "") { %>
+	<a href="#" name="deleteAccount" data-account-id="<%=(accountForm != null) ? accountForm.getAccountId() : ""%>">Delete</a>
+	<%} %>
+	</td>
 
 </tr>
