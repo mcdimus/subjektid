@@ -145,7 +145,9 @@
 							+ "<input type=\"hidden\" name=\"role_type_id\" value=\""
 							+ role.getRole() + "\" /><input type=\"hidden\""
 							+ " name=\"role_id\" value=\""
-							+ role.getRoleID() + "\" />");
+							+ role.getRoleID() + "\" />"
+							+ "<input type=\"hidden\" name=\"role_name\""
+							+ " value=\"" + role.getRoleName() + "\" />");
 				}
 				%>
 			</td>

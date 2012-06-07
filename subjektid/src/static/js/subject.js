@@ -4,13 +4,14 @@ $(document).ready(function() {
 		var $addrNumInput = $('input[name="addr_counter"]');
 		var num = parseInt($addrNumInput.val()) + 1;
 		$(this).parents('tr').before($('<tr><td colspan="2" class="centered">'
-+ '---------- Additional address #' + (num + 1) + ' ---------'
-+ '<input type="hidden" name="address_id" /></td></tr>' +
-'<tr><th>Country</th><td><input type="text" name="country" /></td></tr>' +
-'<tr><th>County</th><td><input type="text" name="county" /></td></tr>' +
-'<tr><th>Town/village</th><td><input type="text" name="town_village" /></td></tr>' +
-'<tr><th>Street address</th><td><input type="text" name="street_address" /></td></tr>' +
-'<tr><th>ZipCode</th><td><input type="text" name="zipcode" /></td></tr>'));
++ '<input type="hidden" name="address_type_fk" value="2" />'
++ '<input type="hidden" name="address_id" />'
++ '---------- Additional address #' + (num + 1) + ' ---------</td></tr>'
++ '<tr><th>Country</th><td><input type="text" name="country" /></td></tr>'
++ '<tr><th>County</th><td><input type="text" name="county" /></td></tr>'
++ '<tr><th>Town/village</th><td><input type="text" name="town_village" /></td></tr>'
++ '<tr><th>Street address</th><td><input type="text" name="street_address" /></td></tr>'
++ '<tr><th>ZipCode</th><td><input type="text" name="zipcode" /></td></tr>'));
 		$addrNumInput.val(num);
 	});
 	

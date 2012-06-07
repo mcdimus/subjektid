@@ -229,7 +229,9 @@ public class SubjectController extends Controller {
 		ArrayList<EmployeeRoleForm> roles = new ArrayList<EmployeeRoleForm>();
 		for (int i = 0; i < params.get("role_type_id").length; i++) {
 			EmployeeRoleForm role = new EmployeeRoleForm();
-			role.setRoleID(params.get("role_type_id")[i]);
+			role.setRoleID(params.get("role_id")[i]);
+			role.setRole(params.get("role_type_id")[i]);
+			role.setRoleName(params.get("role_name")[i]);
 			roles.add(role);
 		}
 		employeeForm.setRoles(roles);
@@ -276,7 +278,7 @@ public class SubjectController extends Controller {
 		form.setAddressForm(addressForm);
 		
 		ArrayList<AddressForm> addresses = new ArrayList<AddressForm>();
-		for (int i = 1; i < params.get("country").length; i++) {
+		for (int i = 1; i < params.get("address_type_fk").length; i++) {
 			AddressForm aForm = formAddressForm(i);
 			addresses.add(aForm);
 		}
