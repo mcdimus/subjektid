@@ -29,10 +29,8 @@ $(document).ready(function() {
 	
 	$('select[name="employee_role_type"]').on('change', function() {
 		$this = $(this);
-		var $newInput = $('<input type="hidden">').attr({
-			name : "role_type",
-			value : $this.val()
-		});
+		var $newInput = $('<input type="hidden" name="role_type_id" value="'
+				+ $this.val() + '"/><input type="hidden" name="role_id" />');
 		
 	$this.after("<br />", $this.find("option:selected").text(), $newInput);
 	

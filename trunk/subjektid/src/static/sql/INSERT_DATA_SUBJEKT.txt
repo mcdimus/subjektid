@@ -205,7 +205,7 @@ INSERT INTO subject_attribute (subject_fk,subject_attribute_type_fk,subject_type
 
 
 /* lisame tootajale 2 (Marten Maasikas tabelis employee), subject_type_fk=3 info laste arvu kohta , tal on 12 last*/
-INSERT INTO subject_attribute (subject_fk,subject_attribute_type_fk,subject_type_fk, value_number,data_type) VALUES (1,4,3,12,2);
+INSERT INTO subject_attribute (subject_fk,subject_attribute_type_fk,subject_type_fk, value_number,data_type) VALUES (2,4,3,12,2);
 
 /* lisame kliendile 1 ("Kaarel Klient" tabelites person+customer) info huvialade kohta, huvitub see klient mootorratastest*/
 INSERT INTO subject_attribute (subject_fk,subject_attribute_type_fk,subject_type_fk, value_text,data_type,orderby) VALUES (1,5,4,'mootorrattad',1,1);

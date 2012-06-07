@@ -197,15 +197,15 @@ public class SubjectController extends Controller {
 		humanForm.setLastName(params.get("last_name")[0]);
 		humanForm.setIdentityCode(params.get("identity_code")[0]);
 		humanForm.setBirthDate(params.get("birthdate")[0]);
-		if (params.get("customer_id")[0] != null) {
+		if (params.containsKey("customer_id")) {
 			humanForm.setCustomerId(params.get("customer_id")[0]);
-		} else {
+		} else if (params.containsKey("customer")) {
 			humanForm.setCustomer(params.get("customer")[0] != null 
 					? params.get("customer")[0] : null);
 		}
 		HumanFormValidator humanFormValidator = new HumanFormValidator(humanForm);
 		humanFormValidator.validate();
-		
+
 		formAndValidateAddressForms(humanForm);
 		formContactForms(humanForm);
 		
@@ -251,9 +251,9 @@ public class SubjectController extends Controller {
 		enterpriseForm.setUpdatedBy(sessionManager.getEmployeeId());
 		enterpriseForm.setName(params.get("name")[0]);
 		enterpriseForm.setFullName(params.get("full_name")[0]);
-		if (params.get("customer_id")[0] != null) {
+		if (params.containsKey("customer_id")) {
 			enterpriseForm.setCustomerId(params.get("customer_id")[0]);
-		} else {
+		} else if (params.containsKey("customer")) {
 			enterpriseForm.setCustomer(params.get("customer")[0] != null 
 					? params.get("customer")[0] : null);
 		}

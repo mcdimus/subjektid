@@ -7,7 +7,7 @@
         <id name="employeeRole" type="long">
             <column name="employee_role" precision="10" scale="0" />
             <generator class="sequence">
-            	<param name="sequence">emloyee_role_id</param>
+            	<param name="sequence">employee_role_id</param>
             </generator>
         </id>
         <property name="employeeFk" type="java.lang.Long">

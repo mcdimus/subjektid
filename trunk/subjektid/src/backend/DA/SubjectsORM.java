@@ -240,10 +240,10 @@ public class SubjectsORM {
 
 	public String saveEmployee(EmployeeForm form) {
 		Employee employee = new Employee();
-		employee.setPersonFk(Long.parseLong(form.getSubjectId()));
 		if (!form.getEmployeeId().isEmpty()) {
 			employee.setEmployee(Long.parseLong(form.getSubjectId()));
 		}
+		employee.setPersonFk(Long.parseLong(form.getSubjectId()));
 		employee.setEnterpriseFk(Long.parseLong(form.getEnterprise()));
 		employee.setActive("Y");
 
@@ -252,14 +252,16 @@ public class SubjectsORM {
 		
 		ArrayList<EmployeeRoleForm> roles = form.getRoles();
 		for (int i = 0; i < roles.size(); i++) {
-			EmployeeRole employeeRole = new EmployeeRole();
-			employeeRole.setEmployeeFk(employee.getEmployee());
-			employeeRole.setEmployeeRoleTypeFk(Long.parseLong(roles.get(i)
-					.getRoleID()));
-			employeeRole.setActive("Y");
-			saveOrUpdate(employeeRole);
-			roles.get(i).setRole(String.valueOf(employeeRole
-					.getEmployeeRole()));
+			if (roles.get(i).getRoleID().isEmpty()) {
+				EmployeeRole employeeRole = new EmployeeRole();
+				employeeRole.setEmployeeFk(employee.getEmployee());
+				employeeRole.setEmployeeRoleTypeFk(Long.parseLong(roles.get(i)
+						.getRole()));
+				employeeRole.setActive("Y");
+				saveOrUpdate(employeeRole);
+				roles.get(i).setRoleID(String.valueOf(employeeRole
+						.getEmployeeRole()));
+			}
 		}
 
 		saveAttributes(employee.getEmployee(), form.getEmployeeAttributes());

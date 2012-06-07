@@ -9,11 +9,17 @@ $(function() {
 					$place.html('<tr><td colspan="2" class="centered">'
 							+ '---- Subject attributes ----</td></tr>');
 		        	$(answer).each(function(index, element) {
-		        		var type;
+		        		var input;
 		        		if (element.type != 1) {
-		        			type = "text";
+		        			input = '<td class="short">'
+		        				+ '<input type="text" name="attribute_fval'
+		        				+ '" /><input type="text" name="'
+			        			+ 'attribute_sval" value="" /></td></tr>';
 		        		} else {
-		        			type = "hidden";
+		        			input = '<td>'
+		        				+ '<input type="text" name="attribute_fval'
+		        				+ '" /><input type="hidden" name="'
+			        			+ 'attribute_sval" value="" /></td></tr>';
 		        		}
 		        		$place.append($('<tr><input type="hidden" name="'
 		        				+ 'attribute_id" value="' + element.attr_id
@@ -23,10 +29,7 @@ $(function() {
 		        				+ '<input type="hidden" name="'
 		        				+ 'attribute_type" value="'
 		        				+ element.type + '" /><th>' + element.name
-		        				+ '</th><td class="short">'
-		        				+ '<input type="text" name="attribute_fval'
-		        				+ '" /><input type="' + type + '" name="'
-			        			+ 'attribute_sval" value="" /></td></tr>'));
+		        				+ '</th>' + input));
 			        });
 		        	$place.append($('<tr><td><button type="submit" name="submitBtn">' +
 						'Search</button></td><td></td></tr>'));
