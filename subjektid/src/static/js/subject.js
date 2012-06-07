@@ -69,4 +69,32 @@ $(document).ready(function() {
 			//console.log(data);
 		}
 	});
+	
+	$(document).on('click', 'a[name="deleteAccount"]', function(event) {
+		event.preventDefault();
+		$this = $(this);
+		if (confirm("Are you sure?")) {
+			var data = {
+					mode : "delete", 
+					what : "account", 
+					accountId : $(this).data("accountId")
+					};
+			$.post('ajax', data, function(answer) {
+				var message = '';
+				if (answer.answer == 'OK') {
+					$this.parent().prev().append("Deleted");
+					$this.parents('table').find('input').val("");
+					$this.remove();
+				} else {
+					alert("Account is not deleted. Sorry.");
+				}
+				
+				//$('div#message').html(message);
+				
+			}, 'json').fail(function(answer) {
+				alert("Something went wrong. Sorry!");
+			});
+			//console.log(data);
+		}
+	});
 });
