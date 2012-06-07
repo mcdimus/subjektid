@@ -13,8 +13,10 @@
 		fullName = enterpriseForm.getFullName();
 		if (enterpriseForm.getSubjectId() != null) {
 			subjectId = enterpriseForm.getSubjectId();
-			action = "Edit enterprise";
-			button = "Save";
+			if (!subjectId.isEmpty()) {
+				action = "Edit enterprise";
+				button = "Save";
+			}
 		}
 	}
 %>

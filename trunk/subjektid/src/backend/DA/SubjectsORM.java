@@ -298,7 +298,9 @@ public class SubjectsORM {
 		customer.setSubjectTypeFk(subjectTypeFk);
 		saveOrUpdate(customer);
 		
-		saveAttributes(customer.getCustomer(), form.getCustromerAttributes());
+		if (form.getCustromerAttributes() != null) {
+			saveAttributes(customer.getCustomer(), form.getCustromerAttributes());
+		}
 
 		form.setCustomerId(String.valueOf(customer.getCustomer()));
 	}

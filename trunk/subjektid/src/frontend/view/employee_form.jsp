@@ -23,8 +23,10 @@
 		if (employeeForm.getSubjectId() != null) {
 			subjectId = employeeForm.getSubjectId();
 			employeeId = employeeForm.getEmployeeId();
-			action = "Edit employee";
-			button = "Save";
+			if (!subjectId.isEmpty()) {
+				action = "Edit employee";
+				button = "Save";
+			}
 		}
 	}
 %>

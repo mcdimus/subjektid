@@ -20,8 +20,10 @@
 		birthDate = personForm.getBirthDate();
 		if (personForm.getSubjectId() != null) {
 			subjectId = personForm.getSubjectId();
-			action = "Edit person";
-			button = "Save";
+			if (!subjectId.isEmpty()) {
+				action = "Edit person";
+				button = "Save";
+			}
 		}
 	}
 %>

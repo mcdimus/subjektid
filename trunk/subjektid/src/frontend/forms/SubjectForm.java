@@ -1,12 +1,13 @@
 package frontend.forms;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public abstract class SubjectForm {
 
 	String subjectId;
-	String createdBy;
-	String updatedBy;
+	String createdBy, updatedBy;
+	Date created, updated;
 	AddressForm addressForm;
 	ArrayList<ContactForm> contacts;
 	FormAttribute[] attributes;
@@ -36,18 +37,34 @@ public abstract class SubjectForm {
 		this.createdBy = createdBy;
 	}
 
-	/**
-	 * @return the updatedBy
-	 */
-	public final String getUpdatedBy() {
+	public String getUpdatedBy() {
 		return updatedBy;
 	}
 
-	/**
-	 * @param updatedBy the updatedBy to set
-	 */
-	public final void setUpdatedBy(String updatedBy) {
+	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+
+	/**
+	 * @return the created
+	 */
+	public final Date getCreated() {
+		return created;
+	}
+
+	/**
+	 * @param created the created to set
+	 */
+	public final void setCreated(Date created) {
+		this.created = created;
 	}
 
 	/**

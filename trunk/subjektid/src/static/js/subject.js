@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	
-	$('a.additional_address').on('click', function() {
+	$('a.additional_address').on('click', function(event) {
+		event.preventDefault();
 		var $addrNumInput = $('input[name="addr_counter"]');
 		var num = parseInt($addrNumInput.val()) + 1;
 		$(this).parents('tr').before($('<tr><td colspan="2" class="centered">'
@@ -15,7 +16,8 @@ $(document).ready(function() {
 		$addrNumInput.val(num);
 	});
 	
-	$('a.additional_contact').on('click', function() {
+	$('a.additional_contact').on('click', function(event) {
+		event.preventDefault();
 		var $addrNumInput = $('input[name="cont_counter"]');
 		var num = parseInt($addrNumInput.val()) + 1;
 		$(this).parents('tr').before($('<tr><td colspan="2" class="centered">'
@@ -75,7 +77,6 @@ $(document).ready(function() {
 					contactId : $(this).data("contactId")
 					};
 			$.post('ajax', data, function(answer) {
-				var message = '';
 				if (answer.answer == 'OK') {
 					//alert("Contact successfully deleted.");
 					$parentTr = $this.parents('tr');
@@ -107,7 +108,6 @@ $(document).ready(function() {
 					accountId : $(this).data("accountId")
 					};
 			$.post('ajax', data, function(answer) {
-				var message = '';
 				if (answer.answer == 'OK') {
 					$this.parent().prev().append("Deleted");
 					$this.parents('table').find('input').val("");
@@ -135,7 +135,6 @@ $(document).ready(function() {
 					roleId : $this.data("roleId")
 					};
 			$.post('ajax', data, function(answer) {
-				var message = '';
 				if (answer.answer == 'OK') {
 				
 					$this.prevUntil('br').remove();
