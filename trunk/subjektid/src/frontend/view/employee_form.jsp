@@ -141,13 +141,15 @@
 					emplyeeRoles = employeeForm.getRoles();
 				}
 				for (EmployeeRoleForm role : emplyeeRoles) {
-					out.println("<br/>" + role.getRoleName()
+					out.println("<br/><span>" + role.getRoleName()
+							+ "</span> "
 							+ "<input type=\"hidden\" name=\"role_type_id\" value=\""
 							+ role.getRole() + "\" /><input type=\"hidden\""
 							+ " name=\"role_id\" value=\""
 							+ role.getRoleID() + "\" />"
 							+ "<input type=\"hidden\" name=\"role_name\""
-							+ " value=\"" + role.getRoleName() + "\" />");
+							+ " value=\"" + role.getRoleName() + "\" />"
+							+ "<a href=\"#\" name=\"deleteRole\" data-role-id=\""+ role.getRoleID() +"\">x</a>");
 				}
 				%>
 			</td>
