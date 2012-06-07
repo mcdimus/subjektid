@@ -205,7 +205,7 @@
 						for (int i = 0; i < ent_per_rels.size(); i++) {
 							rel = (EntPerRelationType) ent_per_rels.get(i);
 					%>
-					<option value="<%=rel.getTypeName()%>" 
+					<option value="<%=rel.getEntPerRelationType()%>" 
 						<%=personForm.getEntPerRelType() != null &&
 							personForm.getEntPerRelType().equals(
 							String.valueOf(rel.getEntPerRelationType())) ? 
