@@ -37,4 +37,36 @@ $(document).ready(function() {
 	$this.after("<br />", $this.find("option:selected").text(), $newInput);
 	
 	});
+	
+	$(document).on('click', 'a[name="deleteContact"]', function(event) {
+		event.preventDefault();
+		$this = $(this);
+		if (confirm("Are you sure?")) {
+			var data = {
+					mode : "delete", 
+					what : "contact", 
+					contactId : $(this).data("contactId")
+					};
+			$.post('ajax', data, function(answer) {
+				var message = '';
+				if (answer.answer == 'OK') {
+					alert("Contact successfully deleted.");
+					$parentTr = $this.parents('tr');
+					// delete parent, and four preceding trs
+					for (var i = 0; i < 4; i++ ){
+						$parentTr.prev().remove();
+					}
+					$parentTr.remove();
+				} else {
+					alert("Contact is not deleted. Sorry.");
+				}
+				
+				//$('div#message').html(message);
+				
+			}, 'json').fail(function(answer) {
+				alert("Something went wrong. Sorry!");
+			});
+			//console.log(data);
+		}
+	});
 });

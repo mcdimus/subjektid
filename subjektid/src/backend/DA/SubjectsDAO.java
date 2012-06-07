@@ -101,6 +101,30 @@ public class SubjectsDAO {
 		
 		return answer;
 	}
+
+	public String deleteContact(String id) {
+		String answer = null;
+		Connection db;
+		int results = 0;
+		try {
+			db = DriverManager.getConnection(url, user, password);
+			Statement st = db.createStatement();
+			results = st.executeUpdate("DELETE FROM contact WHERE contact="+id+";");
+			
+			MyLogger.logMessage("Deleted " + results + " contacts with id " + id);
+			
+			if (results > 0) {
+				
+				answer = "OK";
+			}
+			db.close();
+		} catch(Exception e) {
+			MyLogger.log("SubjectsDAO.deleteEnterprise(): ", e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return answer;
+	}
 	
 //	public void findAddresses() {
 //		List<Address> addresses = null;
