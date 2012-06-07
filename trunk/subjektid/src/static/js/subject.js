@@ -33,11 +33,36 @@ $(document).ready(function() {
 		var text = $this.find("option:selected").text();
 		if (text != "Select one...") {
 			var $newInput = $('<input type="hidden" name="role_type_id" value="'
-					+ $this.val() + '"/><input type="hidden" name="role_id" />');
+					+ $this.val() + '"/><input type="hidden" name="role_id" />'
+					+ '<input type="hidden" name="role_name"'
+					+ ' value="' + text + '" />"');
 			
 			$this.after("<br />", text, $newInput);
 		}
 	
+	});
+	
+	$('button[name="replace_main_address"]').on('click', function() {
+		var newId = $(this).siblings('input'),
+			oldId = $($('input[name="address_id"]').get(0));
+		$.post('ajax', { mode : "update", what : "address", old_id : oldId.val(),
+			new_id : newId.val() }, function() {
+				var newTR = newId.parents('tr'), oldTR =
+					$($('input[name="address_type_fk"]').get(1)).parents('tr');
+				var newInput, oldInput, spare;
+				spare = newId.val();
+				newId.val(oldId.val());
+				oldId.val(spare);
+				for (var i = 0; i < 5; i++) {
+					newTR = newTR.prev();
+					oldTR = oldTR.prev().prev();
+					newInput = newTR.find('input');
+					oldInput = oldTR.find('input');
+					spare = newInput.val();
+					newInput.val(oldInput.val());
+					oldInput.val(spare);
+				}
+		});
 	});
 	
 	$(document).on('click', 'a[name="deleteContact"]', function(event) {
@@ -55,7 +80,7 @@ $(document).ready(function() {
 					//alert("Contact successfully deleted.");
 					$parentTr = $this.parents('tr');
 					// delete parent, and four preceding trs
-					for (var i = 0; i < 4; i++ ){
+					for (var i = 0; i < 4; i++) {
 						$parentTr.prev().remove();
 					}
 					$parentTr.remove();
@@ -117,7 +142,7 @@ $(document).ready(function() {
 					$this.after($("<span></span>").text("deleted"));
 					$this.remove();
 				} else {
-					alert("Role is not deleted. Sorry.\nMay be it is not exist yet?");
+					alert("Role is not deleted. Sorry.\nMay be it does not exist yet?");
 				}
 				
 				//$('div#message').html(message);

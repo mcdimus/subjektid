@@ -14,7 +14,7 @@ public class UserAccount implements java.io.Serializable {
 	private Long subjectFk;
 	private String username;
 	private String passw;
-	private Long status;
+	private String status;
 	private Date validFrom;
 	private Date validTo;
 	private Long createdBy;
@@ -29,7 +29,7 @@ public class UserAccount implements java.io.Serializable {
 	}
 
 	public UserAccount(long userAccount, Long subjectTypeFk, Long subjectFk,
-			String username, String passw, Long status, Date validFrom,
+			String username, String passw, String status, Date validFrom,
 			Date validTo, Long createdBy, Date created,
 			String passwordNeverExpires) {
 		this.userAccount = userAccount;
@@ -85,11 +85,11 @@ public class UserAccount implements java.io.Serializable {
 		this.passw = passw;
 	}
 
-	public Long getStatus() {
+	public String getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(Long status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

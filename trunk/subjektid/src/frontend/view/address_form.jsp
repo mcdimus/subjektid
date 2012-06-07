@@ -82,8 +82,6 @@
 		<tr>
 			<td colspan="2" class="centered">
 				<input type="hidden" name="address_type_fk" value="2" />
-				<input type="hidden" name="address_id"
-					value="<%=form.getAddressId() != null ? form.getAddressId() : ""%>" />
 				---------- Additional address #<%=i + 1%> ---------
 			</td>
 		</tr>
@@ -113,6 +111,19 @@
 				value="<%=form.getZipcode() != null ? form.getZipcode() : ""%>"/></td>
 		</tr>
 		<%
+				if (form.getAddressId() != null && !form.getAddressId().isEmpty()) {
+		%>
+		<tr>
+			<td colspan="2" class="centered">
+				<input type="hidden" name="address_id"
+					value="<%=form.getAddressId() != null ? form.getAddressId() : ""%>" />
+				<button name="replace_main_address" type="button">
+					Make this the main address
+				</button>
+			</td>
+		</tr>
+		<%
+				}
 			}
 			
 			if (addressId.length() != 0) {

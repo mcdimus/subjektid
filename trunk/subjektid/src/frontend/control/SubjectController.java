@@ -18,6 +18,7 @@ import frontend.forms.FormAttribute;
 import frontend.forms.HumanForm;
 import frontend.forms.PersonForm;
 import frontend.forms.SubjectForm;
+import frontend.validator.AccountFormValidator;
 import frontend.validator.AddressFormValidator;
 import frontend.validator.EmployeeFormValidator;
 import frontend.validator.EnterpriseFormValidator;
@@ -243,7 +244,26 @@ public class SubjectController extends Controller {
 		formAndValidateFormAttributes(employeeForm.getEmployeeAttributes());
 		formAndValidateFormAttributes(employeeForm.getEmployeeAttributes());
 		
+		employeeForm.setAccForm(formAndValidateAccountForm());
+		
 		return employeeForm;
+	}
+	
+	private AccountForm formAndValidateAccountForm() {
+		AccountForm form = new AccountForm();
+		form.setAccountId(params.get("account_id")[0]);
+		form.setUsername(params.get("username")[0]);
+		form.setPassword(params.get("password")[0]);
+		form.setValidFrom(params.get("valid_from")[0]);
+		form.setValidTo(params.get("valid_to")[0]);
+		form.setPasswordNeverExpires(params.get("password_never_expires")[0]);
+		form.setStatus(params.get("status")[0]);
+		form.setCreatedBy(params.get("created_by")[0]);
+		form.setCreated(params.get("created")[0]);
+		
+		AccountFormValidator validator = new AccountFormValidator(form);
+		validator.validate();
+		return form;
 	}
 	
 	private EnterpriseForm formAndValidateEnterpriseForm(SessionManager sessionManager,
@@ -299,13 +319,15 @@ public class SubjectController extends Controller {
 	
 	private void formContactForms(SubjectForm form) {
 		ArrayList<ContactForm> contacts = new ArrayList<ContactForm>();
-		for (int i = 0; i < params.get("contact").length; i++) {
-			ContactForm contact = new ContactForm();
-			contact.setContactId(params.get("contact_id")[i]);
-			contact.setContactType(params.get("contact_type")[i]);
-			contact.setContact(params.get("contact")[i]);
-			contact.setNote(params.get("note")[i]);
-			contacts.add(contact);
+		if (params.containsKey("contact")) {
+			for (int i = 0; i < params.get("contact").length; i++) {
+				ContactForm contact = new ContactForm();
+				contact.setContactId(params.get("contact_id")[i]);
+				contact.setContactType(params.get("contact_type")[i]);
+				contact.setContact(params.get("contact")[i]);
+				contact.setNote(params.get("note")[i]);
+				contacts.add(contact);
+			}
 		}
 		form.setContacts(contacts);
 	}
