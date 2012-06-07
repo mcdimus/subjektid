@@ -16,7 +16,6 @@ import frontend.forms.SubjectForm;
 import general.Utils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -195,7 +194,9 @@ public class SubjectsORM {
 		person.setIdentityCode(form.getIdentityCode());
 		person.setBirthDate(Utils.parseDate(form.getBirthDate()));
 		person.setCreatedBy(Long.parseLong(form.getCreatedBy()));
-		person.setCreated(new Date());
+		person.setCreated(form.getCreated());
+		person.setUpdatedBy(Long.parseLong(form.getUpdatedBy()));
+		person.setUpdated(form.getUpdated());
 
 		saveOrUpdate(person);
 		form.setSubjectId(String.valueOf(person.getPerson()));
@@ -222,9 +223,10 @@ public class SubjectsORM {
 						.getEntPerRelId()));
 			}
 			rel.setPersonFk(Long.parseLong(form.getSubjectId()));
-			rel.setEnterpriseFk(Long.parseLong(form.getEnterprise()));
-			rel.setEntPerRelationTypeFk(Long.parseLong(
-					form.getEntPerRelType()));
+			rel.setEnterpriseFk(!form.getEnterprise().isEmpty() ? 
+					Long.parseLong(form.getEnterprise()) : 0);
+			rel.setEntPerRelationTypeFk(!form.getEntPerRelType().isEmpty() ?
+					Long.parseLong(form.getEntPerRelType()) : 0);
 			
 			saveOrUpdate(rel);
 			
@@ -276,7 +278,9 @@ public class SubjectsORM {
 		enterprise.setName(form.getName());
 		enterprise.setFullName(form.getFullName());
 		enterprise.setCreatedBy(Long.parseLong(form.getCreatedBy()));
-		enterprise.setCreated(new Date());
+		enterprise.setCreated(form.getCreated());
+		enterprise.setUpdatedBy(Long.parseLong(form.getUpdatedBy()));
+		enterprise.setUpdated(form.getUpdated());
 
 		saveOrUpdate(enterprise);
 		form.setSubjectId(String.valueOf(enterprise.getEnterprise()));
@@ -300,7 +304,7 @@ public class SubjectsORM {
 		customer.setSubjectTypeFk(subjectTypeFk);
 		saveOrUpdate(customer);
 		
-		if (form.getCustromerAttributes() != null) {
+		if (form.getCustromerAttributes()[0].getValue() != null) {
 			saveAttributes(customer.getCustomer(), form.getCustromerAttributes());
 		}
 
