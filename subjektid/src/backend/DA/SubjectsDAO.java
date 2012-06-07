@@ -153,6 +153,32 @@ public class SubjectsDAO {
 		
 		return answer;
 	}
+
+	public String deleteRole(String id) {
+		String answer = null;
+		Connection db;
+		int results = 0;
+		try {
+			db = DriverManager.getConnection(url, user, password);
+			Statement st = db.createStatement();
+			results = st.executeUpdate("DELETE FROM employee_role WHERE employee_role="+id+";");
+			
+			MyLogger.logMessage("Deleted " + results + " role with id " + id);
+			
+			if (results > 0) {
+				
+				answer = "OK";
+			} else {
+				answer = "FAIL";
+			}
+			db.close();
+		} catch(Exception e) {
+			MyLogger.log("SubjectsDAO.deleteEnterprise(): ", e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return answer;
+	}
 	
 //	public void findAddresses() {
 //		List<Address> addresses = null;

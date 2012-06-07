@@ -30,10 +30,13 @@ $(document).ready(function() {
 	
 	$('select[name="employee_role_type"]').on('change', function() {
 		$this = $(this);
-		var $newInput = $('<input type="hidden" name="role_type_id" value="'
-				+ $this.val() + '"/><input type="hidden" name="role_id" />');
-		
-	$this.after("<br />", $this.find("option:selected").text(), $newInput);
+		var text = $this.find("option:selected").text();
+		if (text != "Select one...") {
+			var $newInput = $('<input type="hidden" name="role_type_id" value="'
+					+ $this.val() + '"/><input type="hidden" name="role_id" />');
+			
+			$this.after("<br />", text, $newInput);
+		}
 	
 	});
 	
@@ -86,6 +89,35 @@ $(document).ready(function() {
 					$this.remove();
 				} else {
 					alert("Account is not deleted. Sorry.");
+				}
+				
+				//$('div#message').html(message);
+				
+			}, 'json').fail(function(answer) {
+				alert("Something went wrong. Sorry!");
+			});
+			//console.log(data);
+		}
+	});
+	
+	$(document).on('click', 'a[name="deleteRole"]', function(event) {
+		event.preventDefault();
+		$this = $(this);
+		if (confirm("Are you sure?")) {
+			var data = {
+					mode : "delete", 
+					what : "role", 
+					roleId : $this.data("roleId")
+					};
+			$.post('ajax', data, function(answer) {
+				var message = '';
+				if (answer.answer == 'OK') {
+				
+					$this.prevUntil('br').remove();
+					$this.after($("<span></span>").text("deleted"));
+					$this.remove();
+				} else {
+					alert("Role is not deleted. Sorry.\nMay be it is not exist yet?");
 				}
 				
 				//$('div#message').html(message);

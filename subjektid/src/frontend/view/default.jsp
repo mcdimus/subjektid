@@ -10,8 +10,8 @@
 	<form method="post" action="?mode=search">
 		<button type="submit">Search</button>
 	</form>
-	<form method="post" action="?mode=account&action=view">
-		<button type="submit">Accounts</button>
-	</form>
+<!-- 	<form method="post" action="?mode=account&action=view"> -->
+<!-- 		<button type="submit">Accounts</button> -->
+<!-- 	</form> -->
 </body>
 </html>
