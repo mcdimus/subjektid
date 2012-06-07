@@ -50,7 +50,7 @@ $(document).ready(function() {
 			$.post('ajax', data, function(answer) {
 				var message = '';
 				if (answer.answer == 'OK') {
-					alert("Contact successfully deleted.");
+					//alert("Contact successfully deleted.");
 					$parentTr = $this.parents('tr');
 					// delete parent, and four preceding trs
 					for (var i = 0; i < 4; i++ ){
