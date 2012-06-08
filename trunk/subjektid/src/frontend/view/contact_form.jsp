@@ -16,7 +16,10 @@
 		name="contact_id"
 		value="<%=contact.getContactId() != null ? contact
 						.getContactId() : ""%>" />
-		--------------- #<%=i + 1%> --------------</td>
+		--------------- #<%=i + 1%> --------------
+		<input type="hidden" name="contact_orderby"
+			value="<%=contact.getOrderBy() != null ? contact
+					.getOrderBy() : ""%>"/></td>
 </tr>
 <tr>
 	<th>Type</th>

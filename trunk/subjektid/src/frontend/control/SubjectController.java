@@ -343,6 +343,7 @@ public class SubjectController extends Controller {
 				contact.setContactType(params.get("contact_type")[i]);
 				contact.setContact(params.get("contact")[i]);
 				contact.setNote(params.get("note")[i]);
+				contact.setOrderBy(params.get("contact_orderby")[i]);
 				contacts.add(contact);
 			}
 		}
