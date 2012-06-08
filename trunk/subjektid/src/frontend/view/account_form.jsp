@@ -96,13 +96,15 @@
 </tr>
 <tr>
 	<th>&nbsp;<input type="hidden" name="status"
-		value="<%=accountForm.getStatus() != null ? accountForm.getStatus() : "1"%>" />
+		value="<%=accountForm.getStatus() != null && !accountForm.getStatus()
+			.equals("null") ? accountForm.getStatus() : "1"%>" />
 		<input type="hidden" name="created_by"
-		value="<%=accountForm.getCreatedBy() != null ? accountForm.getCreatedBy()
+		value="<%=accountForm.getCreatedBy() != null && !accountForm
+			.getCreatedBy().equals("null") ? accountForm.getCreatedBy()
 					: session.getAttribute("employee_id")%>" />
 		<input type="hidden" name="created"
-		value="<%=accountForm.getCreated() != null ? accountForm.getCreated()
-					: new Date().getTime()%>" />
+		value="<%=accountForm.getCreated() != null && !accountForm.getCreated()
+			.equals("null") ? accountForm.getCreated() : new Date().getTime() %>" />
 	</th>
 	<td>
 	<% if (accountForm != null && accountForm.getUsername() != "") { %>

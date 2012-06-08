@@ -304,6 +304,9 @@ public class SubjectsORM {
 
 	private void saveCustomer(SubjectForm form, long subjectTypeFk) {
 		Customer customer = new Customer();
+		if (form.getCustomerId() != null) {
+			customer.setCustomer(Long.parseLong(form.getCustomerId()));
+		}
 		customer.setSubjectFk(Long.parseLong(form.getSubjectId()));
 		customer.setSubjectTypeFk(subjectTypeFk);
 		saveOrUpdate(customer);
@@ -319,18 +322,24 @@ public class SubjectsORM {
 		UserAccount account = new UserAccount();
 		if (!form.getAccountId().isEmpty()) {
 			account.setUserAccount(Long.parseLong(form.getAccountId()));
+			account = findByID(UserAccount.class, account
+					.getUserAccount());
 		}
 		account.setSubjectFk(employeeID);
 		account.setSubjectTypeFk((long) 3);
 		account.setUsername(form.getUsername());
-		account.setPassw(Utils.generateMD5(form.getUsername() +
-				form.getPassword()));
+		if (!form.getPassword().isEmpty()) {
+			account.setPassw(Utils.generateMD5(form.getUsername() +
+					form.getPassword()));
+		}
 		account.setValidFrom(Utils.parseDate(form.getValidFrom()));
 		account.setValidTo(Utils.parseDate(form.getValidTo()));
 		account.setPasswordNeverExpires(form.getPasswordNeverExpires());
-		account.setStatus(form.getStatus());
+		account.setStatus(Long.parseLong(form.getStatus()));
 		account.setCreated(Utils.parseDate(form.getCreated()));
 		account.setCreatedBy(Long.parseLong(form.getCreatedBy()));
+		
+		saveOrUpdate(account);
 	}
 
 	private void saveAddress(AddressForm form, long subjectFk,

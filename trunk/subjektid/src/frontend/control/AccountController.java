@@ -46,7 +46,7 @@ public class AccountController extends Controller {
 					account.setUsername(params.get("username")[0]);
 					account.setPassw(Utils.generateMD5(params.get("username")[0]
 							+ params.get("password")[0]));
-					account.setStatus(params.get("status")[0]);
+					account.setStatus(Long.parseLong(params.get("status")[0]));
 					account.setValidFrom(df.parse(params.get("validFrom")[0]));
 					account.setValidTo(df.parse(params.get("validTo")[0]));
 					account.setCreatedBy(Long.valueOf(params.get("createdBy")[0]));

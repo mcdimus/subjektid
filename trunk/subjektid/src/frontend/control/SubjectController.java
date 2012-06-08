@@ -206,6 +206,7 @@ public class SubjectController extends Controller {
 		humanForm.setBirthDate(params.get("birthdate")[0]);
 		if (params.containsKey("customer_id")) {
 			humanForm.setCustomerId(params.get("customer_id")[0]);
+			humanForm.setCustomer("ON");
 		} else if (params.containsKey("customer")) {
 			humanForm.setCustomer(params.get("customer")[0] != null 
 					? params.get("customer")[0] : null);
@@ -289,6 +290,7 @@ public class SubjectController extends Controller {
 		enterpriseForm.setFullName(params.get("full_name")[0]);
 		if (params.containsKey("customer_id")) {
 			enterpriseForm.setCustomerId(params.get("customer_id")[0]);
+			enterpriseForm.setCustomer("ON");
 		} else if (params.containsKey("customer")) {
 			enterpriseForm.setCustomer(params.get("customer")[0] != null 
 					? params.get("customer")[0] : null);
@@ -352,11 +354,10 @@ public class SubjectController extends Controller {
 	
 	private FormAttribute[] formAndValidateFormAttributes(
 			FormAttribute[] attributes) {
-		int i = 0;
 		for (FormAttribute attribute : attributes) {
-			attribute.setFormAttributeId(params.get("attribute_id")[i]);
+			attribute.setFormAttributeId(params.get(attribute.getName()
+					+ "_id")[0]);
 			attribute.setValue(params.get(attribute.getName())[0]);
-			i++;
 		}
 		FormAttributesValidator attrFormValidator = 
 				new FormAttributesValidator(attributes);
