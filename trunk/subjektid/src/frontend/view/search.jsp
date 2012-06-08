@@ -12,13 +12,15 @@
 		<table>
 			<tr>
 				<th>Subject type</th>
-				<td><select name="subject_type" id="subject_type">
-						<option value="0">All subjects</option>
-						<option value="1">Person</option>
-						<option value="2">Enterprise</option>
-						<option value="3">Employee</option>
-						<option value="4">Client</option>
-				</select></td>
+				<td>
+					<select name="subject_type" id="subject_type">
+							<option value="0">All subjects</option>
+							<option value="1">Person</option>
+							<option value="2">Enterprise</option>
+							<option value="3">Employee</option>
+							<option value="4">Client</option>
+					</select>
+				</td>
 			</tr>
 			<tr>
 				<th>First name</th>
