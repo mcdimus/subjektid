@@ -37,6 +37,7 @@ public class SearchController extends Controller {
 				SearchForm form = formSearchForm();
 				SubjectsORM orm = new SubjectsORM();
 				ArrayList<SearchResult> results = orm.search(form);
+				req.setAttribute("searchForm", form);
 				req.setAttribute("results", results);
 				req.setAttribute("action", "search");
 			} else if (action.equals("search_xml")) {

@@ -193,10 +193,12 @@ public class SubjectsORM {
 		person.setLastName(form.getLastName());
 		person.setIdentityCode(form.getIdentityCode());
 		person.setBirthDate(Utils.parseDate(form.getBirthDate()));
+		if (form.getUpdatedBy() != null) {
+			person.setUpdatedBy(Long.parseLong(form.getUpdatedBy()));
+			person.setUpdated(form.getUpdated());
+		}
 		person.setCreatedBy(Long.parseLong(form.getCreatedBy()));
 		person.setCreated(form.getCreated());
-		person.setUpdatedBy(Long.parseLong(form.getUpdatedBy()));
-		person.setUpdated(form.getUpdated());
 
 		saveOrUpdate(person);
 		form.setSubjectId(String.valueOf(person.getPerson()));
@@ -277,10 +279,12 @@ public class SubjectsORM {
 		}
 		enterprise.setName(form.getName());
 		enterprise.setFullName(form.getFullName());
+		if (form.getUpdatedBy() != null) {
+			enterprise.setUpdatedBy(Long.parseLong(form.getUpdatedBy()));
+			enterprise.setUpdated(form.getUpdated());
+		}
 		enterprise.setCreatedBy(Long.parseLong(form.getCreatedBy()));
 		enterprise.setCreated(form.getCreated());
-		enterprise.setUpdatedBy(Long.parseLong(form.getUpdatedBy()));
-		enterprise.setUpdated(form.getUpdated());
 
 		saveOrUpdate(enterprise);
 		form.setSubjectId(String.valueOf(enterprise.getEnterprise()));
