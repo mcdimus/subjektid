@@ -23,9 +23,9 @@ public class AccountFormValidator extends Validator {
 	
 	private void validateUsernameAndPassword() {
 		if (form.getAccountId().isEmpty()) {
-			if (!form.getUsername().isEmpty()) {
+			if (form.getUsername().isEmpty()) {
 				errors.put("username", "Username is empty!");
-			} else if (!form.getPassword().isEmpty()) {
+			} else if (form.getPassword().isEmpty()) {
 				errors.put("password", "Password is empty!");
 			}
 		} else {
