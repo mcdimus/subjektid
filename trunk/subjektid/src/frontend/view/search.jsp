@@ -1,7 +1,10 @@
+<%@page import="frontend.forms.ContactForm"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <jsp:include page="header.jsp" />
 <%@ page import="frontend.forms.SearchResult"%>
+<%@ page import="frontend.forms.ContactForm"%>
+<jsp:useBean id="searchForm" scope="request" class="frontend.forms.SearchForm" />
 <jsp:useBean id="action" scope="request" class="java.lang.String" />
 <jsp:useBean id="results" scope="request" class="java.util.ArrayList" />
 <jsp:useBean id="htmlWithResults" scope="request"
@@ -11,24 +14,46 @@
 	<div class="float-left">
 		<table>
 			<tr>
+			<%
+				int subjectType = (int) searchForm.getSubjectType();
+				String valOne = "", valTwo = "", valThree = "", valFour = "";
+				switch(subjectType) {
+				case 1:
+					valOne = "selected";
+					break;
+				case 2:
+					valTwo = "selected";
+					break;
+				case 3:
+					valThree = "selected";
+					break;
+				case 4:
+					valFour = "selected";
+					break;
+				}
+			%>
 				<th>Subject type</th>
 				<td>
 					<select name="subject_type" id="subject_type">
 							<option value="0">All subjects</option>
-							<option value="1">Person</option>
-							<option value="2">Enterprise</option>
-							<option value="3">Employee</option>
-							<option value="4">Client</option>
+							<option value="1" <%=valOne%>>Person</option>
+							<option value="2" <%=valTwo%>>Enterprise</option>
+							<option value="3" <%=valThree%>>Employee</option>
+							<option value="4" <%=valFour%>>Client</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<th>First name</th>
-				<td><input type="text" name="fname" /></td>
+				<td><input type="text" name="fname"
+					value="<%=searchForm.getFirstName() != null ?
+							searchForm.getFirstName() : ""%>" /></td>
 			</tr>
 			<tr>
 				<th>Name</th>
-				<td><input type="text" name="lname" /></td>
+				<td><input type="text" name="lname"
+					value="<%=searchForm.getLastName() != null ?
+							searchForm.getLastName() : ""%>" /></td>
 			</tr>
 
 			<tr>
@@ -40,20 +65,31 @@
 			<tr>
 				<td colspan="2" class="centered">---------- Contact ---------</td>
 			</tr>
+			<%
+				ContactForm form = searchForm.getContactForm();
+				String contactType = "", contact = "", note = "";
+				if (form != null) {
+					contactType = form.getContactType();
+					contact = form.getContact();
+					note = form.getNote();
+				}
+			%>
 			<tr>
 				<th>Type</th>
 				<td><select name="contact_type">
-					<option value="1">Email</option>
-					<option value="2">Phone number</option>
+					<option value="1" <%=contactType.equals("1")
+						? "selected" : ""%>>Email</option>
+					<option value="2" <%=contactType.equals("2")
+						? "selected" : ""%>>Phone number</option>
 				</select></td>
 			</tr>
 			<tr>
 				<th>Contact</th>
-				<td><input type="text" name="contact" /></td>
+				<td><input type="text" name="contact" value="<%=contact%>" /></td>
 			</tr>
 			<tr>
 				<th>Note</th>
-				<td><input type="text" name="contact_note" /></td>
+				<td><input type="text" name="contact_note" value="<%=note%>" /></td>
 			</tr>
 			
 			<tfoot>

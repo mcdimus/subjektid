@@ -234,20 +234,21 @@ public class SubjectController extends Controller {
 		employeeForm.setEmployeeId(params.get("employee_id")[0]);
 		employeeForm.setEnterprise(params.get("enterprise")[0]);
 		ArrayList<EmployeeRoleForm> roles = new ArrayList<EmployeeRoleForm>();
-		for (int i = 0; i < params.get("role_type_id").length; i++) {
-			EmployeeRoleForm role = new EmployeeRoleForm();
-			role.setRoleID(params.get("role_id")[i]);
-			role.setRole(params.get("role_type_id")[i]);
-			role.setRoleName(params.get("role_name")[i]);
-			roles.add(role);
+		if (params.containsKey("role_type_id")) {
+			for (int i = 0; i < params.get("role_type_id").length; i++) {
+				EmployeeRoleForm role = new EmployeeRoleForm();
+				role.setRoleID(params.get("role_id")[i]);
+				role.setRole(params.get("role_type_id")[i]);
+				role.setRoleName(params.get("role_name")[i]);
+				roles.add(role);
+			}
+			employeeForm.setRoles(roles);
 		}
-		employeeForm.setRoles(roles);
 		
 		EmployeeFormValidator employeeFormValidator =
 				new EmployeeFormValidator(employeeForm);
 		employeeFormValidator.validate();
 
-		formAndValidateFormAttributes(employeeForm.getEmployeeAttributes());
 		formAndValidateFormAttributes(employeeForm.getEmployeeAttributes());
 		
 		if (params.containsKey("account_id")) {
@@ -301,6 +302,9 @@ public class SubjectController extends Controller {
 		enterpriseFormValidator.validate();
 		formAndValidateFormAttributes(enterpriseForm.getAttributes());
 		
+		if (enterpriseForm.getCustomerId() != null) {
+			formAndValidateFormAttributes(enterpriseForm.getCustromerAttributes());
+		}
 		return enterpriseForm;
 	}
 	
