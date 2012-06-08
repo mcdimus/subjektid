@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import frontend.forms.AddressForm;
 import frontend.forms.ContactForm;
+import frontend.forms.PersonForm;
 import frontend.forms.SearchAttribute;
 import frontend.forms.SearchForm;
 import frontend.forms.SearchResult;
@@ -16,6 +17,7 @@ import frontend.forms.SearchResult;
 import backend.DA.SubjectsORM;
 import backend.model.Address;
 import backend.model.AddressType;
+import backend.model.Person;
 import backend.model.SubjectAttributeType;
 
 public class SubjectsORMTest {
@@ -130,6 +132,12 @@ public class SubjectsORMTest {
 		for (SearchResult res : ress) {
 			System.out.println(res.getSubjectName());
 		}
+	}
+	
+	@Test
+	public void test() {
+		Person p = orm.findByID(Person.class, 100);
+		System.out.println(p == null ? "YES" : "NO");
 	}
 
 }
