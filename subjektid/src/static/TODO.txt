@@ -1,10 +1,7 @@
 нет:
 - поиска по ролям и фирмам для работников.
-- не опустошения формы поиска после поиска.
-- orderby у контактов не сохраняется.
 - установки роли работника активной / не активной.
 - multiple attributes у FormAttribute.
 - active employee???
 
 косяки:
-- distinction between save and update (date & by).

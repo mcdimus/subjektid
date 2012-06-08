@@ -22,7 +22,8 @@ $(document).ready(function() {
 		var num = parseInt($addrNumInput.val()) + 1;
 		$(this).parents('tr').before($('<tr><td colspan="2" class="centered">'
 + '---------------  #' + (num + 1) + ' --------------<input type="hidden"'
-+ ' name="contact_id" /></td></tr>'
++ ' name="contact_id" /><input type="hidden" name="contact_orderby" value="'
++ (num + 1) + '" /></td></tr>'
 + '<tr><th>Type</th><td><select name="contact_type"><option value="1">Email</option>'
 + '<option value="2">Phone number</option></select></td></tr><tr><th>Contact</th>'
 + '<td><input type="text" name="contact" /></td></tr><tr><th>Note</th>'

@@ -254,7 +254,7 @@
 <div class="float-left">
 	<table>
 		<%
-			if (!subjectId.isEmpty()) {
+			if (!employeeId.isEmpty()) {
 		%>
 		
 		<jsp:include page="account_form.jsp" />

@@ -365,6 +365,7 @@ public class SubjectsORM {
 			contact.setSubjectFk(subjectFk);
 			contact.setSubjectTypeFk(subjectTypeFk);
 			contact.setValueText(form.getContact());
+			contact.setOrderby(Long.parseLong(form.getOrderBy()));
 			
 			saveOrUpdate(contact);
 		}

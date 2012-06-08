@@ -42,8 +42,12 @@
 	<%
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		String formattedDate = sdf.format(new Date());
+		Calendar c = Calendar.getInstance();
+		c.setTime(sdf.parse(formattedDate));
+		c.add(Calendar.DAY_OF_YEAR, 1);
+		formattedDate = sdf.format(c.getTime());
 	%>
-	<td><input type="text" name="valid_From"
+	<td><input type="text" name="valid_from"
 		value="<%=accountForm.getValidFrom() != null ? accountForm.getValidFrom()
 					: formattedDate%>" />
 	</td>
@@ -54,7 +58,7 @@
 <tr>
 	<th>Valid to</th>
 	<%
-		Calendar c = Calendar.getInstance();
+		c = Calendar.getInstance();
 		c.setTime(sdf.parse(formattedDate));
 		c.add(Calendar.YEAR, 1); // number of years to add
 		formattedDate = sdf.format(c.getTime()); // the new date
