@@ -2,6 +2,7 @@ $(function() {
 	
 	var $select = $('select#subject_type'),
 		$place = $('tfoot');
+	
 	$select.on('change', function() {
 		if ($select.val() != 0) {
 			$.post('ajax', { mode : "get", attribute : "subjectTypeFk",
@@ -39,6 +40,10 @@ $(function() {
 					'Search</button></td><td></td></tr>');
 		}
 	});
+	
+	if ($select.val() != 0) {
+		$select.triggerHandler('change');
+	}
 
 	$(document).on('click', 'a[name="deleteSubject"]', function(event) {
 		$this = $(this);

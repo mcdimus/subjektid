@@ -18,7 +18,7 @@ public class EmployeeFormValidator extends Validator {
 
 	
 	private void validateEmployeeRoleType() {
-		if (form.getRoles().isEmpty()) {
+		if (form.getRoles() == null) {
 			errors.put("employee_role_type", "At least one employee role"
 					+ " should be specified!");
 		}

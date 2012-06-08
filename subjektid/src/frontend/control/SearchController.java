@@ -38,6 +38,7 @@ public class SearchController extends Controller {
 				SubjectsORM orm = new SubjectsORM();
 				ArrayList<SearchResult> results = orm.search(form);
 				req.setAttribute("searchForm", form);
+				req.setAttribute("addressForm", form.getAddressForm());
 				req.setAttribute("results", results);
 				req.setAttribute("action", "search");
 			} else if (action.equals("search_xml")) {
@@ -61,6 +62,8 @@ public class SearchController extends Controller {
 
 					transformer.transform(source, result);
 
+					req.setAttribute("searchForm", form);
+					req.setAttribute("addressForm", form.getAddressForm());
 					req.setAttribute("htmlWithResults", strWriter.toString());
 				} catch (TransformerConfigurationException e) {
 					MyLogger.log("SearchController.service(): TransConf",
