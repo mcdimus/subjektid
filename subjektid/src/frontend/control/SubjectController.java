@@ -545,7 +545,7 @@ public class SubjectController extends Controller {
 						attribute.setValue(attrs.get(i).getValueNumber().toString());
 						break;
 					case 3:
-						attribute.setValue(attrs.get(i).getValueDate().toString());
+						attribute.setValue(new SimpleDateFormat("dd.MM.yyyy").format(attrs.get(i).getValueDate()));
 						break;
 					}
 					break;
