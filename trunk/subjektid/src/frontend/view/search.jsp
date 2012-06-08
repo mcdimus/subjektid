@@ -129,15 +129,23 @@
 			<td><%=res.getSubjectName()%></td>
 			<td><%=res.getSubjectType()%></td>
 			<%
-				String link = "?mode=subject&action=edit_subject&subject_id="
-									+ res.getSubjectId() + "&subject_type=";
-							if (res.getSubjectType().equals("person")) {
-								link += "1";
-							} else {
-								link += "2";
-							}
+// 				String link = "?mode=subject&action=edit_subject&subject_id="
+// 									+ res.getSubjectId() + "&subject_type=";
+// 							if (res.getSubjectType().equals("person")) {
+// 								link += "1";
+// 							} else {
+// 								link += "2";
+// 							}
 			%>
-			<td><a href="<%=link%>">Edit</a></td>
+			<td>
+			<form method="post" action="?mode=subject&action=edit_subject" >
+				<input type="hidden" name="subject_id" value="<%=res.getSubjectId() %>" />
+				<input type="hidden" name="subject_type" value="<%=res.getSubjectType().equals("person") ? "1" : "2" %>" />
+				<input type="submit" name="submitBtn" value="Edit" />
+			</form>
+<%-- 			<a href="<%=link%>">Edit</a> --%>
+			
+			</td>
 		</tr>
 		<%
 			}

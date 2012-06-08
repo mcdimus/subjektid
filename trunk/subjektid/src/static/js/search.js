@@ -45,7 +45,7 @@ $(function() {
 		$select.triggerHandler('change');
 	}
 
-	$(document).on('click', 'a[name="deleteSubject"]', function(event) {
+	$(document).on('click', 'button[name="deleteSubject"]', function(event) {
 		$this = $(this);
 		event.preventDefault();
 		if (confirm("Are you sure?")) {
