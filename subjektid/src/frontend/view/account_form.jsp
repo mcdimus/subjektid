@@ -10,11 +10,15 @@
 <jsp:useBean id="errors" scope="request" class="java.util.HashMap" />
 
 <%
-	AccountForm accountForm = employeeForm.getAccForm();
+	AccountForm accountForm = new AccountForm();
+	if (employeeForm.getAccForm() != null) {
+		accountForm = employeeForm.getAccForm();
+	}
 %>
 <tr>
 	<th colspan="2" class="main">Account
-		<input type="hidden" name="account_id" value="<%=accountForm != null ?
+		<input type="hidden" name="account_id"
+			value="<%=accountForm.getAccountId() != null ?
 				accountForm.getAccountId() : ""%>" />
 	</th>
 </tr>
