@@ -1,0 +1,1 @@
+JAVA baseeruv veebirakendus, mis tehtud MVC mustri kasutamisel.
